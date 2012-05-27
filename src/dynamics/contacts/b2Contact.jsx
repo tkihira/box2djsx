@@ -25,7 +25,7 @@ class b2Contact {
 	var m_friction = 0;
 	var m_restitution = 0;
 
-	function constructor(s1: b2Shape, s2: b2Shape) {
+	function initializer(s1: b2Shape, s2: b2Shape): void {
 		this.m_node1 = new b2ContactNode();
 		this.m_node2 = new b2ContactNode();
 
@@ -58,8 +58,11 @@ class b2Contact {
 		this.m_node2.next = null;
 		this.m_node2.other = null;
 	}
+	function constructor(s1: b2Shape, s2: b2Shape) {
+		this.initializer(s1, s2);
+	}
 	function constructor() {
-		this.constructor(null, null);
+		this.initializer(null, null);
 	}
 	
 	function GetManifolds(): b2Manifold[] {return null;}

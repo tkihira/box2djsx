@@ -3,7 +3,7 @@ import "common/math/*.jsx";
 class b2Mat22 {
 	var col1: b2Vec2;
 	var col2: b2Vec2;
-	function constructor(angle: number, c1: b2Vec2, c2: b2Vec2) {
+	function initializer(angle: number, c1: b2Vec2, c2: b2Vec2): void {
 		this.col1 = new b2Vec2();
 		this.col2 = new b2Vec2();
 		if(c1 != null && c2 != null) {
@@ -16,11 +16,14 @@ class b2Mat22 {
 			this.col1.y = s; this.col2.y = c;
 		}
 	}
+	function constructor(angle: number, c1: b2Vec2, c2: b2Vec2) {
+		this.initializer(angle, c1, c2);
+	}
 	function constructor(angle: number) {
-		this.constructor(angle, null, null);
+		this.initializer(angle, null, null);
 	}
 	function constructor() {
-		this.constructor(0, null, null);
+		this.initializer(0, null, null);
 	}
 	
 	function Set(angle: number): void {
