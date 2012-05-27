@@ -83,6 +83,8 @@ class b2Contact {
 
 	static var e_islandFlag = 0x0001;
 	static var e_destroyFlag = 0x0002;
+	
+	// TODO: later
 	/*
 	static function AddType = function(createFcn, destroyFcn, type1, type2) {
 		//b2Settings.b2Assert(b2Shape.e_unknownShape < type1 && type1 < b2Shape.e_shapeTypeCount);

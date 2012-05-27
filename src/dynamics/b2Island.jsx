@@ -168,7 +168,68 @@ class b2Island {
 		}
 	}
 	
-	// TODO: now here
+	function UpdateSleep(dt: number): void {
+		var i = 0;
+		var b;
+
+		var minSleepTime = Number.MAX_VALUE;
+
+		var linTolSqr = b2Settings.b2_linearSleepTolerance * b2Settings.b2_linearSleepTolerance;
+		var angTolSqr = b2Settings.b2_angularSleepTolerance * b2Settings.b2_angularSleepTolerance;
+
+		for (i = 0; i < this.m_bodyCount; ++i)
+		{
+			b = this.m_bodies[i];
+			if (b.m_invMass == 0.0)
+			{
+				continue;
+			}
+
+			if ((b.m_flags & b2Body.e_allowSleepFlag) == 0)
+			{
+				b.m_sleepTime = 0.0;
+				minSleepTime = 0.0;
+			}
+
+			if ((b.m_flags & b2Body.e_allowSleepFlag) == 0 ||
+				b.m_angularVelocity * b.m_angularVelocity > angTolSqr ||
+				b2Math.b2Dot(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr)
+			{
+				b.m_sleepTime = 0.0;
+				minSleepTime = 0.0;
+			}
+			else
+			{
+				b.m_sleepTime += dt;
+				minSleepTime = b2Math.b2Min(minSleepTime, b.m_sleepTime);
+			}
+		}
+
+		if (minSleepTime >= b2Settings.b2_timeToSleep)
+		{
+			for (i = 0; i < this.m_bodyCount; ++i)
+			{
+				b = this.m_bodies[i];
+				b.m_flags |= b2Body.e_sleepFlag;
+			}
+		}
+	}
+	
+	function AddBody(body: b2Body): void {
+		//b2Settings.b2Assert(this.m_bodyCount < this.m_bodyCapacity);
+		this.m_bodies[this.m_bodyCount++] = body;
+	}
+
+	function AddContact(contact: b2Contact): void {
+		//b2Settings.b2Assert(this.m_contactCount < this.m_contactCapacity);
+		this.m_contacts[this.m_contactCount++] = contact;
+	}
+
+	function AddJoint(joint: variant): void {
+		debugger;
+		//b2Settings.b2Assert(this.m_jointCount < this.m_jointCapacity);
+		//this.m_joints[this.m_jointCount++] = joint;
+	}
 	
 	static var m_positionIterationCount = 0;
 }
