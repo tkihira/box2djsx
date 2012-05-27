@@ -1,0 +1,3 @@
+[submodule "JSX"]
+	path = JSX
+	url = git@github.com:kazuho/JSX.git
