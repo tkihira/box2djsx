@@ -3,6 +3,8 @@ import "common/math/*.jsx";
 import "collision/*.jsx";
 import "collision/shapes/*.jsx";
 import "dynamics/*.jsx";
+import "dynamics/contacts/*.jsx";
+
 
 class b2Body {
 	var m_flags: number;
@@ -31,7 +33,7 @@ class b2Body {
 	var m_shapeCount: number;
 
 	var m_jointList: variant = null;
-	var m_contactList: variant = null;
+	var m_contactList: b2ContactNode = null;
 
 	var m_mass: number;
 	var m_invMass: number;
@@ -335,7 +337,7 @@ class b2Body {
 		return this.m_shapeList;
 	}
 
-	function GetContactList(): variant {
+	function GetContactList(): b2ContactNode {
 		return this.m_contactList;
 	}
 

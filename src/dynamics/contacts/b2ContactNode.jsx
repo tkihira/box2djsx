@@ -8,6 +8,6 @@ import "dynamics/contacts/*.jsx";
 class b2ContactNode {
 	var other: variant;
 	var contact: variant;
-	var prev: variant;
-	var next: variant;
+	var prev: b2ContactNode;
+	var next: b2ContactNode;
 }
