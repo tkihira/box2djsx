@@ -495,5 +495,4 @@ class b2World {
 	//var m_broadPhase: b2BroadPhase;
 	static var s_enablePositionCorrection = true;
 	static var s_enableWarmStarting = true;
-
 }
