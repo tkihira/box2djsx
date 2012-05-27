@@ -7,8 +7,8 @@ import "dynamics/*.jsx";
 class b2ContactPoint {
 	var position: b2Vec2;
 	var separation: number;
-	//normalImpulse: null,
-	//tangentImpulse: null,
+	var normalImpulse: number = 0;
+	var tangentImpulse: number = 0;
 	var id: b2ContactID;
 	function constructor() {
 		this.position = new b2Vec2();

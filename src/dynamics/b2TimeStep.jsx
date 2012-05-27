@@ -5,8 +5,8 @@ import "collision/shapes/*.jsx";
 import "dynamics/*.jsx";
 import "dynamics/contacts/*.jsx";
 
-class _Main {
-	static function main(args : string[]) :void {
-		log "Hello, world!";
-	}
+class b2TimeStep {
+	var dt: number = 0;
+	var inv_dt: number = 0;
+	var iterations = 0;
 }

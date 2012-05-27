@@ -5,8 +5,9 @@ import "collision/shapes/*.jsx";
 import "dynamics/*.jsx";
 import "dynamics/contacts/*.jsx";
 
-class _Main {
-	static function main(args : string[]) :void {
-		log "Hello, world!";
-	}
+class b2ContactNode {
+	var other: variant;
+	var contact: variant;
+	var prev: variant;
+	var next: variant;
 }

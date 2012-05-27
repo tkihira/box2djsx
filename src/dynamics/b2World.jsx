@@ -6,4 +6,5 @@ import "dynamics/*.jsx";
 
 class b2World {
 	var m_broadPhase: b2BroadPhase;
+	static var s_enablePositionCorrection: boolean;
 }
