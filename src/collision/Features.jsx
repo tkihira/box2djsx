@@ -38,4 +38,10 @@ class Features {
 	function get_flip(): number {
 		return this._flip;
 	}
+
+	// why?? maybe Box2D JS's bug
+	var referenceFace = 0;
+	var incidentEdge = 0;
+	var incidentVertex = 0;
+	var flip = 0;
 }
