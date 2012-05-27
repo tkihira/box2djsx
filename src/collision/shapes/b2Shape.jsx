@@ -69,7 +69,7 @@ class b2Shape {
 
 	// Remove and then add proxy from the broad-phase.
 	// This is used to refresh the collision filters.
-	//ResetProxy: function(broadPhase){},
+	function ResetProxy(broadPhase: b2BroadPhase): void{}
 
 	// Get the next shape in the parent body's shape list.
 	function GetNext(): b2Shape {
@@ -86,9 +86,9 @@ class b2Shape {
 	}
 
 	// Internal use only. Do not call.
-	function Synchronize(position1: b2Vec2, R1: number, position2: b2Vec2, R2: number): void{}
-	function QuickSync(position: b2Vec2, R: number): void{}
-	//function Support(dX: number, dY, out){},
+	function Synchronize(position1: b2Vec2, R1: b2Mat22, position2: b2Vec2, R2: b2Mat22): void{}
+	function QuickSync(position: b2Vec2, R: b2Mat22): void{}
+	function Support(dX: number, dY: number, out: b2Vec2): void{}
 	function GetMaxRadius(): number{
 		return this.m_maxRadius;
 	}
@@ -113,7 +113,7 @@ class b2Shape {
 		//b2Settings.b2Assert(false);
 		return null;
 	}
-	static function destroy(shape: b2Shape): void {
+	static function Destroy(shape: b2Shape): void {
 		/*b2BlockAllocator& allocator = shape->m_body->m_world->m_blockAllocator;
 
 		switch (shape.m_type)

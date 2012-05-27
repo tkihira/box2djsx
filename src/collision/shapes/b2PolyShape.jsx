@@ -295,7 +295,7 @@ class b2PolyShape extends b2Shape {
 		}
 	}
 
-	function Synchronize(position1: b2Vec2, R1: b2Mat22, position2: b2Vec2, R2: b2Mat22): void {
+	override function Synchronize(position1: b2Vec2, R1: b2Mat22, position2: b2Vec2, R2: b2Mat22): void {
 		// The body transform is copied for convenience.
 		this.m_R.SetM(R2);
 		//this.m_position = this.m_body->this.m_position + b2Mul(this.m_body->this.m_R, this.m_localCentroid)
@@ -381,7 +381,7 @@ class b2PolyShape extends b2Shape {
 		}
 	}
 	
-	function QuickSync(position: b2Vec2, R: b2Mat22): void {
+	override function QuickSync(position: b2Vec2, R: b2Mat22): void {
 		//this.m_R = R;
 		this.m_R.SetM(R);
 		//this.m_position = position + b2Mul(R, this.m_localCentroid);
@@ -389,7 +389,7 @@ class b2PolyShape extends b2Shape {
 		this.m_position.y = position.y + (R.col1.y * this.m_localCentroid.x + R.col2.y * this.m_localCentroid.y);
 	}
 	
-	function ResetProxy(broadPhase: b2BroadPhase): void {
+	override function ResetProxy(broadPhase: b2BroadPhase): void {
 
 		if (this.m_proxyId == b2Pair.b2_nullProxy)
 		{
@@ -431,7 +431,7 @@ class b2PolyShape extends b2Shape {
 		}
 	}
 	
-	function Support(dX: number, dY: number, out: b2Vec2): void{
+	override function Support(dX: number, dY: number, out: b2Vec2): void{
 		//b2Vec2 dLocal = b2MulT(this.m_R, d);
 		var dLocalX = (dX*this.m_R.col1.x + dY*this.m_R.col1.y);
 		var dLocalY = (dX*this.m_R.col2.x + dY*this.m_R.col2.y);

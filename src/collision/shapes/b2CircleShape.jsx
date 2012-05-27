@@ -85,7 +85,7 @@ class b2CircleShape extends b2Shape {
 		}
 	}
 	
-	function Synchronize(position1: b2Vec2, R1: b2Mat22, position2: b2Vec2, R2: b2Mat22): void {
+	override function Synchronize(position1: b2Vec2, R1: b2Mat22, position2: b2Vec2, R2: b2Mat22): void {
 		this.m_R.SetM(R2);
 		//this.m_position = position2 + b2Mul(R2, this.m_localPosition);
 		this.m_position.x = (R2.col1.x * this.m_localPosition.x + R2.col2.x * this.m_localPosition.y) + position2.x;
@@ -122,14 +122,14 @@ class b2CircleShape extends b2Shape {
 		}
 	}
 	
-	function QuickSync(position: b2Vec2, R: b2Mat22): void {
+	override function QuickSync(position: b2Vec2, R: b2Mat22): void {
 		this.m_R.SetM(R);
 		//this.m_position = position + b2Mul(R, this.m_localPosition);
 		this.m_position.x = (R.col1.x * this.m_localPosition.x + R.col2.x * this.m_localPosition.y) + position.x;
 		this.m_position.y = (R.col1.y * this.m_localPosition.x + R.col2.y * this.m_localPosition.y) + position.y;
 	}
 	
-	function ResetProxy(broadPhase: b2BroadPhase): void {
+	override function ResetProxy(broadPhase: b2BroadPhase): void {
 		if (this.m_proxyId == b2Pair.b2_nullProxy)
 		{
 			return;
@@ -159,7 +159,7 @@ class b2CircleShape extends b2Shape {
 		}
 	}
 	
-	function Support(dX: number, dY: number, out: b2Vec2): void {
+	override function Support(dX: number, dY: number, out: b2Vec2): void {
 		//b2Vec2 u = d;
 		//u.Normalize();
 		var len = Math.sqrt(dX*dX + dY*dY);
