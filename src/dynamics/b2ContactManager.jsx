@@ -86,6 +86,7 @@ class b2ContactManager extends b2PairCallback {
 
 		return contact;
 	}
+	
 	// TODO: now here
 
 }

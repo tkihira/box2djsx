@@ -311,8 +311,7 @@ class b2Collision {
 		tClip.id.features.incidentVertex = vertex22;
 	}
 	static var b2CollidePolyTempVec = new b2Vec2();
-	static function b2CollidePoly(manifold: b2Manifold, polyA: b2PolyShape, polyB: b2PolyShape, conservative: boolean): void
-	{
+	static function b2CollidePoly(manifold: b2Manifold, polyA: b2PolyShape, polyB: b2PolyShape, conservative: boolean): void {
 		manifold.pointCount = 0;
 
 		var edgeA = 0;
@@ -467,5 +466,195 @@ class b2Collision {
 		manifold.pointCount = pointCount;
 	}
 	
+	static function b2CollideCircle(manifold: b2Manifold, circle1: b2CircleShape, circle2: b2CircleShape, conservative: boolean): void {
+		manifold.pointCount = 0;
+
+		//var d = b2Math.SubtractVV(circle2.m_position, circle1.m_position);
+		var dX = circle2.m_position.x - circle1.m_position.x;
+		var dY = circle2.m_position.y - circle1.m_position.y;
+		//var distSqr = b2Math.b2Dot(d, d);
+		var distSqr = dX * dX + dY * dY;
+		var radiusSum = circle1.m_radius + circle2.m_radius;
+		if (distSqr > radiusSum * radiusSum && conservative == false)
+		{
+			return;
+		}
+
+		var separation;
+		if (distSqr < Number.MIN_VALUE)
+		{
+			separation = -radiusSum;
+			manifold.normal.Set(0.0, 1.0);
+		}
+		else
+		{
+			var dist = Math.sqrt(distSqr);
+			separation = dist - radiusSum;
+			var a = 1.0 / dist;
+			manifold.normal.x = a * dX;
+			manifold.normal.y = a * dY;
+		}
+
+		manifold.pointCount = 1;
+		var tPoint = manifold.points[0];
+		tPoint.id.set_key(0);
+		tPoint.separation = separation;
+		//tPoint.position = b2Math.SubtractVV(circle2.m_position, b2Math.MulFV(circle2.m_radius, manifold.normal));
+		tPoint.position.x = circle2.m_position.x - (circle2.m_radius * manifold.normal.x);
+		tPoint.position.y = circle2.m_position.y - (circle2.m_radius * manifold.normal.y);
+	}
+	
+	static function b2CollidePolyAndCircle(manifold: b2Manifold, poly: b2PolyShape, circle: b2CircleShape, conservative: boolean): void{
+		manifold.pointCount = 0;
+		var tPoint;
+
+		var dX;
+		var dY;
+
+		// Compute circle position in the frame of the polygon.
+		//var xLocal = b2Math.b2MulTMV(poly.m_R, b2Math.SubtractVV(circle.m_position, poly.m_position));
+		var xLocalX = circle.m_position.x - poly.m_position.x;
+		var xLocalY = circle.m_position.y - poly.m_position.y;
+		var tMat = poly.m_R;
+		var tX = xLocalX * tMat.col1.x + xLocalY * tMat.col1.y;
+		xLocalY = xLocalX * tMat.col2.x + xLocalY * tMat.col2.y;
+		xLocalX = tX;
+
+		var dist;
+
+		// Find the min separating edge.
+		var normalIndex = 0;
+		var separation = -Number.MAX_VALUE;
+		var radius = circle.m_radius;
+		for (var i = 0; i < poly.m_vertexCount; ++i)
+		{
+			//var s = b2Math.b2Dot(poly.m_normals[i], b2Math.SubtractVV(xLocal, poly.m_vertices[i]));
+			var s = poly.m_normals[i].x * (xLocalX-poly.m_vertices[i].x) + poly.m_normals[i].y * (xLocalY-poly.m_vertices[i].y);
+			if (s > radius)
+			{
+				// Early out.
+				return;
+			}
+
+			if (s > separation)
+			{
+				separation = s;
+				normalIndex = i;
+			}
+		}
+
+		// If the center is inside the polygon ...
+		if (separation < Number.MIN_VALUE)
+		{
+			manifold.pointCount = 1;
+			//manifold.normal = b2Math.b2MulMV(poly.m_R, poly.m_normals[normalIndex]);
+			var tVec = poly.m_normals[normalIndex];
+			manifold.normal.x = tMat.col1.x * tVec.x + tMat.col2.x * tVec.y;
+			manifold.normal.y = tMat.col1.y * tVec.x + tMat.col2.y * tVec.y;
+
+			tPoint = manifold.points[0];
+			tPoint.id.features.incidentEdge = normalIndex;
+			tPoint.id.features.incidentVertex = b2Collision.b2_nullFeature;
+			tPoint.id.features.referenceFace = b2Collision.b2_nullFeature;
+			tPoint.id.features.flip = 0;
+			tPoint.position.x = circle.m_position.x - radius * manifold.normal.x;
+			tPoint.position.y = circle.m_position.y - radius * manifold.normal.y;
+			//tPoint.position = b2Math.SubtractVV(circle.m_position , b2Math.MulFV(radius , manifold.normal));
+			tPoint.separation = separation - radius;
+			return;
+		}
+
+		// Project the circle center onto the edge segment.
+		var vertIndex1 = normalIndex;
+		var vertIndex2 = vertIndex1 + 1 < poly.m_vertexCount ? vertIndex1 + 1 : 0;
+		//var e = b2Math.SubtractVV(poly.m_vertices[vertIndex2] , poly.m_vertices[vertIndex1]);
+		var eX = poly.m_vertices[vertIndex2].x - poly.m_vertices[vertIndex1].x;
+		var eY = poly.m_vertices[vertIndex2].y - poly.m_vertices[vertIndex1].y;
+		//var length = e.Normalize();
+		var length = Math.sqrt(eX*eX + eY*eY);
+		eX /= length;
+		eY /= length;
+
+		// If the edge length is zero ...
+		if (length < Number.MIN_VALUE)
+		{
+			//d = b2Math.SubtractVV(xLocal , poly.m_vertices[vertIndex1]);
+			dX = xLocalX - poly.m_vertices[vertIndex1].x;
+			dY = xLocalY - poly.m_vertices[vertIndex1].y;
+			//dist = d.Normalize();
+			dist = Math.sqrt(dX*dX + dY*dY);
+			dX /= dist;
+			dY /= dist;
+			if (dist > radius)
+			{
+				return;
+			}
+
+			manifold.pointCount = 1;
+			//manifold.normal = b2Math.b2MulMV(poly.m_R, d);
+			manifold.normal.Set(tMat.col1.x * dX + tMat.col2.x * dY, tMat.col1.y * dX + tMat.col2.y * dY);
+			tPoint = manifold.points[0];
+			tPoint.id.features.incidentEdge = b2Collision.b2_nullFeature;
+			tPoint.id.features.incidentVertex = vertIndex1;
+			tPoint.id.features.referenceFace = b2Collision.b2_nullFeature;
+			tPoint.id.features.flip = 0;
+			//tPoint.position = b2Math.SubtractVV(circle.m_position , b2Math.MulFV(radius , manifold.normal));
+			tPoint.position.x = circle.m_position.x - radius * manifold.normal.x;
+			tPoint.position.y = circle.m_position.y - radius * manifold.normal.y;
+			tPoint.separation = dist - radius;
+			return;
+		}
+
+		// Project the center onto the edge.
+		//var u = b2Math.b2Dot(b2Math.SubtractVV(xLocal , poly.m_vertices[vertIndex1]) , e);
+		var u = (xLocalX-poly.m_vertices[vertIndex1].x) * eX + (xLocalY-poly.m_vertices[vertIndex1].y) * eY;
+
+		tPoint = manifold.points[0];
+		tPoint.id.features.incidentEdge = b2Collision.b2_nullFeature;
+		tPoint.id.features.incidentVertex = b2Collision.b2_nullFeature;
+		tPoint.id.features.referenceFace = b2Collision.b2_nullFeature;
+		tPoint.id.features.flip = 0;
+
+		var pX, pY;
+		if (u <= 0.0)
+		{
+			pX = poly.m_vertices[vertIndex1].x;
+			pY = poly.m_vertices[vertIndex1].y;
+			tPoint.id.features.incidentVertex = vertIndex1;
+		}
+		else if (u >= length)
+		{
+			pX = poly.m_vertices[vertIndex2].x;
+			pY = poly.m_vertices[vertIndex2].y;
+			tPoint.id.features.incidentVertex = vertIndex2;
+		}
+		else
+		{
+			//p = b2Math.AddVV(poly.m_vertices[vertIndex1] , b2Math.MulFV(u, e));
+			pX = eX * u + poly.m_vertices[vertIndex1].x;
+			pY = eY * u + poly.m_vertices[vertIndex1].y;
+			tPoint.id.features.incidentEdge = vertIndex1;
+		}
+
+		//d = b2Math.SubtractVV(xLocal , p);
+		dX = xLocalX - pX;
+		dY = xLocalY - pY;
+		//dist = d.Normalize();
+		dist = Math.sqrt(dX*dX + dY*dY);
+		dX /= dist;
+		dY /= dist;
+		if (dist > radius)
+		{
+			return;
+		}
+
+		manifold.pointCount = 1;
+		//manifold.normal = b2Math.b2MulMV(poly.m_R, d);
+		manifold.normal.Set(tMat.col1.x * dX + tMat.col2.x * dY, tMat.col1.y * dX + tMat.col2.y * dY);
+		//tPoint.position = b2Math.SubtractVV(circle.m_position , b2Math.MulFV(radius , manifold.normal));
+		tPoint.position.x = circle.m_position.x - radius * manifold.normal.x;
+		tPoint.position.y = circle.m_position.y - radius * manifold.normal.y;
+		tPoint.separation = dist - radius;
+	}
 
 }

@@ -28,4 +28,7 @@ class b2ContactID {
 		this.features._incidentVertex = ((this._key & 0x00ff0000) >> 16) & 0x000000ff;
 		this.features._flip = ((this._key & 0xff000000) >> 24) & 0x000000ff;
 	}
+	
+	// ??? maybe box2D's bug
+	var key = 0;
 }

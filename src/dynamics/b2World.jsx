@@ -66,7 +66,7 @@ class b2World {
 		this.m_groundBody = this.CreateBody(bd);
 	}
 	
-	// now here
+	// TODO: now here
 
 	//var m_broadPhase: b2BroadPhase;
 	static var s_enablePositionCorrection = true;
