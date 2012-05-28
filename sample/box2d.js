@@ -71,6 +71,14 @@ function _Main$() {
 _Main$.prototype = new _Main;
 
 /**
+ * @return {!number}
+ */
+_Main.random$ = function () {
+	_Main.seed = _Main.seed * 713 + 17 & 0xFF;
+	return _Main.seed / 256;
+};
+
+/**
  * @param {b2World} world
  * @param {CanvasRenderingContext2D} context
  */
@@ -142,22 +150,10 @@ _Main.drawShape$Lb2Shape$LCanvasRenderingContext2D$ = function (shape, context) 
 		break;
 	case b2Shape.e_polyShape:
 		poly = (function (o) { return o instanceof b2PolyShape ? o : null; })(shape);
-		tV = b2Math.AddVV$Lb2Vec2$Lb2Vec2$(poly.m_position, b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(poly.m_R, (function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/box2d.jsx:51] detected misuse of 'undefined' as type 'b2Vec2'");
-			}
-			return v;
-		}(poly.m_vertices[(0)]))));
+		tV = b2Math.AddVV$Lb2Vec2$Lb2Vec2$(poly.m_position, b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(poly.m_R, poly.m_vertices[(0)]));
 		context.moveTo(tV.x, tV.y);
 		for (i = 0; i < poly.m_vertexCount; i++) {
-			v = b2Math.AddVV$Lb2Vec2$Lb2Vec2$(poly.m_position, b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(poly.m_R, (function (v) {
-				if (! (typeof v !== "undefined")) {
-					debugger;
-					throw new Error("[src/box2d.jsx:54] detected misuse of 'undefined' as type 'b2Vec2'");
-				}
-				return v;
-			}(poly.m_vertices[i]))));
+			v = b2Math.AddVV$Lb2Vec2$Lb2Vec2$(poly.m_position, b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(poly.m_R, poly.m_vertices[i]));
 			context.lineTo(v.x, v.y);
 		}
 		context.lineTo(tV.x, tV.y);
@@ -179,14 +175,14 @@ _Main.createWorld$ = function () {
 	/** @type {b2World} */
 	var world;
 	worldAABB = new b2AABB$();
-	worldAABB.minVertex.Set$NN(- 1000, - 1000);
+	worldAABB.minVertex.Set$NN(-1000, -1000);
 	worldAABB.maxVertex.Set$NN(1000, 1000);
 	gravity = new b2Vec2$NN(0, 300);
 	doSleep = true;
 	world = new b2World$Lb2AABB$Lb2Vec2$B(worldAABB, gravity, doSleep);
 	_Main.createGround$Lb2World$(world);
 	_Main.createBox$Lb2World$NNNN(world, 0, 0, 10, 1000);
-	_Main.createBox$Lb2World$NNNN(world, 500, 0, 10, 1000);
+	_Main.createBox$Lb2World$NNNN(world, 320, 0, 10, 1000);
 	return world;
 };
 
@@ -200,12 +196,12 @@ _Main.createGround$Lb2World$ = function (world) {
 	/** @type {b2BodyDef} */
 	var groundBd;
 	groundSd = new b2BoxDef$();
-	groundSd.extents.Set$NN(1000, 50);
+	groundSd.extents.Set$NN(1000, 10);
 	groundSd.restitution = 0.2;
 	groundSd.friction = 0.2;
 	groundBd = new b2BodyDef$();
 	groundBd.AddShape$Lb2ShapeDef$(groundSd);
-	groundBd.position.Set$NN(- 500, 340);
+	groundBd.position.Set$NN(-500, 400);
 	return world.CreateBody$Lb2BodyDef$(groundBd);
 };
 
@@ -251,7 +247,7 @@ _Main.createMy$Lb2World$NNN = function (world, x, y, r) {
 	ballSd = new b2PolyDef$();
 	ballSd.density = 1.0;
 	ballSd.restitution = 0.8;
-	v = 3 + (Math.random() * 5 | 0);
+	v = 3 + (_Main.random$() * 5 | 0);
 	ballSd.vertexCount = v;
 	for (i = 0; i < v; i++) {
 		ballSd.vertices[i].Set$NN(r * Math.cos(Math.PI * 2 / v * i), r * Math.sin(Math.PI * 2 / v * i));
@@ -281,12 +277,15 @@ _Main.main$ = function () {
 	/** @type {!number} */
 	var last;
 	var tick;
+	dom.window.setTimeout((function () {
+		dom.window.scrollTo(0, 0);
+	}), 100);
 	canvas = (function (o) { return o instanceof HTMLCanvasElement ? o : null; })(dom.id$S("canvas"));
 	ctx = (function (o) { return o instanceof CanvasRenderingContext2D ? o : null; })(canvas.getContext("2d"));
 	world = _Main.createWorld$();
-	count = 700;
+	count = 100;
 	for (i = 0; i < count; i++) {
-		_Main.createMy$Lb2World$NNN(world, i * 450 / count + 25, - 100 + Math.random() * 200, 5 + Math.random() * 5);
+		_Main.createMy$Lb2World$NNN(world, i * 270 / count + 25, -200 + _Main.random$() * 300, 15 + _Main.random$() * 10);
 	}
 	frame = 0;
 	last = Date.now();
@@ -297,12 +296,13 @@ _Main.main$ = function () {
 		var now;
 		frame++;
 		dom.window.setTimeout(tick, 0);
-		world.Step$NN(1 / 60, 1);
+		world.Step$NN(0.016666666666666666, 1);
 		ctx.fillStyle = "#000";
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 		_Main.drawWorld$Lb2World$LCanvasRenderingContext2D$(world, ctx);
 		now = Date.now();
 		if (now - last > 1000) {
+			(function (o) { return o instanceof HTMLDivElement ? o : null; })(dom.id$S("fps")).innerHTML = "fps:" + (frame + "");
 			console.log("fps:" + (frame + ""));
 			frame = 0;
 			last = now;
@@ -808,7 +808,7 @@ b2Math.b2Random$ = function () {
  * @param {!number} x
  * @return {!number}
  */
-b2Math.b2NextPowerOfTwo$I = function (x) {
+b2Math.b2NextPowerOfTwo$N = function (x) {
 	x |= x >> 1 & 0x7FFFFFFF;
 	x |= x >> 2 & 0x3FFFFFFF;
 	x |= x >> 4 & 0x0FFFFFFF;
@@ -842,7 +842,8 @@ b2Vec2.prototype = new Object;
 function b2Vec2$() {
 	this.x = 0;
 	this.y = 0;
-	this.SetZero$();
+	this.x = 0;
+	this.y = 0;
 };
 
 b2Vec2$.prototype = new b2Vec2;
@@ -855,7 +856,8 @@ b2Vec2$.prototype = new b2Vec2;
 function b2Vec2$NN(x, y) {
 	this.x = 0;
 	this.y = 0;
-	this.Set$NN(x, y);
+	this.x = x;
+	this.y = y;
 };
 
 b2Vec2$NN.prototype = new b2Vec2;
@@ -1004,7 +1006,7 @@ b2Vec2.prototype.Normalize$ = function () {
 	var length;
 	/** @type {!number} */
 	var invLength;
-	length = this.Length$();
+	length = Math.sqrt(this.x * this.x + this.y * this.y);
 	if (length < Number.MIN_VALUE) {
 		return 0.0;
 	}
@@ -1247,8 +1249,8 @@ b2BroadPhase.prototype.InRange$Lb2AABB$ = function (aabb) {
 	d2Y = this.m_worldAABB.minVertex.y;
 	d2X -= aabb.maxVertex.x;
 	d2Y -= aabb.maxVertex.y;
-	dX = b2Math.b2Max$NN(dX, d2X);
-	dY = b2Math.b2Max$NN(dY, d2Y);
+	dX = (dX > d2X ? dX : d2X);
+	dY = (dY > d2Y ? dY : d2Y);
 	return b2Math.b2Max$NN(dX, dY) < 0.0;
 };
 
@@ -1257,10 +1259,7 @@ b2BroadPhase.prototype.InRange$Lb2AABB$ = function (aabb) {
  * @return {b2Proxy}
  */
 b2BroadPhase.prototype.GetProxy$N = function (proxyId) {
-	if (proxyId === b2Pair.b2_nullProxy || this.m_proxyPool[proxyId].IsValid$() === false) {
-		return null;
-	}
-	return this.m_proxyPool[proxyId];
+	return proxyId === b2Pair.b2_nullProxy || this.m_proxyPool[proxyId].IsValid$() === false ? null : this.m_proxyPool[proxyId];
 };
 
 /**
@@ -1312,7 +1311,7 @@ b2BroadPhase.prototype.CreateProxy$Lb2AABB$X = function (aabb, userData) {
 	index = 0;
 	proxyId = this.m_freeProxy;
 	proxy = this.m_proxyPool[proxyId];
-	this.m_freeProxy = proxy.GetNext$();
+	this.m_freeProxy = proxy.lowerBounds[(0)];
 	proxy.overlapCount = 0;
 	proxy.userData = userData;
 	boundCount = 2 * this.m_proxyCount;
@@ -1325,39 +1324,9 @@ b2BroadPhase.prototype.CreateProxy$Lb2AABB$X = function (aabb, userData) {
 		upperIndex = 0;
 		lowerIndexOut = [ lowerIndex ];
 		upperIndexOut = [ upperIndex ];
-		this.Query$ANANNNALb2Bound$NN(lowerIndexOut, upperIndexOut, (function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/b2BroadPhase.jsx:144] detected misuse of 'undefined' as type 'number'");
-			}
-			return v;
-		}(lowerValues[axis])), (function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/b2BroadPhase.jsx:144] detected misuse of 'undefined' as type 'number'");
-			}
-			return v;
-		}(upperValues[axis])), (function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/b2BroadPhase.jsx:144] detected misuse of 'undefined' as type 'Array.<b2Bound>'");
-			}
-			return v;
-		}(bounds)), boundCount, axis);
-		lowerIndex = (function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/b2BroadPhase.jsx:145] detected misuse of 'undefined' as type 'number'");
-			}
-			return v;
-		}(lowerIndexOut[(0)]));
-		upperIndex = (function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/b2BroadPhase.jsx:146] detected misuse of 'undefined' as type 'number'");
-			}
-			return v;
-		}(upperIndexOut[(0)]));
+		this.Query$ANANNNALb2Bound$NN(lowerIndexOut, upperIndexOut, lowerValues[axis], upperValues[axis], bounds, boundCount, axis);
+		lowerIndex = lowerIndexOut[(0)];
+		upperIndex = upperIndexOut[(0)];
 		tArr = [  ];
 		j = 0;
 		tEnd = boundCount - upperIndex;
@@ -1398,21 +1367,9 @@ b2BroadPhase.prototype.CreateProxy$Lb2AABB$X = function (aabb, userData) {
 			tBound1.stabbingCount = tBound2.stabbingCount;
 		}
 		++ upperIndex;
-		bounds[lowerIndex].value = (function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/b2BroadPhase.jsx:203] detected misuse of 'undefined' as type 'number'");
-			}
-			return v;
-		}(lowerValues[axis]));
+		bounds[lowerIndex].value = lowerValues[axis];
 		bounds[lowerIndex].proxyId = proxyId;
-		bounds[upperIndex].value = (function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/b2BroadPhase.jsx:205] detected misuse of 'undefined' as type 'number'");
-			}
-			return v;
-		}(upperValues[axis]));
+		bounds[upperIndex].value = upperValues[axis];
 		bounds[upperIndex].proxyId = proxyId;
 		bounds[lowerIndex].stabbingCount = (lowerIndex === 0 ? 0 : bounds[(lowerIndex - 1)].stabbingCount);
 		bounds[upperIndex].stabbingCount = bounds[(upperIndex - 1)].stabbingCount;
@@ -1430,13 +1387,7 @@ b2BroadPhase.prototype.CreateProxy$Lb2AABB$X = function (aabb, userData) {
 	}
 	++ this.m_proxyCount;
 	for (i = 0; i < this.m_queryResultCount; ++ i) {
-		this.m_pairManager.AddBufferedPair$NN(proxyId, (function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/b2BroadPhase.jsx:241] detected misuse of 'undefined' as type 'number'");
-			}
-			return v;
-		}(this.m_queryResults[i])));
+		this.m_pairManager.AddBufferedPair$NN(proxyId, this.m_queryResults[i]);
 	}
 	this.m_pairManager.Commit$();
 	this.m_queryResultCount = 0;
@@ -1544,22 +1495,10 @@ b2BroadPhase.prototype.DestroyProxy$N = function (proxyId) {
 		for (index2 = lowerIndex; index2 < tEnd; ++ index2) {
 			bounds[index2].stabbingCount--;
 		}
-		this.Query$ANANNNALb2Bound$NN([ 0 ], [ 0 ], lowerValue, upperValue, (function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/b2BroadPhase.jsx:346] detected misuse of 'undefined' as type 'Array.<b2Bound>'");
-			}
-			return v;
-		}(bounds)), boundCount - 2, axis);
+		this.Query$ANANNNALb2Bound$NN([ 0 ], [ 0 ], lowerValue, upperValue, bounds, boundCount - 2, axis);
 	}
 	for (i = 0; i < this.m_queryResultCount; ++ i) {
-		this.m_pairManager.RemoveBufferedPair$NN(proxyId, (function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/b2BroadPhase.jsx:355] detected misuse of 'undefined' as type 'number'");
-			}
-			return v;
-		}(this.m_queryResults[i])));
+		this.m_pairManager.RemoveBufferedPair$NN(proxyId, this.m_queryResults[i]);
 	}
 	this.m_pairManager.Commit$();
 	this.m_queryResultCount = 0;
@@ -1646,28 +1585,10 @@ b2BroadPhase.prototype.MoveProxy$NLb2AABB$ = function (proxyId, aabb) {
 		upperValue = newValues.upperValues[axis];
 		deltaLower = lowerValue - bounds[lowerIndex].value;
 		deltaUpper = upperValue - bounds[upperIndex].value;
-		bounds[lowerIndex].value = (function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/b2BroadPhase.jsx:426] detected misuse of 'undefined' as type 'number'");
-			}
-			return v;
-		}(lowerValue));
-		bounds[upperIndex].value = (function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/b2BroadPhase.jsx:427] detected misuse of 'undefined' as type 'number'");
-			}
-			return v;
-		}(upperValue));
+		bounds[lowerIndex].value = lowerValue;
+		bounds[upperIndex].value = upperValue;
 		if (deltaLower < 0) {
-			index = (function (v) {
-				if (! (typeof v !== "undefined")) {
-					debugger;
-					throw new Error("[src/collision/b2BroadPhase.jsx:436] detected misuse of 'undefined' as type 'number'");
-				}
-				return v;
-			}(lowerIndex));
+			index = lowerIndex;
 			while (index > 0 && lowerValue < bounds[(index - 1)].value) {
 				bound = bounds[index];
 				prevBound = bounds[(index - 1)];
@@ -1675,13 +1596,7 @@ b2BroadPhase.prototype.MoveProxy$NLb2AABB$ = function (proxyId, aabb) {
 				prevProxy = this.m_proxyPool[prevBound.proxyId];
 				prevBound.stabbingCount++;
 				if (prevBound.IsUpper$() === true) {
-					if (this.TestOverlap$Lb2BoundValues$Lb2Proxy$(newValues, (function (v) {
-						if (! (typeof v !== "undefined")) {
-							debugger;
-							throw new Error("[src/collision/b2BroadPhase.jsx:449] detected misuse of 'undefined' as type 'b2Proxy'");
-						}
-						return v;
-					}(prevProxy)))) {
+					if (this.TestOverlap$Lb2BoundValues$Lb2Proxy$(newValues, prevProxy)) {
 						this.m_pairManager.AddBufferedPair$NN(proxyId, prevProxyId);
 					}
 					prevProxy.upperBounds[axis]++;
@@ -1691,24 +1606,12 @@ b2BroadPhase.prototype.MoveProxy$NLb2AABB$ = function (proxyId, aabb) {
 					bound.stabbingCount--;
 				}
 				proxy.lowerBounds[axis]--;
-				bound.Swap$Lb2Bound$((function (v) {
-					if (! (typeof v !== "undefined")) {
-						debugger;
-						throw new Error("[src/collision/b2BroadPhase.jsx:469] detected misuse of 'undefined' as type 'b2Bound'");
-					}
-					return v;
-				}(prevBound)));
+				bound.Swap$Lb2Bound$(prevBound);
 				-- index;
 			}
 		}
 		if (deltaUpper > 0) {
-			index = (function (v) {
-				if (! (typeof v !== "undefined")) {
-					debugger;
-					throw new Error("[src/collision/b2BroadPhase.jsx:478] detected misuse of 'undefined' as type 'number'");
-				}
-				return v;
-			}(upperIndex));
+			index = upperIndex;
 			while (index < boundCount - 1 && bounds[(index + 1)].value <= upperValue) {
 				bound = bounds[index];
 				nextBound = bounds[(index + 1)];
@@ -1716,13 +1619,7 @@ b2BroadPhase.prototype.MoveProxy$NLb2AABB$ = function (proxyId, aabb) {
 				nextProxy = this.m_proxyPool[nextProxyId];
 				nextBound.stabbingCount++;
 				if (nextBound.IsLower$() === true) {
-					if (this.TestOverlap$Lb2BoundValues$Lb2Proxy$(newValues, (function (v) {
-						if (! (typeof v !== "undefined")) {
-							debugger;
-							throw new Error("[src/collision/b2BroadPhase.jsx:490] detected misuse of 'undefined' as type 'b2Proxy'");
-						}
-						return v;
-					}(nextProxy)))) {
+					if (this.TestOverlap$Lb2BoundValues$Lb2Proxy$(newValues, nextProxy)) {
 						this.m_pairManager.AddBufferedPair$NN(proxyId, nextProxyId);
 					}
 					nextProxy.lowerBounds[axis]--;
@@ -1732,24 +1629,12 @@ b2BroadPhase.prototype.MoveProxy$NLb2AABB$ = function (proxyId, aabb) {
 					bound.stabbingCount--;
 				}
 				proxy.upperBounds[axis]++;
-				bound.Swap$Lb2Bound$((function (v) {
-					if (! (typeof v !== "undefined")) {
-						debugger;
-						throw new Error("[src/collision/b2BroadPhase.jsx:509] detected misuse of 'undefined' as type 'b2Bound'");
-					}
-					return v;
-				}(nextBound)));
+				bound.Swap$Lb2Bound$(nextBound);
 				index++;
 			}
 		}
 		if (deltaLower > 0) {
-			index = (function (v) {
-				if (! (typeof v !== "undefined")) {
-					debugger;
-					throw new Error("[src/collision/b2BroadPhase.jsx:522] detected misuse of 'undefined' as type 'number'");
-				}
-				return v;
-			}(lowerIndex));
+			index = lowerIndex;
 			while (index < boundCount - 1 && bounds[(index + 1)].value <= lowerValue) {
 				bound = bounds[index];
 				nextBound = bounds[(index + 1)];
@@ -1757,13 +1642,7 @@ b2BroadPhase.prototype.MoveProxy$NLb2AABB$ = function (proxyId, aabb) {
 				nextProxy = this.m_proxyPool[nextProxyId];
 				nextBound.stabbingCount--;
 				if (nextBound.IsUpper$()) {
-					if (this.TestOverlap$Lb2BoundValues$Lb2Proxy$(oldValues, (function (v) {
-						if (! (typeof v !== "undefined")) {
-							debugger;
-							throw new Error("[src/collision/b2BroadPhase.jsx:535] detected misuse of 'undefined' as type 'b2Proxy'");
-						}
-						return v;
-					}(nextProxy)))) {
+					if (this.TestOverlap$Lb2BoundValues$Lb2Proxy$(oldValues, nextProxy)) {
 						this.m_pairManager.RemoveBufferedPair$NN(proxyId, nextProxyId);
 					}
 					nextProxy.upperBounds[axis]--;
@@ -1773,24 +1652,12 @@ b2BroadPhase.prototype.MoveProxy$NLb2AABB$ = function (proxyId, aabb) {
 					bound.stabbingCount++;
 				}
 				proxy.lowerBounds[axis]++;
-				bound.Swap$Lb2Bound$((function (v) {
-					if (! (typeof v !== "undefined")) {
-						debugger;
-						throw new Error("[src/collision/b2BroadPhase.jsx:554] detected misuse of 'undefined' as type 'b2Bound'");
-					}
-					return v;
-				}(nextBound)));
+				bound.Swap$Lb2Bound$(nextBound);
 				index++;
 			}
 		}
 		if (deltaUpper < 0) {
-			index = (function (v) {
-				if (! (typeof v !== "undefined")) {
-					debugger;
-					throw new Error("[src/collision/b2BroadPhase.jsx:563] detected misuse of 'undefined' as type 'number'");
-				}
-				return v;
-			}(upperIndex));
+			index = upperIndex;
 			while (index > 0 && upperValue < bounds[(index - 1)].value) {
 				bound = bounds[index];
 				prevBound = bounds[(index - 1)];
@@ -1798,13 +1665,7 @@ b2BroadPhase.prototype.MoveProxy$NLb2AABB$ = function (proxyId, aabb) {
 				prevProxy = this.m_proxyPool[prevProxyId];
 				prevBound.stabbingCount--;
 				if (prevBound.IsLower$() === true) {
-					if (this.TestOverlap$Lb2BoundValues$Lb2Proxy$(oldValues, (function (v) {
-						if (! (typeof v !== "undefined")) {
-							debugger;
-							throw new Error("[src/collision/b2BroadPhase.jsx:576] detected misuse of 'undefined' as type 'b2Proxy'");
-						}
-						return v;
-					}(prevProxy)))) {
+					if (this.TestOverlap$Lb2BoundValues$Lb2Proxy$(oldValues, prevProxy)) {
 						this.m_pairManager.RemoveBufferedPair$NN(proxyId, prevProxyId);
 					}
 					prevProxy.lowerBounds[axis]++;
@@ -1814,13 +1675,7 @@ b2BroadPhase.prototype.MoveProxy$NLb2AABB$ = function (proxyId, aabb) {
 					bound.stabbingCount++;
 				}
 				proxy.upperBounds[axis]--;
-				bound.Swap$Lb2Bound$((function (v) {
-					if (! (typeof v !== "undefined")) {
-						debugger;
-						throw new Error("[src/collision/b2BroadPhase.jsx:595] detected misuse of 'undefined' as type 'b2Bound'");
-					}
-					return v;
-				}(prevBound)));
+				bound.Swap$Lb2Bound$(prevBound);
 				index--;
 			}
 		}
@@ -1865,44 +1720,8 @@ b2BroadPhase.prototype.QueryAABB$Lb2AABB$AXN = function (aabb, userData, maxCoun
 	upperIndex = 0;
 	lowerIndexOut = [ lowerIndex ];
 	upperIndexOut = [ upperIndex ];
-	this.Query$ANANNNALb2Bound$NN(lowerIndexOut, upperIndexOut, (function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/collision/b2BroadPhase.jsx:616] detected misuse of 'undefined' as type 'number'");
-		}
-		return v;
-	}(lowerValues[(0)])), (function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/collision/b2BroadPhase.jsx:616] detected misuse of 'undefined' as type 'number'");
-		}
-		return v;
-	}(upperValues[(0)])), (function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/collision/b2BroadPhase.jsx:616] detected misuse of 'undefined' as type 'Array.<b2Bound>'");
-		}
-		return v;
-	}(this.m_bounds[(0)])), 2 * this.m_proxyCount, 0);
-	this.Query$ANANNNALb2Bound$NN(lowerIndexOut, upperIndexOut, (function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/collision/b2BroadPhase.jsx:617] detected misuse of 'undefined' as type 'number'");
-		}
-		return v;
-	}(lowerValues[(1)])), (function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/collision/b2BroadPhase.jsx:617] detected misuse of 'undefined' as type 'number'");
-		}
-		return v;
-	}(upperValues[(1)])), (function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/collision/b2BroadPhase.jsx:617] detected misuse of 'undefined' as type 'Array.<b2Bound>'");
-		}
-		return v;
-	}(this.m_bounds[(1)])), 2 * this.m_proxyCount, 1);
+	this.Query$ANANNNALb2Bound$NN(lowerIndexOut, upperIndexOut, lowerValues[(0)], upperValues[(0)], this.m_bounds[(0)], 2 * this.m_proxyCount, 0);
+	this.Query$ANANNNALb2Bound$NN(lowerIndexOut, upperIndexOut, lowerValues[(1)], upperValues[(1)], this.m_bounds[(1)], 2 * this.m_proxyCount, 1);
 	count = 0;
 	for (i = 0; i < this.m_queryResultCount && count < maxCount; (++ i, ++ count)) {
 		proxy = this.m_proxyPool[this.m_queryResults[i]];
@@ -2343,7 +2162,7 @@ b2Collision.FindMaxSeparation$ANLb2PolyShape$Lb2PolyShape$B = function (edgeInde
 	bestEdge = 0;
 	increment = 0;
 	if (sPrev > s && sPrev > sNext) {
-		increment = - 1;
+		increment = -1;
 		bestEdge = prevEdge;
 		bestSeparation = sPrev;
 	} else {
@@ -2357,7 +2176,7 @@ b2Collision.FindMaxSeparation$ANLb2PolyShape$Lb2PolyShape$B = function (edgeInde
 		}
 	}
 	while (true) {
-		if (increment === - 1) {
+		if (increment === -1) {
 			edge = (bestEdge - 1 >= 0 ? bestEdge - 1 : count1 - 1);
 		} else {
 			edge = (bestEdge + 1 < count1 ? bestEdge + 1 : 0);
@@ -2493,13 +2312,7 @@ b2Collision.FindIncidentEdge$ALClipVertex$Lb2PolyShape$NLb2PolyShape$ = function
 	}
 	tClip = c[(0)];
 	tVec = tClip.v;
-	tVec.SetV$Lb2Vec2$((function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/collision/b2Collision.jsx:295] detected misuse of 'undefined' as type 'b2Vec2'");
-		}
-		return v;
-	}(vert2s[vertex21])));
+	tVec.SetV$Lb2Vec2$(vert2s[vertex21]);
 	tVec.MulM$Lb2Mat22$(poly2.m_R);
 	tVec.Add$Lb2Vec2$(poly2.m_position);
 	tClip.id.features.referenceFace = edge1;
@@ -2507,13 +2320,7 @@ b2Collision.FindIncidentEdge$ALClipVertex$Lb2PolyShape$NLb2PolyShape$ = function
 	tClip.id.features.incidentVertex = vertex21;
 	tClip = c[(1)];
 	tVec = tClip.v;
-	tVec.SetV$Lb2Vec2$((function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/collision/b2Collision.jsx:306] detected misuse of 'undefined' as type 'b2Vec2'");
-		}
-		return v;
-	}(vert2s[vertex22])));
+	tVec.SetV$Lb2Vec2$(vert2s[vertex22]);
 	tVec.MulM$Lb2Mat22$(poly2.m_R);
 	tVec.Add$Lb2Vec2$(poly2.m_position);
 	tClip.id.features.referenceFace = edge1;
@@ -2614,26 +2421,14 @@ b2Collision.b2CollidePoly$Lb2Manifold$Lb2PolyShape$Lb2PolyShape$B = function (ma
 	edgeA = 0;
 	edgeAOut = [ edgeA ];
 	separationA = b2Collision.FindMaxSeparation$ANLb2PolyShape$Lb2PolyShape$B(edgeAOut, polyA, polyB, conservative);
-	edgeA = (function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/collision/b2Collision.jsx:320] detected misuse of 'undefined' as type 'number'");
-		}
-		return v;
-	}(edgeAOut[(0)]));
+	edgeA = edgeAOut[(0)];
 	if (separationA > 0.0 && conservative === false) {
 		return;
 	}
 	edgeB = 0;
 	edgeBOut = [ edgeB ];
 	separationB = b2Collision.FindMaxSeparation$ANLb2PolyShape$Lb2PolyShape$B(edgeBOut, polyB, polyA, conservative);
-	edgeB = (function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/collision/b2Collision.jsx:327] detected misuse of 'undefined' as type 'number'");
-		}
-		return v;
-	}(edgeBOut[(0)]));
+	edgeB = edgeBOut[(0)];
 	if (separationB > 0.0 && conservative === false) {
 		return;
 	}
@@ -3221,14 +3016,13 @@ b2PairManager.prototype.AddBufferedPair$NN = function (proxyId1, proxyId2) {
 	var pair;
 	pair = this.AddPair$NN(proxyId1, proxyId2);
 	if (pair.IsBuffered$() === false) {
-		pair.SetBuffered$();
+		pair.status |= b2Pair.e_pairBuffered;
 		this.m_pairBuffer[this.m_pairBufferCount].proxyId1 = pair.proxyId1;
 		this.m_pairBuffer[this.m_pairBufferCount].proxyId2 = pair.proxyId2;
 		++ this.m_pairBufferCount;
 	}
-	pair.ClearRemoved$();
+	pair.status &= ~ b2Pair.e_pairRemoved;
 	if (b2BroadPhase.s_validate) {
-		this.ValidateBuffer$();
 	}
 };
 
@@ -3244,14 +3038,13 @@ b2PairManager.prototype.RemoveBufferedPair$NN = function (proxyId1, proxyId2) {
 		return;
 	}
 	if (pair.IsBuffered$() === false) {
-		pair.SetBuffered$();
+		pair.status |= b2Pair.e_pairBuffered;
 		this.m_pairBuffer[this.m_pairBufferCount].proxyId1 = pair.proxyId1;
 		this.m_pairBuffer[this.m_pairBufferCount].proxyId2 = pair.proxyId2;
 		++ this.m_pairBufferCount;
 	}
-	pair.SetRemoved$();
+	pair.status |= b2Pair.e_pairRemoved;
 	if (b2BroadPhase.s_validate) {
-		this.ValidateBuffer$();
 	}
 };
 
@@ -3275,7 +3068,7 @@ b2PairManager.prototype.Commit$ = function () {
 	proxies = this.m_broadPhase.m_proxyPool;
 	for (i = 0; i < this.m_pairBufferCount; ++ i) {
 		pair = this.Find$NN(this.m_pairBuffer[i].proxyId1, this.m_pairBuffer[i].proxyId2);
-		pair.ClearBuffered$();
+		pair.status &= ~ b2Pair.e_pairBuffered;
 		proxy1 = proxies[pair.proxyId1];
 		proxy2 = proxies[pair.proxyId2];
 		if (pair.IsRemoved$()) {
@@ -3288,7 +3081,7 @@ b2PairManager.prototype.Commit$ = function () {
 		} else {
 			if (pair.IsFinal$() === false) {
 				pair.userData = this.m_callback.PairAdded$XX(proxy1.userData, proxy2.userData);
-				pair.SetFinal$();
+				pair.status |= b2Pair.e_pairFinal;
 			}
 		}
 	}
@@ -3297,7 +3090,6 @@ b2PairManager.prototype.Commit$ = function () {
 	}
 	this.m_pairBufferCount = 0;
 	if (b2BroadPhase.s_validate) {
-		this.ValidateTable$();
 	}
 };
 
@@ -3326,25 +3118,13 @@ b2PairManager.prototype.AddPair$NN = function (proxyId1, proxyId2) {
 		return pair;
 	}
 	pIndex = this.m_freePair;
-	pair = (function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/collision/b2PairManager.jsx:201] detected misuse of 'undefined' as type 'b2Pair'");
-		}
-		return v;
-	}(this.m_pairs[pIndex]));
+	pair = this.m_pairs[pIndex];
 	this.m_freePair = pair.next;
 	pair.proxyId1 = proxyId1;
 	pair.proxyId2 = proxyId2;
 	pair.status = 0;
 	pair.userData = null;
-	pair.next = (function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/collision/b2PairManager.jsx:208] detected misuse of 'undefined' as type 'number'");
-		}
-		return v;
-	}(this.m_hashTable[hash]));
+	pair.next = this.m_hashTable[hash];
 	this.m_hashTable[hash] = pIndex;
 	++ this.m_pairCount;
 	return pair;
@@ -3379,13 +3159,7 @@ b2PairManager.prototype.RemovePair$NN = function (proxyId1, proxyId2) {
 	node = this.m_hashTable[hash];
 	pNode = null;
 	while (node !== b2Pair.b2_nullPair) {
-		if (b2PairManager.Equals$Lb2Pair$NN((function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/b2PairManager.jsx:235] detected misuse of 'undefined' as type 'b2Pair'");
-			}
-			return v;
-		}(this.m_pairs[node])), proxyId1, proxyId2)) {
+		if (b2PairManager.Equals$Lb2Pair$NN(this.m_pairs[node], proxyId1, proxyId2)) {
 			index = node;
 			if (pNode != null) {
 				pNode.next = this.m_pairs[node].next;
@@ -3399,23 +3173,11 @@ b2PairManager.prototype.RemovePair$NN = function (proxyId1, proxyId2) {
 			pair.proxyId2 = b2Pair.b2_nullProxy;
 			pair.userData = null;
 			pair.status = 0;
-			this.m_freePair = (function (v) {
-				if (! (typeof v !== "undefined")) {
-					debugger;
-					throw new Error("[src/collision/b2PairManager.jsx:257] detected misuse of 'undefined' as type 'number'");
-				}
-				return v;
-			}(index));
+			this.m_freePair = index;
 			-- this.m_pairCount;
 			return userData;
 		} else {
-			pNode = (function (v) {
-				if (! (typeof v !== "undefined")) {
-					debugger;
-					throw new Error("[src/collision/b2PairManager.jsx:264] detected misuse of 'undefined' as type 'b2Pair'");
-				}
-				return v;
-			}(this.m_pairs[node]));
+			pNode = this.m_pairs[node];
 			node = pNode.next;
 		}
 	}
@@ -3451,19 +3213,10 @@ b2PairManager.prototype.FindHash$NNN = function (proxyId1, proxyId2, hash) {
 	/** @type {undefined|!number} */
 	var index;
 	index = this.m_hashTable[hash];
-	while (index !== b2Pair.b2_nullPair && b2PairManager.Equals$Lb2Pair$NN((function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/collision/b2PairManager.jsx:290] detected misuse of 'undefined' as type 'b2Pair'");
-		}
-		return v;
-	}(this.m_pairs[index])), proxyId1, proxyId2) === false) {
+	while (index !== b2Pair.b2_nullPair && b2PairManager.Equals$Lb2Pair$NN(this.m_pairs[index], proxyId1, proxyId2) === false) {
 		index = this.m_pairs[index].next;
 	}
-	if (index === b2Pair.b2_nullPair) {
-		return null;
-	}
-	return this.m_pairs[index];
+	return index === b2Pair.b2_nullPair ? null : this.m_pairs[index];
 };
 
 /**
@@ -3874,50 +3627,29 @@ b2Shape.PolyMass$Lb2MassData$ALb2Vec2$NN = function (massData, vs, count, rho) {
 	/** @type {!number} */
 	var inty2;
 	center = new b2Vec2$();
-	center.SetZero$();
+	center.x = 0;
+	center.y = 0;
 	area = 0.0;
 	I = 0.0;
 	pRef = new b2Vec2$NN(0.0, 0.0);
-	inv3 = 1.0 / 3.0;
+	inv3 = 0.3333333333333333;
 	for (i = 0; i < count; ++ i) {
 		p1 = pRef;
 		p2 = vs[i];
 		p3 = (i + 1 < count ? vs[(i + 1)] : vs[(0)]);
-		e1 = b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$((function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/shapes/b2Shape.jsx:171] detected misuse of 'undefined' as type 'b2Vec2'");
-			}
-			return v;
-		}(p2)), p1);
-		e2 = b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$((function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/shapes/b2Shape.jsx:172] detected misuse of 'undefined' as type 'b2Vec2'");
-			}
-			return v;
-		}(p3)), p1);
-		D = b2Math.b2CrossVV$Lb2Vec2$Lb2Vec2$(e1, e2);
+		e1 = b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$(p2, p1);
+		e2 = b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$(p3, p1);
+		D = e1.x * e2.y - e1.y * e2.x;
 		triangleArea = 0.5 * D;
 		area += triangleArea;
 		tVec = new b2Vec2$();
-		tVec.SetV$Lb2Vec2$(p1);
-		tVec.Add$Lb2Vec2$((function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/shapes/b2Shape.jsx:183] detected misuse of 'undefined' as type 'b2Vec2'");
-			}
-			return v;
-		}(p2)));
-		tVec.Add$Lb2Vec2$((function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/shapes/b2Shape.jsx:184] detected misuse of 'undefined' as type 'b2Vec2'");
-			}
-			return v;
-		}(p3)));
+		tVec.x = p1.x;
+		tVec.y = p1.y;
+		tVec.Add$Lb2Vec2$(p2);
+		tVec.Add$Lb2Vec2$(p3);
 		tVec.Multiply$N(inv3 * triangleArea);
-		center.Add$Lb2Vec2$(tVec);
+		center.x += tVec.x;
+		center.y += tVec.y;
 		px = p1.x;
 		py = p1.y;
 		ex1 = e1.x;
@@ -3984,7 +3716,7 @@ b2Shape.PolyCentroid$ALb2Vec2$NLb2Vec2$ = function (vs, count, out) {
 	area = 0.0;
 	pRefX = 0.0;
 	pRefY = 0.0;
-	inv3 = 1.0 / 3.0;
+	inv3 = 0.3333333333333333;
 	for (i = 0; i < count; ++ i) {
 		p1X = pRefX;
 		p1Y = pRefY;
@@ -4004,7 +3736,8 @@ b2Shape.PolyCentroid$ALb2Vec2$NLb2Vec2$ = function (vs, count, out) {
 	}
 	cX *= 1.0 / area;
 	cY *= 1.0 / area;
-	out.Set$NN(cX, cY);
+	out.x = cX;
+	out.y = cY;
 };
 
 /**
@@ -4072,7 +3805,19 @@ function b2PolyShape$Lb2ShapeDef$Lb2Body$Lb2Vec2$(def, body, newOrigin) {
 	var positionY;
 	/** @type {b2BroadPhase} */
 	var broadPhase;
-	b2Shape$Lb2ShapeDef$Lb2Body$.call(this, def, body);
+	this.m_next = null;
+	this.m_type = 0;
+	this.m_R = new b2Mat22$();
+	this.m_position = new b2Vec2$();
+	this.m_userData = def.userData;
+	this.m_friction = def.friction;
+	this.m_restitution = def.restitution;
+	this.m_body = body;
+	this.m_proxyId = b2Pair.b2_nullProxy;
+	this.m_maxRadius = 0.0;
+	this.m_categoryBits = def.categoryBits;
+	this.m_maskBits = def.maskBits;
+	this.m_groupIndex = def.groupIndex;
 	this.m_coreVertices = null;
 	this.m_vertexCount = 0;
 	this.m_normals = null;
@@ -4222,26 +3967,16 @@ b2PolyShape.prototype.TestPoint$Lb2Vec2$ = function (p) {
 	/** @type {!number} */
 	var dot;
 	pLocal = new b2Vec2$();
-	pLocal.SetV$Lb2Vec2$(p);
+	pLocal.x = p.x;
+	pLocal.y = p.y;
 	pLocal.Subtract$Lb2Vec2$(this.m_position);
 	pLocal.MulTM$Lb2Mat22$(this.m_R);
 	for (i = 0; i < this.m_vertexCount; ++ i) {
 		tVec = new b2Vec2$();
-		tVec.SetV$Lb2Vec2$(pLocal);
-		tVec.Subtract$Lb2Vec2$((function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/shapes/b2PolyShape.jsx:33] detected misuse of 'undefined' as type 'b2Vec2'");
-			}
-			return v;
-		}(this.m_vertices[i])));
-		dot = b2Math.b2Dot$Lb2Vec2$Lb2Vec2$((function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/collision/shapes/b2PolyShape.jsx:35] detected misuse of 'undefined' as type 'b2Vec2'");
-			}
-			return v;
-		}(this.m_normals[i])), tVec);
+		tVec.x = pLocal.x;
+		tVec.y = pLocal.y;
+		tVec.Subtract$Lb2Vec2$(this.m_vertices[i]);
+		dot = b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(this.m_normals[i], tVec);
 		if (dot > 0.0) {
 			return false;
 		}
@@ -4472,7 +4207,8 @@ b2CircleShape.prototype.TestPoint$Lb2Vec2$ = function (p) {
 	/** @type {b2Vec2} */
 	var d;
 	d = new b2Vec2$();
-	d.SetV$Lb2Vec2$(p);
+	d.x = p.x;
+	d.y = p.y;
 	d.Subtract$Lb2Vec2$(this.m_position);
 	return b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(d, d) <= this.m_radius * this.m_radius;
 };
@@ -4655,7 +4391,16 @@ b2PolyDef.prototype = new b2ShapeDef;
 function b2PolyDef$() {
 	/** @type {!number} */
 	var i;
-	b2ShapeDef$.call(this);
+	this.type = b2Shape.e_unknownShape;
+	this.userData = null;
+	this.localPosition = new b2Vec2$NN(0.0, 0.0);
+	this.localRotation = 0.0;
+	this.friction = 0.2;
+	this.restitution = 0.0;
+	this.density = 0.0;
+	this.categoryBits = 0x0001;
+	this.maskBits = 0xFFFF;
+	this.groupIndex = 0;
 	this.vertexCount = 0;
 	this.type = b2Shape.e_unknownShape;
 	this.userData = null;
@@ -4690,7 +4435,16 @@ b2CircleDef.prototype = new b2ShapeDef;
  * @constructor
  */
 function b2CircleDef$() {
-	b2ShapeDef$.call(this);
+	this.type = b2Shape.e_unknownShape;
+	this.userData = null;
+	this.localPosition = new b2Vec2$NN(0.0, 0.0);
+	this.localRotation = 0.0;
+	this.friction = 0.2;
+	this.restitution = 0.0;
+	this.density = 0.0;
+	this.categoryBits = 0x0001;
+	this.maskBits = 0xFFFF;
+	this.groupIndex = 0;
 	this.type = b2Shape.e_unknownShape;
 	this.userData = null;
 	this.localPosition = new b2Vec2$NN(0.0, 0.0);
@@ -4719,7 +4473,16 @@ b2BoxDef.prototype = new b2ShapeDef;
  * @constructor
  */
 function b2BoxDef$() {
-	b2ShapeDef$.call(this);
+	this.type = b2Shape.e_unknownShape;
+	this.userData = null;
+	this.localPosition = new b2Vec2$NN(0.0, 0.0);
+	this.localRotation = 0.0;
+	this.friction = 0.2;
+	this.restitution = 0.0;
+	this.density = 0.0;
+	this.categoryBits = 0x0001;
+	this.maskBits = 0xFFFF;
+	this.groupIndex = 0;
 	this.type = b2Shape.e_unknownShape;
 	this.userData = null;
 	this.localPosition = new b2Vec2$NN(0.0, 0.0);
@@ -4814,13 +4577,7 @@ function b2Body$Lb2BodyDef$Lb2World$(bd, world) {
 			break;
 		}
 		massData = massDatas[i];
-		sd.ComputeMass$Lb2MassData$((function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/dynamics/b2Body.jsx:93] detected misuse of 'undefined' as type 'b2MassData'");
-			}
-			return v;
-		}(massData)));
+		sd.ComputeMass$Lb2MassData$(massData);
 		this.m_mass += massData.mass;
 		this.m_center.x += massData.mass * (sd.localPosition.x + massData.center.x);
 		this.m_center.y += massData.mass * (sd.localPosition.y + massData.center.y);
@@ -4860,13 +4617,7 @@ function b2Body$Lb2BodyDef$Lb2World$(bd, world) {
 	this.m_shapeList = null;
 	for (i = 0; i < this.m_shapeCount; ++ i) {
 		sd = bd.shapes[i];
-		shape = b2Shape.Create$Lb2ShapeDef$Lb2Body$Lb2Vec2$((function (v) {
-			if (! (typeof v !== "undefined")) {
-				debugger;
-				throw new Error("[src/dynamics/b2Body.jsx:156] detected misuse of 'undefined' as type 'b2ShapeDef'");
-			}
-			return v;
-		}(sd)), this, this.m_center);
+		shape = b2Shape.Create$Lb2ShapeDef$Lb2Body$Lb2Vec2$(sd, this, this.m_center);
 		shape.m_next = this.m_shapeList;
 		this.m_shapeList = shape;
 	}
@@ -5090,7 +4841,8 @@ b2Body.prototype.AllowSleeping$B = function (flag) {
 		this.m_flags |= b2Body.e_allowSleepFlag;
 	} else {
 		this.m_flags &= ~ b2Body.e_allowSleepFlag;
-		this.WakeUp$();
+		this.m_flags &= ~ b2Body.e_sleepFlag;
+		this.m_sleepTime = 0.0;
 	}
 };
 
@@ -5291,7 +5043,6 @@ b2ContactManager.prototype = new b2PairCallback;
  * @constructor
  */
 function b2ContactManager$() {
-	b2PairCallback$.call(this);
 	this.m_nullContact = new b2NullContact$();
 	this.m_world = null;
 	this.m_destroyImmediate = false;
@@ -5406,8 +5157,10 @@ b2ContactManager.prototype.DestroyContact$Lb2Contact$ = function (c) {
 		body2 = c.m_shape2.m_body;
 		node1 = c.m_node1;
 		node2 = c.m_node2;
-		body1.WakeUp$();
-		body2.WakeUp$();
+		body1.m_flags &= ~ b2Body.e_sleepFlag;
+		body1.m_sleepTime = 0.0;
+		body2.m_flags &= ~ b2Body.e_sleepFlag;
+		body2.m_sleepTime = 0.0;
 		if (node1.prev != null) {
 			node1.prev.next = node1.next;
 		}
@@ -5474,9 +5227,9 @@ b2ContactManager.prototype.Collide$ = function () {
 		if (c.m_shape1.m_body.IsSleeping$() && c.m_shape2.m_body.IsSleeping$()) {
 			continue;
 		}
-		oldCount = c.GetManifoldCount$();
+		oldCount = c.m_manifoldCount;
 		c.Evaluate$();
-		newCount = c.GetManifoldCount$();
+		newCount = c.m_manifoldCount;
 		if (oldCount === 0 && newCount > 0) {
 			body1 = c.m_shape1.m_body;
 			body2 = c.m_shape2.m_body;
@@ -5934,19 +5687,15 @@ b2World.prototype.Step$NN = function (dt, iterations) {
 		if ((seed.m_flags & (b2Body.e_staticFlag | b2Body.e_islandFlag | b2Body.e_sleepFlag | b2Body.e_frozenFlag)) !== 0) {
 			continue;
 		}
-		island.Clear$();
+		island.m_bodyCount = 0;
+		island.m_contactCount = 0;
+		island.m_jointCount = 0;
 		stackCount = 0;
 		stack[(stackCount++)] = seed;
 		seed.m_flags |= b2Body.e_islandFlag;
 		while (stackCount > 0) {
-			b = (function (v) {
-				if (! (typeof v !== "undefined")) {
-					debugger;
-					throw new Error("[src/dynamics/b2World.jsx:369] detected misuse of 'undefined' as type 'b2Body'");
-				}
-				return v;
-			}(stack[(-- stackCount)]));
-			island.AddBody$Lb2Body$(b);
+			b = stack[(-- stackCount)];
+			island.m_bodies[(island.m_bodyCount++)] = b;
 			b.m_flags &= ~ b2Body.e_sleepFlag;
 			if ((b.m_flags & b2Body.e_staticFlag) !== 0) {
 				continue;
@@ -5971,13 +5720,7 @@ b2World.prototype.Step$NN = function (dt, iterations) {
 			island.UpdateSleep$N(dt);
 		}
 		for (i = 0; i < island.m_bodyCount; ++ i) {
-			b = (function (v) {
-				if (! (typeof v !== "undefined")) {
-					debugger;
-					throw new Error("[src/dynamics/b2World.jsx:441] detected misuse of 'undefined' as type 'b2Body'");
-				}
-				return v;
-			}(island.m_bodies[i]));
+			b = island.m_bodies[i];
 			if ((b.m_flags & b2Body.e_staticFlag) !== 0) {
 				b.m_flags &= ~ b2Body.e_islandFlag;
 			}
@@ -6296,13 +6039,7 @@ b2CircleContact$Lb2CircleShape$Lb2CircleShape$.prototype = new b2CircleContact;
 /**
  */
 b2CircleContact.prototype.Evaluate$ = function () {
-	b2Collision.b2CollideCircle$Lb2Manifold$Lb2CircleShape$Lb2CircleShape$B((function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/dynamics/contacts/b2CircleContact.jsx:24] detected misuse of 'undefined' as type 'b2Manifold'");
-		}
-		return v;
-	}(this.m_manifold[(0)])), (function (o) { return o instanceof b2CircleShape ? o : null; })(this.m_shape1), (function (o) { return o instanceof b2CircleShape ? o : null; })(this.m_shape2), false);
+	b2Collision.b2CollideCircle$Lb2Manifold$Lb2CircleShape$Lb2CircleShape$B(this.m_manifold[(0)], (function (o) { return o instanceof b2CircleShape ? o : null; })(this.m_shape1), (function (o) { return o instanceof b2CircleShape ? o : null; })(this.m_shape2), false);
 	if (this.m_manifold[(0)].pointCount > 0) {
 		this.m_manifoldCount = 1;
 	} else {
@@ -6542,7 +6279,7 @@ function b2ContactSolver$ALb2Contact$NX(contacts, contactCount, allocator) {
 		contact = contacts[i];
 		b1 = contact.m_shape1.m_body;
 		b2 = contact.m_shape2.m_body;
-		manifoldCount = contact.GetManifoldCount$();
+		manifoldCount = contact.m_manifoldCount;
 		manifolds = contact.GetManifolds$();
 		friction = contact.m_friction;
 		restitution = contact.m_restitution;
@@ -6559,13 +6296,7 @@ function b2ContactSolver$ALb2Contact$NX(contacts, contactCount, allocator) {
 			c = this.m_constraints[count];
 			c.body1 = b1;
 			c.body2 = b2;
-			c.manifold = (function (v) {
-				if (! (typeof v !== "undefined")) {
-					debugger;
-					throw new Error("[src/dynamics/contacts/b2ContactSolver.jsx:69] detected misuse of 'undefined' as type 'b2Manifold'");
-				}
-				return v;
-			}(manifold));
+			c.manifold = manifold;
 			c.normal.x = normalX;
 			c.normal.y = normalY;
 			c.pointCount = manifold.pointCount;
@@ -6605,7 +6336,7 @@ function b2ContactSolver$ALb2Contact$NX(contacts, contactCount, allocator) {
 				ccp.tangentMass = 1.0 / kTangent;
 				ccp.velocityBias = 0.0;
 				if (ccp.separation > 0.0) {
-					ccp.velocityBias = - 60.0 * ccp.separation;
+					ccp.velocityBias = -60 * ccp.separation;
 				}
 				tX = v2X + - w2 * r2Y - v1X - - w1 * r1Y;
 				tY = v2Y + w2 * r2X - v1Y - w1 * r1X;
@@ -6972,7 +6703,7 @@ b2ContactSolver.prototype.SolvePositionConstraints$N = function (beta) {
 			dpX = p2X - p1X;
 			dpY = p2Y - p1Y;
 			separation = dpX * normalX + dpY * normalY + ccp.separation;
-			minSeparation = b2Math.b2Min$NN(minSeparation, separation);
+			minSeparation = (minSeparation < separation ? minSeparation : separation);
 			C = beta * b2Math.b2Clamp$NNN(separation + b2Settings.b2_linearSlop, - b2Settings.b2_maxLinearCorrection, 0.0);
 			dImpulse = - ccp.normalMass * C;
 			impulse0 = ccp.positionImpulse;
@@ -7036,7 +6767,17 @@ b2NullContact.prototype = new b2Contact;
  * @param {b2Shape} s2
  */
 function b2NullContact$Lb2Shape$Lb2Shape$(s1, s2) {
-	b2Contact$Lb2Shape$Lb2Shape$.call(this, s1, s2);
+	this.m_flags = 0;
+	this.m_prev = null;
+	this.m_next = null;
+	this.m_node1 = null;
+	this.m_node2 = null;
+	this.m_shape1 = null;
+	this.m_shape2 = null;
+	this.m_manifoldCount = 0;
+	this.m_friction = 0;
+	this.m_restitution = 0;
+	this.initializer$Lb2Shape$Lb2Shape$(s1, s2);
 };
 
 b2NullContact$Lb2Shape$Lb2Shape$.prototype = new b2NullContact;
@@ -7045,7 +6786,17 @@ b2NullContact$Lb2Shape$Lb2Shape$.prototype = new b2NullContact;
  * @constructor
  */
 function b2NullContact$() {
-	b2Contact$.call(this);
+	this.m_flags = 0;
+	this.m_prev = null;
+	this.m_next = null;
+	this.m_node1 = null;
+	this.m_node2 = null;
+	this.m_shape1 = null;
+	this.m_shape2 = null;
+	this.m_manifoldCount = 0;
+	this.m_friction = 0;
+	this.m_restitution = 0;
+	this.initializer$Lb2Shape$Lb2Shape$(null, null);
 };
 
 b2NullContact$.prototype = new b2NullContact;
@@ -7090,13 +6841,7 @@ b2PolyAndCircleContact$Lb2PolyShape$Lb2CircleShape$.prototype = new b2PolyAndCir
 /**
  */
 b2PolyAndCircleContact.prototype.Evaluate$ = function () {
-	b2Collision.b2CollidePolyAndCircle$Lb2Manifold$Lb2PolyShape$Lb2CircleShape$B((function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/dynamics/contacts/b2PolyAndCircleContact.jsx:25] detected misuse of 'undefined' as type 'b2Manifold'");
-		}
-		return v;
-	}(this.m_manifold[(0)])), (function (o) { return o instanceof b2PolyShape ? o : null; })(this.m_shape1), (function (o) { return o instanceof b2CircleShape ? o : null; })(this.m_shape2), false);
+	b2Collision.b2CollidePolyAndCircle$Lb2Manifold$Lb2PolyShape$Lb2CircleShape$B(this.m_manifold[(0)], (function (o) { return o instanceof b2PolyShape ? o : null; })(this.m_shape1), (function (o) { return o instanceof b2CircleShape ? o : null; })(this.m_shape2), false);
 	if (this.m_manifold[(0)].pointCount > 0) {
 		this.m_manifoldCount = 1;
 	} else {
@@ -7187,13 +6932,7 @@ b2PolyContact.prototype.Evaluate$ = function () {
 		tPoint.id = tPoint0.id.Copy$();
 	}
 	this.m0.pointCount = tMani.pointCount;
-	b2Collision.b2CollidePoly$Lb2Manifold$Lb2PolyShape$Lb2PolyShape$B((function (v) {
-		if (! (typeof v !== "undefined")) {
-			debugger;
-			throw new Error("[src/dynamics/contacts/b2PolyContact.jsx:50] detected misuse of 'undefined' as type 'b2Manifold'");
-		}
-		return v;
-	}(tMani)), (function (o) { return o instanceof b2PolyShape ? o : null; })(this.m_shape1), (function (o) { return o instanceof b2PolyShape ? o : null; })(this.m_shape2), false);
+	b2Collision.b2CollidePoly$Lb2Manifold$Lb2PolyShape$Lb2PolyShape$B(tMani, (function (o) { return o instanceof b2PolyShape ? o : null; })(this.m_shape1), (function (o) { return o instanceof b2PolyShape ? o : null; })(this.m_shape2), false);
 	if (tMani.pointCount > 0) {
 		match = [ false, false ];
 		for (i = 0; i < tMani.pointCount; ++ i) {
@@ -7291,39 +7030,21 @@ dom.getWindow$ = function () {
  * @return {HTMLElement}
  */
 dom.id$S = function (identifier) {
-	return (function (v) {
-		if (! (v === null || v instanceof HTMLElement)) {
-			debugger;
-			throw new Error("[C:/t-kihira/Projects/box2djsx/JSX/lib/js/js/dom.jsx:1816] detected invalid cast, value is not an instance of the designated type or null");
-		}
-		return v;
-	}(dom.window.document.getElementById(identifier)));
+	return dom.window.document.getElementById(identifier);
 };
 
 /**
  * @return {HTMLCanvasElement}
  */
 dom.createCanvas$ = function () {
-	return (function (v) {
-		if (! (v === null || v instanceof HTMLCanvasElement)) {
-			debugger;
-			throw new Error("[C:/t-kihira/Projects/box2djsx/JSX/lib/js/js/dom.jsx:1821] detected invalid cast, value is not an instance of the designated type or null");
-		}
-		return v;
-	}(dom.window.document.createElement("canvas")));
+	return dom.window.document.createElement("canvas");
 };
 
 /**
  * @return {HTMLImageElement}
  */
 dom.createImage$ = function () {
-	return (function (v) {
-		if (! (v === null || v instanceof HTMLImageElement)) {
-			debugger;
-			throw new Error("[C:/t-kihira/Projects/box2djsx/JSX/lib/js/js/dom.jsx:1825] detected invalid cast, value is not an instance of the designated type or null");
-		}
-		return v;
-	}(dom.window.document.createElement("img")));
+	return dom.window.document.createElement("img");
 };
 
 /**
@@ -7342,6 +7063,7 @@ function js$() {
 
 js$.prototype = new js;
 
+_Main.seed = 0;
 b2Settings.USHRT_MAX = 0x0000ffff;
 $__jsx_lazy_init(b2Settings, "b2_pi", function () {
 	return Math.PI;

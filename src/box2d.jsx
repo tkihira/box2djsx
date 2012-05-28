@@ -9,6 +9,11 @@ import 'js/dom.jsx';
 import 'js/dom/canvas2d.jsx';
 
 class _Main {
+	static var seed = 0;
+	static function random(): number {
+		_Main.seed = (_Main.seed * 713 + 17) & 0xFF;
+		return _Main.seed / 256;
+	}
 	static function drawWorld(world: b2World, context: CanvasRenderingContext2D): void {
 		for (var b = world.m_bodyList; b != null; b = b.m_next) {
 			for (var s = b.GetShapeList(); s != null; s = s.GetNext()) {
@@ -72,18 +77,18 @@ class _Main {
 		
 		_Main.createGround(world);
 		_Main.createBox(world, 0, 0, 10, 1000);
-		_Main.createBox(world, 500, 0, 10, 1000);
+		_Main.createBox(world, 320, 0, 10, 1000);
 		return world;
 	}
 	static function createGround(world: b2World): b2Body {
 		var groundSd = new b2BoxDef();
-		groundSd.extents.Set(1000, 50);
+		groundSd.extents.Set(1000, 10);
 		groundSd.restitution = 0.2;
 		groundSd.friction = 0.2;
 		
 		var groundBd = new b2BodyDef();
 		groundBd.AddShape(groundSd);
-		groundBd.position.Set(-500, 340);
+		groundBd.position.Set(-500, 400);
 		return world.CreateBody(groundBd);
 	}
 	static function createBox(world: b2World, x: number, y: number, width: number, height: number): b2Body {
@@ -99,7 +104,7 @@ class _Main {
 		var ballSd = new b2PolyDef();
 		ballSd.density = 1.0;
 		ballSd.restitution = 0.8;
-		var v = 3 + ((Math.random() * 5) | 0);
+		var v = 3 + ((_Main.random() * 5) | 0);
 		ballSd.vertexCount = v;
 		for(var i = 0; i < v; i++) {
 			//var r = 5;
@@ -124,14 +129,15 @@ class _Main {
 	}
 	
 	static function main() :void {
+		dom.window.setTimeout(function():void { dom.window.scrollTo(0, 0); }, 100);
 		var canvas = dom.id("canvas") as HTMLCanvasElement;
 		var ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 		
 		var world = _Main.createWorld();
 		
-		var count = 700;
+		var count = 100;
 		for(var i = 0; i < count; i++) {
-			_Main.createMy(world, i * (450 / count) + 25, -100 + Math.random() * 200, 5 + Math.random() * 5);
+			_Main.createMy(world, i * (270 / count) + 25, -200 + _Main.random() * 300, 15 + _Main.random() * 10);
 		}
 		
 		var frame = 0;
@@ -147,6 +153,7 @@ class _Main {
 			_Main.drawWorld(world, ctx);
 			var now = Date.now();
 			if(now - last > 1000) {
+				(dom.id("fps") as HTMLDivElement).innerHTML = "fps:" + frame as string;
 				log "fps:" + frame as string;
 				frame = 0;
 				last = now;

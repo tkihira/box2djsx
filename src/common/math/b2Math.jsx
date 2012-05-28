@@ -95,7 +95,7 @@ class b2Math {
 	static function b2Random(): number {
 		return Math.random() * 2 - 1;
 	}
-	static function b2NextPowerOfTwo(x: int): int {
+	static function b2NextPowerOfTwo(x: number): number {
 		x |= (x >> 1) & 0x7FFFFFFF;
 		x |= (x >> 2) & 0x3FFFFFFF;
 		x |= (x >> 4) & 0x0FFFFFFF;
