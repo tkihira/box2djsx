@@ -138,12 +138,12 @@ class b2Shape {
 		if (shape.m_proxyId != b2Pair.b2_nullProxy)
 			shape.m_body.m_world.m_broadPhase.DestroyProxy(shape.m_proxyId);
 	}
-	static var e_unknownShape = -1;
-	static var e_circleShape = 0;
-	static var e_boxShape = 1;
-	static var e_polyShape = 2;
-	static var e_meshShape = 3;
-	static var e_shapeTypeCount = 4;
+	static const e_unknownShape = -1;
+	static const e_circleShape = 0;
+	static const e_boxShape = 1;
+	static const e_polyShape = 2;
+	static const e_meshShape = 3;
+	static const e_shapeTypeCount = 4;
 	static function PolyMass(massData: b2MassData, vs: b2Vec2[], count: number, rho: number): void
 	{
 		//b2Settings.b2Assert(count >= 3);

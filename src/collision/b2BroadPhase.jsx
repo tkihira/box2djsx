@@ -820,9 +820,9 @@ class b2BroadPhase {
 	}
 
 
-	static var s_validate = false;
-	static var b2_invalid = b2Settings.USHRT_MAX;
-	static var b2_nullEdge = b2Settings.USHRT_MAX;
+	static const s_validate = false;
+	static const b2_invalid = b2Settings.USHRT_MAX;
+	static const b2_nullEdge = b2Settings.USHRT_MAX;
 	
 	static function BinarySearch(bounds: b2Bound[], count: number, value: number): number {
 		var low = 0;

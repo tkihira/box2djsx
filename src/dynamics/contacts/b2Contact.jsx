@@ -84,8 +84,8 @@ class b2Contact {
 	
 	function Evaluate(): void {}
 
-	static var e_islandFlag = 0x0001;
-	static var e_destroyFlag = 0x0002;
+	static const e_islandFlag = 0x0001;
+	static const e_destroyFlag = 0x0002;
 	
 	
 	static function AddType(createFcn: function(:b2Shape, :b2Shape, :variant):b2Contact, destroyFcn: function(:b2Contact, :variant):void, type1: number, type2: number): void {
