@@ -135,7 +135,7 @@ class _Main {
 		
 		var world = _Main.createWorld();
 		
-		var count = 100;
+		var count = 50;
 		for(var i = 0; i < count; i++) {
 			_Main.createMy(world, i * (270 / count) + 25, -200 + _Main.random() * 300, 15 + _Main.random() * 10);
 		}
