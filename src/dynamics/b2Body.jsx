@@ -405,10 +405,10 @@ class b2Body {
 		}
 	}
 
-	static var e_staticFlag = 0x0001;
-	static var e_frozenFlag = 0x0002;
-	static var e_islandFlag = 0x0004;
-	static var e_sleepFlag = 0x0008;
-	static var e_allowSleepFlag = 0x0010;
-	static var e_destroyFlag = 0x0020;
+	static const e_staticFlag = 0x0001;
+	static const e_frozenFlag = 0x0002;
+	static const e_islandFlag = 0x0004;
+	static const e_sleepFlag = 0x0008;
+	static const e_allowSleepFlag = 0x0010;
+	static const e_destroyFlag = 0x0020;
 }

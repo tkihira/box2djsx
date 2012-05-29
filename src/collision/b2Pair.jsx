@@ -22,8 +22,8 @@ class b2Pair {
 	static var b2_nullProxy = b2Settings.USHRT_MAX;
 	static var b2_tableCapacity = b2Settings.b2_maxPairs;
 	static var b2_tableMask = b2Pair.b2_tableCapacity - 1;
-	static var e_pairBuffered = 0x0001;
-	static var e_pairRemoved = 0x0002;
-	static var e_pairFinal = 0x0004;
+	static const e_pairBuffered = 0x0001;
+	static const e_pairRemoved = 0x0002;
+	static const e_pairFinal = 0x0004;
 
 }

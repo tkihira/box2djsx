@@ -45,7 +45,7 @@ class b2ShapeDef {
 		{
 		case b2Shape.e_circleShape:
 			{
-				var circle: b2CircleDef = this as b2CircleDef;
+				var circle: b2CircleDef = this as __noconvert__ b2CircleDef;
 				massData.mass = this.density * b2Settings.b2_pi * circle.radius * circle.radius;
 				massData.center.Set(0.0, 0.0);
 				massData.I = 0.5 * (massData.mass) * circle.radius * circle.radius;
@@ -54,7 +54,7 @@ class b2ShapeDef {
 
 		case b2Shape.e_boxShape:
 			{
-				var box: b2BoxDef = this as b2BoxDef;
+				var box: b2BoxDef = this as __noconvert__ b2BoxDef;
 				massData.mass = 4.0 * this.density * box.extents.x * box.extents.y;
 				massData.center.Set(0.0, 0.0);
 				massData.I = massData.mass / 3.0 * b2Math.b2Dot(box.extents, box.extents);
@@ -63,7 +63,7 @@ class b2ShapeDef {
 
 		case b2Shape.e_polyShape:
 			{
-				var poly: b2PolyDef = this as b2PolyDef;
+				var poly: b2PolyDef = this as __noconvert__ b2PolyDef;
 				b2Shape.PolyMass(massData, poly.vertices, poly.vertexCount, this.density);
 			}
 			break;

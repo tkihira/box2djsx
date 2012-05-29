@@ -25,8 +25,8 @@ class b2ContactManager extends b2PairCallback {
 	}
 
 	override function PairAdded(proxyUserData1: variant, proxyUserData2: variant): variant {
-		var shape1 = proxyUserData1 as b2Shape;
-		var shape2 = proxyUserData2 as b2Shape;
+		var shape1 = proxyUserData1 as __noconvert__ b2Shape;
+		var shape2 = proxyUserData2 as __noconvert__ b2Shape;
 
 		var body1 = shape1.m_body;
 		var body2 = shape2.m_body;
@@ -94,7 +94,7 @@ class b2ContactManager extends b2PairCallback {
 			return;
 		}
 
-		var c = pairUserData as b2Contact;
+		var c = pairUserData as __noconvert__ b2Contact;
 		if (c != this.m_nullContact)
 		{
 			//b2Settings.b2Assert(this.m_world.m_contactCount > 0);

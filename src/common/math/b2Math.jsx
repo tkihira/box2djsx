@@ -11,40 +11,31 @@ class b2Math {
 		return a.x * b.y - a.y * b.x;
 	}
 	static function b2CrossVF(a: b2Vec2, s: number): b2Vec2 {
-		var v = new b2Vec2(s * a.y, -s * a.x);
-		return v;
+		return new b2Vec2(s * a.y, -s * a.x);
 	}
 	static function b2CrossFV(s: number, a: b2Vec2): b2Vec2 {
-		var v = new b2Vec2(-s * a.y, s * a.x);
-		return v;
+		return new b2Vec2(-s * a.y, s * a.x);
 	}
 	static function b2MulMV(A: b2Mat22, v: b2Vec2): b2Vec2 {
-		var u = new b2Vec2(A.col1.x * v.x + A.col2.x * v.y, A.col1.y * v.x + A.col2.y * v.y);
-		return u;
+		return new b2Vec2(A.col1.x * v.x + A.col2.x * v.y, A.col1.y * v.x + A.col2.y * v.y);
 	}
 	static function b2MulTMV(A: b2Mat22, v: b2Vec2): b2Vec2 {
-		var u = new b2Vec2(b2Math.b2Dot(v, A.col1), b2Math.b2Dot(v, A.col2));
-		return u;
+		return new b2Vec2(b2Math.b2Dot(v, A.col1), b2Math.b2Dot(v, A.col2));
 	}
 	static function AddVV(a: b2Vec2, b: b2Vec2): b2Vec2 {
-		var v = new b2Vec2(a.x + b.x, a.y + b.y);
-		return v;
+		return new b2Vec2(a.x + b.x, a.y + b.y);
 	}
 	static function SubtractVV(a: b2Vec2, b: b2Vec2): b2Vec2 {
-		var v = new b2Vec2(a.x - b.x, a.y - b.y);
-		return v;
+		return new b2Vec2(a.x - b.x, a.y - b.y);
 	}
 	static function MulFV(s: number, a: b2Vec2): b2Vec2 {
-		var v = new b2Vec2(s * a.x, s * a.y);
-		return v;
+		return new b2Vec2(s * a.x, s * a.y);
 	}
 	static function AddMM(A: b2Mat22, B: b2Mat22): b2Mat22 {
-		var C = new b2Mat22(0, b2Math.AddVV(A.col1, B.col1), b2Math.AddVV(A.col2, B.col2));
-		return C;
+		return new b2Mat22(0, b2Math.AddVV(A.col1, B.col1), b2Math.AddVV(A.col2, B.col2));
 	}
 	static function b2MulMM(A: b2Mat22, B: b2Mat22): b2Mat22 {
-		var C = new b2Mat22(0, b2Math.b2MulMV(A, B.col1), b2Math.b2MulMV(A, B.col2));
-		return C;
+		return new b2Mat22(0, b2Math.b2MulMV(A, B.col1), b2Math.b2MulMV(A, B.col2));
 	}
 	static function b2MulTMM(A: b2Mat22, B: b2Mat22): b2Mat22 {
 		var c1 = new b2Vec2(b2Math.b2Dot(A.col1, B.col1), b2Math.b2Dot(A.col2, B.col1));
@@ -57,26 +48,22 @@ class b2Math {
 		//return a > 0.0 ? a : -a;
 	}
 	static function b2AbsV(a:b2Vec2): b2Vec2 {
-		var b = new b2Vec2(b2Math.b2Abs(a.x), b2Math.b2Abs(a.y));
-		return b;
+		return new b2Vec2(b2Math.b2Abs(a.x), b2Math.b2Abs(a.y));
 	}
 	static function  b2AbsM(A: b2Mat22): b2Mat22 {
-		var B = new b2Mat22(0, b2Math.b2AbsV(A.col1), b2Math.b2AbsV(A.col2));
-		return B;
+		return new b2Mat22(0, b2Math.b2AbsV(A.col1), b2Math.b2AbsV(A.col2));
 	}
 	static function b2Min(a: number, b: number): number {
 		return a < b ? a : b;
 	}
 	static function b2MinV(a: b2Vec2, b: b2Vec2): b2Vec2 {
-		var c = new b2Vec2(b2Math.b2Min(a.x, b.x), b2Math.b2Min(a.y, b.y));
-		return c;
+		return new b2Vec2(b2Math.b2Min(a.x, b.x), b2Math.b2Min(a.y, b.y));
 	}
 	static function b2Max(a: number, b: number): number {
 		return a > b ? a : b;
 	}
 	static function b2MaxV(a: b2Vec2, b: b2Vec2): b2Vec2 {
-		var c = new b2Vec2(b2Math.b2Max(a.x, b.x), b2Math.b2Max(a.y, b.y));
-		return c;
+		return new b2Vec2(b2Math.b2Max(a.x, b.x), b2Math.b2Max(a.y, b.y));
 	}
 	static function b2Clamp(a: number, low: number, high: number): number {
 		return b2Math.b2Max(low, b2Math.b2Min(a, high));
@@ -104,8 +91,7 @@ class b2Math {
 		return x + 1;
 	}
 	static function b2IsPowerOfTwo(x: number): boolean {
-		var result = x > 0 && (x & (x - 1)) == 0;
-		return result;
+		return x > 0 && (x & (x - 1)) == 0;
 	}
 	static var tempVec2 = new b2Vec2();
 	static var tempVec3 = new b2Vec2();

@@ -27,7 +27,7 @@ class _Main {
 	switch (shape.m_type) {
 		case b2Shape.e_circleShape:
 			{
-				var circle = shape as b2CircleShape;
+				var circle = shape as __noconvert__ b2CircleShape;
 				var pos = circle.m_position;
 				var r = circle.m_radius;
 				var segments = 16.0;
@@ -52,7 +52,7 @@ class _Main {
 			break;
 		case b2Shape.e_polyShape:
 			{
-				var poly = shape as b2PolyShape;
+				var poly = shape as __noconvert__ b2PolyShape;
 				var tV = b2Math.AddVV(poly.m_position, b2Math.b2MulMV(poly.m_R, poly.m_vertices[0]));
 				context.moveTo(tV.x, tV.y);
 				for (var i = 0; i < poly.m_vertexCount; i++) {
@@ -130,8 +130,8 @@ class _Main {
 	
 	static function main() :void {
 		dom.window.setTimeout(function():void { dom.window.scrollTo(0, 0); }, 100);
-		var canvas = dom.id("canvas") as HTMLCanvasElement;
-		var ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+		var canvas = dom.id("canvas") as __noconvert__ HTMLCanvasElement;
+		var ctx = canvas.getContext("2d") as __noconvert__ CanvasRenderingContext2D;
 		
 		var world = _Main.createWorld();
 		
@@ -153,8 +153,8 @@ class _Main {
 			_Main.drawWorld(world, ctx);
 			var now = Date.now();
 			if(now - last > 1000) {
-				(dom.id("fps") as HTMLDivElement).innerHTML = "fps:" + frame as string;
-				log "fps:" + frame as string;
+				(dom.id("fps") as __noconvert__ HTMLDivElement).innerHTML = "fps:" + frame as __noconvert__ string;
+				log "fps:" + frame as __noconvert__ string;
 				frame = 0;
 				last = now;
 			}
