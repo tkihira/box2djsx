@@ -21,7 +21,7 @@ class b2CircleContact extends b2Contact {
 	}
 	
 	override function Evaluate(): void {
-		b2Collision.b2CollideCircle(this.m_manifold[0], this.m_shape1 as b2CircleShape, this.m_shape2 as b2CircleShape, false);
+		b2Collision.b2CollideCircle(this.m_manifold[0], this.m_shape1 as __noconvert__ b2CircleShape, this.m_shape2 as __noconvert__ b2CircleShape, false);
 
 		if (this.m_manifold[0].pointCount > 0)
 		{

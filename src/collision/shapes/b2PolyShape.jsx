@@ -110,7 +110,7 @@ class b2PolyShape extends b2Shape {
 			this.m_localCentroid.x = def.localPosition.x - newOrigin.x;
 			this.m_localCentroid.y = def.localPosition.y - newOrigin.y;
 
-			var box:b2BoxDef = def as b2BoxDef;
+			var box:b2BoxDef = def as __noconvert__ b2BoxDef;
 			this.m_vertexCount = 4;
 			hX = box.extents.x;
 			hY = box.extents.y;
@@ -156,7 +156,7 @@ class b2PolyShape extends b2Shape {
 		}
 		else
 		{
-			var poly: b2PolyDef = def as b2PolyDef;
+			var poly: b2PolyDef = def as __noconvert__ b2PolyDef;
 
 			this.m_vertexCount = poly.vertexCount;
 			//b2Settings.b2Assert(3 <= this.m_vertexCount && this.m_vertexCount <= b2Settings.b2_maxPolyVertices);

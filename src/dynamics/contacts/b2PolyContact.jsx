@@ -47,7 +47,7 @@ class b2PolyContact extends b2Contact {
 		//this.m0.normal.SetV( tMani.normal );
 		this.m0.pointCount = tMani.pointCount;
 
-		b2Collision.b2CollidePoly(tMani, this.m_shape1 as b2PolyShape, this.m_shape2 as b2PolyShape, false);
+		b2Collision.b2CollidePoly(tMani, this.m_shape1 as __noconvert__ b2PolyShape, this.m_shape2 as __noconvert__ b2PolyShape, false);
 
 		// Match contact ids to facilitate warm starting.
 		if (tMani.pointCount > 0)

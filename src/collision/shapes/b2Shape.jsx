@@ -99,7 +99,7 @@ class b2Shape {
 		case b2Shape.e_circleShape:
 			{
 				//void* mem = body->m_world->m_blockAllocator.Allocate(sizeof(b2CircleShape));
-				return new b2CircleShape(def as b2CircleDef, body, center);
+				return new b2CircleShape(def as __noconvert__ b2CircleDef, body, center);
 			}
 
 		case b2Shape.e_boxShape:

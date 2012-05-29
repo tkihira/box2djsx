@@ -116,21 +116,21 @@ class b2Contact {
 		var c: function(:b2Shape, :b2Shape, :variant):b2Contact;
 		var d: function(:b2Contact, :variant):void;
 		c = function(s1:b2Shape, s2:b2Shape, al:variant):b2Contact {
-			return b2CircleContact.Create(s1 as b2CircleShape, s2 as b2CircleShape, al);
+			return b2CircleContact.Create(s1 as __noconvert__ b2CircleShape, s2 as __noconvert__ b2CircleShape, al);
 		};
 		d = function(c: b2Contact, al: variant): void {
 			b2CircleContact.Destroy(c, al);
 		};
 		b2Contact.AddType(c, d, b2Shape.e_circleShape, b2Shape.e_circleShape);
 		c = function(s1:b2Shape, s2:b2Shape, al:variant):b2Contact {
-			return b2PolyAndCircleContact.Create(s1 as b2PolyShape, s2 as b2CircleShape, al);
+			return b2PolyAndCircleContact.Create(s1 as __noconvert__ b2PolyShape, s2 as __noconvert__ b2CircleShape, al);
 		};
 		d = function(c: b2Contact, al: variant): void {
 			b2PolyAndCircleContact.Destroy(c, al);
 		};
 		b2Contact.AddType(c, d, b2Shape.e_polyShape, b2Shape.e_circleShape);
 		c = function(s1:b2Shape, s2:b2Shape, al:variant):b2Contact {
-			return b2PolyContact.Create(s1 as b2PolyShape, s2 as b2PolyShape, al);
+			return b2PolyContact.Create(s1 as __noconvert__ b2PolyShape, s2 as __noconvert__ b2PolyShape, al);
 		};
 		d = function(c: b2Contact, al: variant): void {
 			b2PolyContact.Destroy(c, al);
