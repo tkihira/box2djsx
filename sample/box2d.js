@@ -125,6 +125,14 @@ _Main.drawShape$Lb2Shape$LCanvasRenderingContext2D$ = function (shape, context) 
 	var poly;
 	/** @type {b2Vec2} */
 	var tV;
+	/** @type {b2Vec2} */
+	var a$0;
+	/** @type {b2Vec2} */
+	var b$0;
+	/** @type {b2Vec2} */
+	var a$1;
+	/** @type {b2Vec2} */
+	var b$1;
 	context.strokeStyle = '#ffffff';
 	context.beginPath();
 	switch (shape.m_type) {
@@ -150,10 +158,14 @@ _Main.drawShape$Lb2Shape$LCanvasRenderingContext2D$ = function (shape, context) 
 		break;
 	case 2:
 		poly = shape;
-		tV = b2Math.AddVV$Lb2Vec2$Lb2Vec2$(poly.m_position, b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(poly.m_R, poly.m_vertices[(0)]));
+		a$0 = poly.m_position;
+		b$0 = b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(poly.m_R, poly.m_vertices[(0)]);
+		tV = new b2Vec2$NN(a$0.x + b$0.x, a$0.y + b$0.y);
 		context.moveTo(tV.x, tV.y);
 		for (i = 0; i < poly.m_vertexCount; i++) {
-			v = b2Math.AddVV$Lb2Vec2$Lb2Vec2$(poly.m_position, b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(poly.m_R, poly.m_vertices[i]));
+			a$1 = poly.m_position;
+			b$1 = b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(poly.m_R, poly.m_vertices[i]);
+			v = new b2Vec2$NN(a$1.x + b$1.x, a$1.y + b$1.y);
 			context.lineTo(v.x, v.y);
 		}
 		context.lineTo(tV.x, tV.y);
@@ -683,7 +695,7 @@ b2Math.b2MulTMM$Lb2Mat22$Lb2Mat22$ = function (A, B) {
  * @return {!number}
  */
 b2Math.b2Abs$N = function (a) {
-	return (a >= 0 ? a : -a);
+	return (a >= 0 ? a : - a);
 };
 
 /**
@@ -745,7 +757,10 @@ b2Math.b2MaxV$Lb2Vec2$Lb2Vec2$ = function (a, b) {
  * @return {!number}
  */
 b2Math.b2Clamp$NNN = function (a, low, high) {
-	return b2Math.b2Max$NN(low, a < high ? a : high);
+	/** @type {!number} */
+	var b$0;
+	b$0 = (a < high ? a : high);
+	return low > b$0 ? low : b$0;
 };
 
 /**
@@ -755,7 +770,10 @@ b2Math.b2Clamp$NNN = function (a, low, high) {
  * @return {b2Vec2}
  */
 b2Math.b2ClampV$Lb2Vec2$Lb2Vec2$Lb2Vec2$ = function (a, low, high) {
-	return b2Math.b2MaxV$Lb2Vec2$Lb2Vec2$(low, new b2Vec2$NN(b2Math.b2Min$NN(a.x, high.x), b2Math.b2Min$NN(a.y, high.y)));
+	/** @type {b2Vec2} */
+	var b$0;
+	b$0 = new b2Vec2$NN(b2Math.b2Min$NN(a.x, high.x), b2Math.b2Min$NN(a.y, high.y));
+	return new b2Vec2$NN(b2Math.b2Max$NN(low.x, b$0.x), b2Math.b2Max$NN(low.y, b$0.y));
 };
 
 /**
@@ -899,8 +917,14 @@ b2Vec2.prototype.MulM$Lb2Mat22$ = function (A) {
 b2Vec2.prototype.MulTM$Lb2Mat22$ = function (A) {
 	/** @type {!number} */
 	var tX;
-	tX = b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(this, A.col1);
-	this.y = b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(this, A.col2);
+	/** @type {b2Vec2} */
+	var b$0;
+	/** @type {b2Vec2} */
+	var b$1;
+	b$0 = A.col1;
+	tX = this.x * b$0.x + this.y * b$0.y;
+	b$1 = A.col2;
+	this.y = this.x * b$1.x + this.y * b$1.y;
 	this.x = tX;
 };
 
@@ -1126,6 +1150,10 @@ function b2BroadPhase$Lb2AABB$Lb2PairCallback$(worldAABB, callback) {
 	var dY;
 	/** @type {b2Proxy} */
 	var tProxy;
+	/** @type {!number} */
+	var next$0;
+	/** @type {!number} */
+	var next$1;
 	this.m_pairManager = null;
 	this.m_proxyPool = null;
 	this.m_freeProxy = 0;
@@ -1169,14 +1197,16 @@ function b2BroadPhase$Lb2AABB$Lb2PairCallback$(worldAABB, callback) {
 	for (i = 0; i < 1023; ++ i) {
 		tProxy = new b2Proxy$();
 		this.m_proxyPool[i] = tProxy;
-		tProxy.SetNext$N(i + 1);
+		next$0 = i + 1;
+		tProxy.lowerBounds[(0)] = next$0;
 		tProxy.timeStamp = 0;
 		tProxy.overlapCount = 0x0000ffff;
 		tProxy.userData = null;
 	}
 	tProxy = new b2Proxy$();
 	this.m_proxyPool[(1023)] = tProxy;
-	tProxy.SetNext$N(b2Pair.b2_nullProxy);
+	next$1 = b2Pair.b2_nullProxy;
+	tProxy.lowerBounds[(0)] = next$1;
 	tProxy.timeStamp = 0;
 	tProxy.overlapCount = 0x0000ffff;
 	tProxy.userData = null;
@@ -1394,6 +1424,8 @@ b2BroadPhase.prototype.DestroyProxy$N = function (proxyId) {
 	var index2;
 	/** @type {!number} */
 	var i;
+	/** @type {!number} */
+	var next$0;
 	proxy = this.m_proxyPool[proxyId];
 	boundCount = 2 * this.m_proxyCount;
 	for (axis = 0; axis < 2; ++ axis) {
@@ -1468,7 +1500,8 @@ b2BroadPhase.prototype.DestroyProxy$N = function (proxyId) {
 	proxy.lowerBounds[(1)] = 0x0000ffff;
 	proxy.upperBounds[(0)] = 0x0000ffff;
 	proxy.upperBounds[(1)] = 0x0000ffff;
-	proxy.SetNext$N(this.m_freeProxy);
+	next$0 = this.m_freeProxy;
+	proxy.lowerBounds[(0)] = next$0;
 	this.m_freeProxy = proxyId;
 	-- this.m_proxyCount;
 };
@@ -1735,18 +1768,42 @@ b2BroadPhase.prototype.ComputeBounds$ANANLb2AABB$ = function (lowerValues, upper
 	var maxVertexX;
 	/** @type {!number} */
 	var maxVertexY;
+	/** @type {!number} */
+	var b$0;
+	/** @type {!number} */
+	var b$1;
+	/** @type {!number} */
+	var b$2;
+	/** @type {!number} */
+	var b$3;
+	/** @type {!number} */
+	var b$4;
+	/** @type {!number} */
+	var b$5;
+	/** @type {!number} */
+	var b$6;
+	/** @type {!number} */
+	var b$7;
 	minVertexX = aabb.minVertex.x;
 	minVertexY = aabb.minVertex.y;
-	minVertexX = b2Math.b2Min$NN(minVertexX, this.m_worldAABB.maxVertex.x);
-	minVertexY = b2Math.b2Min$NN(minVertexY, this.m_worldAABB.maxVertex.y);
-	minVertexX = b2Math.b2Max$NN(minVertexX, this.m_worldAABB.minVertex.x);
-	minVertexY = b2Math.b2Max$NN(minVertexY, this.m_worldAABB.minVertex.y);
+	b$0 = this.m_worldAABB.maxVertex.x;
+	minVertexX = (minVertexX < b$0 ? minVertexX : b$0);
+	b$1 = this.m_worldAABB.maxVertex.y;
+	minVertexY = (minVertexY < b$1 ? minVertexY : b$1);
+	b$2 = this.m_worldAABB.minVertex.x;
+	minVertexX = (minVertexX > b$2 ? minVertexX : b$2);
+	b$3 = this.m_worldAABB.minVertex.y;
+	minVertexY = (minVertexY > b$3 ? minVertexY : b$3);
 	maxVertexX = aabb.maxVertex.x;
 	maxVertexY = aabb.maxVertex.y;
-	maxVertexX = b2Math.b2Min$NN(maxVertexX, this.m_worldAABB.maxVertex.x);
-	maxVertexY = b2Math.b2Min$NN(maxVertexY, this.m_worldAABB.maxVertex.y);
-	maxVertexX = b2Math.b2Max$NN(maxVertexX, this.m_worldAABB.minVertex.x);
-	maxVertexY = b2Math.b2Max$NN(maxVertexY, this.m_worldAABB.minVertex.y);
+	b$4 = this.m_worldAABB.maxVertex.x;
+	maxVertexX = (maxVertexX < b$4 ? maxVertexX : b$4);
+	b$5 = this.m_worldAABB.maxVertex.y;
+	maxVertexY = (maxVertexY < b$5 ? maxVertexY : b$5);
+	b$6 = this.m_worldAABB.minVertex.x;
+	maxVertexX = (maxVertexX > b$6 ? maxVertexX : b$6);
+	b$7 = this.m_worldAABB.minVertex.y;
+	maxVertexY = (maxVertexY > b$7 ? maxVertexY : b$7);
 	lowerValues[(0)] = this.m_quantizationFactor.x * (minVertexX - this.m_worldAABB.minVertex.x) & 65534;
 	upperValues[(0)] = this.m_quantizationFactor.x * (maxVertexX - this.m_worldAABB.minVertex.x) & 0x0000ffff | 1;
 	lowerValues[(1)] = this.m_quantizationFactor.y * (minVertexY - this.m_worldAABB.minVertex.y) & 65534;
@@ -2214,6 +2271,14 @@ b2Collision.FindIncidentEdge$ALClipVertex$Lb2PolyShape$NLb2PolyShape$ = function
 	var dot;
 	/** @type {undefined|ClipVertex} */
 	var tClip;
+	/** @type {b2Vec2} */
+	var v$0;
+	/** @type {b2Vec2} */
+	var v$1;
+	/** @type {b2Vec2} */
+	var v$2;
+	/** @type {b2Vec2} */
+	var v$3;
 	count1 = poly1.m_vertexCount;
 	vert1s = poly1.m_vertices;
 	count2 = poly2.m_vertexCount;
@@ -2271,17 +2336,25 @@ b2Collision.FindIncidentEdge$ALClipVertex$Lb2PolyShape$NLb2PolyShape$ = function
 	}
 	tClip = c[(0)];
 	tVec = tClip.v;
-	tVec.SetV$Lb2Vec2$(vert2s[vertex21]);
+	v$0 = vert2s[vertex21];
+	tVec.x = v$0.x;
+	tVec.y = v$0.y;
 	tVec.MulM$Lb2Mat22$(poly2.m_R);
-	tVec.Add$Lb2Vec2$(poly2.m_position);
+	v$1 = poly2.m_position;
+	tVec.x += v$1.x;
+	tVec.y += v$1.y;
 	tClip.id.features.referenceFace = edge1;
 	tClip.id.features.incidentEdge = vertex21;
 	tClip.id.features.incidentVertex = vertex21;
 	tClip = c[(1)];
 	tVec = tClip.v;
-	tVec.SetV$Lb2Vec2$(vert2s[vertex22]);
+	v$2 = vert2s[vertex22];
+	tVec.x = v$2.x;
+	tVec.y = v$2.y;
 	tVec.MulM$Lb2Mat22$(poly2.m_R);
-	tVec.Add$Lb2Vec2$(poly2.m_position);
+	v$3 = poly2.m_position;
+	tVec.x += v$3.x;
+	tVec.y += v$3.y;
 	tClip.id.features.referenceFace = edge1;
 	tClip.id.features.incidentEdge = vertex21;
 	tClip.id.features.incidentVertex = vertex22;
@@ -2704,7 +2777,14 @@ b2ContactID$.prototype = new b2ContactID;
  * @param {b2ContactID} id
  */
 b2ContactID.prototype.Set$Lb2ContactID$ = function (id) {
-	this.set_key$N(id._key);
+	/** @type {!number} */
+	var value$0;
+	value$0 = id._key;
+	this._key = value$0;
+	this.features._referenceFace = this._key & 0x000000ff;
+	this.features._incidentEdge = (this._key & 0x0000ff00) >> 8 & 0x000000ff;
+	this.features._incidentVertex = (this._key & 0x00ff0000) >> 16 & 0x000000ff;
+	this.features._flip = (this._key & 0xff000000) >> 24 & 0x000000ff;
 };
 
 /**
@@ -2713,8 +2793,15 @@ b2ContactID.prototype.Set$Lb2ContactID$ = function (id) {
 b2ContactID.prototype.Copy$ = function () {
 	/** @type {b2ContactID} */
 	var id;
+	/** @type {!number} */
+	var value$0;
 	id = new b2ContactID$();
-	id.set_key$N(this._key);
+	value$0 = this._key;
+	id._key = value$0;
+	id.features._referenceFace = id._key & 0x000000ff;
+	id.features._incidentEdge = (id._key & 0x0000ff00) >> 8 & 0x000000ff;
+	id.features._incidentVertex = (id._key & 0x00ff0000) >> 16 & 0x000000ff;
+	id.features._flip = (id._key & 0xff000000) >> 24 & 0x000000ff;
 	return id;
 };
 
@@ -3109,6 +3196,8 @@ b2PairManager.prototype.RemovePair$NN = function (proxyId1, proxyId2) {
 	var pair;
 	/** @type {*} */
 	var userData;
+	/** @type {b2Pair} */
+	var pair$0;
 	if (proxyId1 > proxyId2) {
 		temp = proxyId1;
 		proxyId1 = proxyId2;
@@ -3118,7 +3207,8 @@ b2PairManager.prototype.RemovePair$NN = function (proxyId1, proxyId2) {
 	node = this.m_hashTable[hash];
 	pNode = null;
 	while (node !== b2Pair.b2_nullPair) {
-		if (b2PairManager.Equals$Lb2Pair$NN(this.m_pairs[node], proxyId1, proxyId2)) {
+		pair$0 = this.m_pairs[node];
+		if (pair$0.proxyId1 === proxyId1 && pair$0.proxyId2 === proxyId2) {
 			index = node;
 			if (pNode != null) {
 				pNode.next = this.m_pairs[node].next;
@@ -3585,6 +3675,10 @@ b2Shape.PolyMass$Lb2MassData$ALb2Vec2$NN = function (massData, vs, count, rho) {
 	var intx2;
 	/** @type {!number} */
 	var inty2;
+	/** @type {!number} */
+	var a$0;
+	/** @type {!number} */
+	var a$1;
 	center = new b2Vec2$();
 	center.x = 0;
 	center.y = 0;
@@ -3608,7 +3702,9 @@ b2Shape.PolyMass$Lb2MassData$ALb2Vec2$NN = function (massData, vs, count, rho) {
 		tVec.y += p2.y;
 		tVec.x += p3.x;
 		tVec.y += p3.y;
-		tVec.Multiply$N(inv3 * triangleArea);
+		a$0 = inv3 * triangleArea;
+		tVec.x *= a$0;
+		tVec.y *= a$0;
 		center.x += tVec.x;
 		center.y += tVec.y;
 		px = p1.x;
@@ -3622,7 +3718,9 @@ b2Shape.PolyMass$Lb2MassData$ALb2Vec2$NN = function (massData, vs, count, rho) {
 		I += D * (intx2 + inty2);
 	}
 	massData.mass = rho * area;
-	center.Multiply$N(1.0 / area);
+	a$1 = 1.0 / area;
+	center.x *= a$1;
+	center.y *= a$1;
 	massData.center = center;
 	I = rho * (I - area * (center.x * center.x + center.y * center.y));
 	massData.I = I;
@@ -3927,17 +4025,28 @@ b2PolyShape.prototype.TestPoint$Lb2Vec2$ = function (p) {
 	var tVec;
 	/** @type {!number} */
 	var dot;
+	/** @type {b2Vec2} */
+	var v$0;
+	/** @type {b2Vec2} */
+	var v$1;
+	/** @type {b2Vec2} */
+	var a$0;
 	pLocal = new b2Vec2$();
 	pLocal.x = p.x;
 	pLocal.y = p.y;
-	pLocal.Subtract$Lb2Vec2$(this.m_position);
+	v$0 = this.m_position;
+	pLocal.x -= v$0.x;
+	pLocal.y -= v$0.y;
 	pLocal.MulTM$Lb2Mat22$(this.m_R);
 	for (i = 0; i < this.m_vertexCount; ++ i) {
 		tVec = new b2Vec2$();
 		tVec.x = pLocal.x;
 		tVec.y = pLocal.y;
-		tVec.Subtract$Lb2Vec2$(this.m_vertices[i]);
-		dot = b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(this.m_normals[i], tVec);
+		v$1 = this.m_vertices[i];
+		tVec.x -= v$1.x;
+		tVec.y -= v$1.y;
+		a$0 = this.m_normals[i];
+		dot = a$0.x * tVec.x + a$0.y * tVec.y;
 		if (dot > 0.0) {
 			return false;
 		}
@@ -4048,17 +4157,39 @@ b2PolyShape.prototype.ResetProxy$Lb2BroadPhase$ = function (broadPhase) {
 	var position;
 	/** @type {b2AABB} */
 	var aabb;
+	/** @type {!number} */
+	var proxyId$0;
+	/** @type {b2Mat22} */
+	var A$0;
+	/** @type {b2Mat22} */
+	var B$0;
+	/** @type {b2Vec2} */
+	var v$0;
+	/** @type {b2Mat22} */
+	var A$1;
+	/** @type {b2Vec2} */
+	var v$1;
+	/** @type {b2Vec2} */
+	var v$2;
 	if (this.m_proxyId === b2Pair.b2_nullProxy) {
 		return;
 	}
-	proxy = broadPhase.GetProxy$N(this.m_proxyId);
+	proxyId$0 = this.m_proxyId;
+	proxy = (proxyId$0 === b2Pair.b2_nullProxy || broadPhase.m_proxyPool[proxyId$0].IsValid$() === false ? null : broadPhase.m_proxyPool[proxyId$0]);
 	broadPhase.DestroyProxy$N(this.m_proxyId);
 	proxy = null;
-	R = b2Math.b2MulMM$Lb2Mat22$Lb2Mat22$(this.m_R, this.m_localOBB.R);
+	A$0 = this.m_R;
+	B$0 = this.m_localOBB.R;
+	R = new b2Mat22$NLb2Vec2$Lb2Vec2$(0, b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(A$0, B$0.col1), b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(A$0, B$0.col2));
 	absR = new b2Mat22$NLb2Vec2$Lb2Vec2$(0, b2Math.b2AbsV$Lb2Vec2$(R.col1), b2Math.b2AbsV$Lb2Vec2$(R.col2));
-	h = b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(absR, this.m_localOBB.extents);
-	position = b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, this.m_localOBB.center);
-	position.Add$Lb2Vec2$(this.m_position);
+	v$0 = this.m_localOBB.extents;
+	h = new b2Vec2$NN(absR.col1.x * v$0.x + absR.col2.x * v$0.y, absR.col1.y * v$0.x + absR.col2.y * v$0.y);
+	A$1 = this.m_R;
+	v$1 = this.m_localOBB.center;
+	position = new b2Vec2$NN(A$1.col1.x * v$1.x + A$1.col2.x * v$1.y, A$1.col1.y * v$1.x + A$1.col2.y * v$1.y);
+	v$2 = this.m_position;
+	position.x += v$2.x;
+	position.y += v$2.y;
 	aabb = new b2AABB$();
 	aabb.minVertex.SetV$Lb2Vec2$(position);
 	aabb.minVertex.Subtract$Lb2Vec2$(h);
@@ -4092,6 +4223,10 @@ b2PolyShape.prototype.Support$NNLb2Vec2$ = function (dX, dY, out) {
 	var i;
 	/** @type {!number} */
 	var value;
+	/** @type {!number} */
+	var x$0;
+	/** @type {!number} */
+	var y$0;
 	dLocalX = dX * this.m_R.col1.x + dY * this.m_R.col1.y;
 	dLocalY = dX * this.m_R.col2.x + dY * this.m_R.col2.y;
 	bestIndex = 0;
@@ -4103,7 +4238,10 @@ b2PolyShape.prototype.Support$NNLb2Vec2$ = function (dX, dY, out) {
 			bestValue = value;
 		}
 	}
-	out.Set$NN(this.m_position.x + this.m_R.col1.x * this.m_coreVertices[bestIndex].x + this.m_R.col2.x * this.m_coreVertices[bestIndex].y, this.m_position.y + this.m_R.col1.y * this.m_coreVertices[bestIndex].x + this.m_R.col2.y * this.m_coreVertices[bestIndex].y);
+	x$0 = this.m_position.x + this.m_R.col1.x * this.m_coreVertices[bestIndex].x + this.m_R.col2.x * this.m_coreVertices[bestIndex].y;
+	y$0 = this.m_position.y + this.m_R.col1.y * this.m_coreVertices[bestIndex].x + this.m_R.col2.y * this.m_coreVertices[bestIndex].y;
+	out.x = x$0;
+	out.y = y$0;
 };
 
 /**
@@ -4179,10 +4317,14 @@ b2CircleShape$Lb2CircleDef$Lb2Body$Lb2Vec2$.prototype = new b2CircleShape;
 b2CircleShape.prototype.TestPoint$Lb2Vec2$ = function (p) {
 	/** @type {b2Vec2} */
 	var d;
+	/** @type {b2Vec2} */
+	var v$0;
 	d = new b2Vec2$();
 	d.x = p.x;
 	d.y = p.y;
-	d.Subtract$Lb2Vec2$(this.m_position);
+	v$0 = this.m_position;
+	d.x -= v$0.x;
+	d.y -= v$0.y;
 	return d.x * d.x + d.y * d.y <= this.m_radius * this.m_radius;
 };
 
@@ -4250,10 +4392,13 @@ b2CircleShape.prototype.ResetProxy$Lb2BroadPhase$ = function (broadPhase) {
 	var proxy;
 	/** @type {b2AABB} */
 	var aabb;
+	/** @type {!number} */
+	var proxyId$0;
 	if (this.m_proxyId === b2Pair.b2_nullProxy) {
 		return;
 	}
-	proxy = broadPhase.GetProxy$N(this.m_proxyId);
+	proxyId$0 = this.m_proxyId;
+	proxy = (proxyId$0 === b2Pair.b2_nullProxy || broadPhase.m_proxyPool[proxyId$0].IsValid$() === false ? null : broadPhase.m_proxyPool[proxyId$0]);
 	broadPhase.DestroyProxy$N(this.m_proxyId);
 	proxy = null;
 	aabb = new b2AABB$();
@@ -4277,10 +4422,17 @@ b2CircleShape.prototype.ResetProxy$Lb2BroadPhase$ = function (broadPhase) {
 b2CircleShape.prototype.Support$NNLb2Vec2$ = function (dX, dY, out) {
 	/** @type {!number} */
 	var len;
+	/** @type {!number} */
+	var x$0;
+	/** @type {!number} */
+	var y$0;
 	len = Math.sqrt(dX * dX + dY * dY);
 	dX /= len;
 	dY /= len;
-	out.Set$NN(this.m_position.x + this.m_radius * dX, this.m_position.y + this.m_radius * dY);
+	x$0 = this.m_position.x + this.m_radius * dX;
+	y$0 = this.m_position.y + this.m_radius * dY;
+	out.x = x$0;
+	out.y = y$0;
 };
 
 /**
@@ -4498,6 +4650,14 @@ function b2Body$Lb2BodyDef$Lb2World$(bd, world) {
 	var r;
 	/** @type {b2Shape} */
 	var shape;
+	/** @type {b2Vec2} */
+	var a$0;
+	/** @type {b2Vec2} */
+	var b$0;
+	/** @type {b2Vec2} */
+	var a$1;
+	/** @type {b2Vec2} */
+	var b$1;
 	this.m_rotation = 0;
 	this.m_rotation0 = 0;
 	this.m_linearVelocity = null;
@@ -4567,7 +4727,9 @@ function b2Body$Lb2BodyDef$Lb2World$(bd, world) {
 		sd = bd.shapes[i];
 		massData = massDatas[i];
 		this.m_I += massData.I;
-		r = b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$(b2Math.AddVV$Lb2Vec2$Lb2Vec2$(sd.localPosition, massData.center), this.m_center);
+		a$0 = b2Math.AddVV$Lb2Vec2$Lb2Vec2$(sd.localPosition, massData.center);
+		b$0 = this.m_center;
+		r = new b2Vec2$NN(a$0.x - b$0.x, a$0.y - b$0.y);
 		this.m_I += massData.mass * (r.x * r.x + r.y * r.y);
 	}
 	if (this.m_mass > 0.0) {
@@ -4581,7 +4743,9 @@ function b2Body$Lb2BodyDef$Lb2World$(bd, world) {
 		this.m_I = 0.0;
 		this.m_invI = 0.0;
 	}
-	this.m_linearVelocity = b2Math.AddVV$Lb2Vec2$Lb2Vec2$(bd.linearVelocity, b2Math.b2CrossFV$NLb2Vec2$(bd.angularVelocity, this.m_center));
+	a$1 = bd.linearVelocity;
+	b$1 = b2Math.b2CrossFV$NLb2Vec2$(bd.angularVelocity, this.m_center);
+	this.m_linearVelocity = new b2Vec2$NN(a$1.x + b$1.x, a$1.y + b$1.y);
 	this.m_angularVelocity = bd.angularVelocity;
 	this.m_jointList = null;
 	this.m_contactList = null;
@@ -4617,12 +4781,15 @@ b2Body$Lb2BodyDef$Lb2World$.prototype = new b2Body;
 b2Body.prototype.SetOriginPosition$Lb2Vec2$N = function (position, rotation) {
 	/** @type {b2Shape} */
 	var s;
+	/** @type {b2Vec2} */
+	var b$0;
 	if ((this.m_flags & 0x0002) === 0x0002) {
 		return;
 	}
 	this.m_rotation = rotation;
 	this.m_R.Set$N(this.m_rotation);
-	this.m_position = b2Math.AddVV$Lb2Vec2$Lb2Vec2$(position, b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, this.m_center));
+	b$0 = b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, this.m_center);
+	this.m_position = new b2Vec2$NN(position.x + b$0.x, position.y + b$0.y);
 	this.m_position0.SetV$Lb2Vec2$(this.m_position);
 	this.m_rotation0 = this.m_rotation;
 	for (s = this.m_shapeList; s != null; s = s.m_next) {
@@ -4635,7 +4802,13 @@ b2Body.prototype.SetOriginPosition$Lb2Vec2$N = function (position, rotation) {
  * @return {b2Vec2}
  */
 b2Body.prototype.GetOriginPosition$ = function () {
-	return b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$(this.m_position, b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, this.m_center));
+	/** @type {b2Vec2} */
+	var a$0;
+	/** @type {b2Vec2} */
+	var b$0;
+	a$0 = this.m_position;
+	b$0 = b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, this.m_center);
+	return new b2Vec2$NN(a$0.x - b$0.x, a$0.y - b$0.y);
 };
 
 /**
@@ -4713,9 +4886,12 @@ b2Body.prototype.GetAngularVelocity$ = function () {
  * @param {b2Vec2} point
  */
 b2Body.prototype.ApplyForce$Lb2Vec2$Lb2Vec2$ = function (force, point) {
+	/** @type {b2Vec2} */
+	var a$0;
 	if ((this.m_flags & 0x0008) === 0x0008 === false) {
 		this.m_force.Add$Lb2Vec2$(force);
-		this.m_torque += b2Math.b2CrossVV$Lb2Vec2$Lb2Vec2$(b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$(point, this.m_position), force);
+		a$0 = b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$(point, this.m_position);
+		this.m_torque += a$0.x * force.y - a$0.y * force.x;
 	}
 };
 
@@ -4758,7 +4934,13 @@ b2Body.prototype.GetInertia$ = function () {
  * @return {b2Vec2}
  */
 b2Body.prototype.GetWorldPoint$Lb2Vec2$ = function (localPoint) {
-	return b2Math.AddVV$Lb2Vec2$Lb2Vec2$(this.m_position, b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, localPoint));
+	/** @type {b2Vec2} */
+	var a$0;
+	/** @type {b2Vec2} */
+	var b$0;
+	a$0 = this.m_position;
+	b$0 = b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, localPoint);
+	return new b2Vec2$NN(a$0.x + b$0.x, a$0.y + b$0.y);
 };
 
 /**
@@ -4766,7 +4948,10 @@ b2Body.prototype.GetWorldPoint$Lb2Vec2$ = function (localPoint) {
  * @return {b2Vec2}
  */
 b2Body.prototype.GetWorldVector$Lb2Vec2$ = function (localVector) {
-	return b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, localVector);
+	/** @type {b2Mat22} */
+	var A$0;
+	A$0 = this.m_R;
+	return new b2Vec2$NN(A$0.col1.x * localVector.x + A$0.col2.x * localVector.y, A$0.col1.y * localVector.x + A$0.col2.y * localVector.y);
 };
 
 /**
@@ -4774,7 +4959,13 @@ b2Body.prototype.GetWorldVector$Lb2Vec2$ = function (localVector) {
  * @return {b2Vec2}
  */
 b2Body.prototype.GetLocalPoint$Lb2Vec2$ = function (worldPoint) {
-	return b2Math.b2MulTMV$Lb2Mat22$Lb2Vec2$(this.m_R, b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$(worldPoint, this.m_position));
+	/** @type {b2Mat22} */
+	var A$0;
+	/** @type {b2Vec2} */
+	var v$0;
+	A$0 = this.m_R;
+	v$0 = b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$(worldPoint, this.m_position);
+	return new b2Vec2$NN(b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(v$0, A$0.col1), b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(v$0, A$0.col2));
 };
 
 /**
@@ -4782,7 +4973,10 @@ b2Body.prototype.GetLocalPoint$Lb2Vec2$ = function (worldPoint) {
  * @return {b2Vec2}
  */
 b2Body.prototype.GetLocalVector$Lb2Vec2$ = function (worldVector) {
-	return b2Math.b2MulTMV$Lb2Mat22$Lb2Vec2$(this.m_R, worldVector);
+	/** @type {b2Mat22} */
+	var A$0;
+	A$0 = this.m_R;
+	return new b2Vec2$NN(b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(worldVector, A$0.col1), b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(worldVector, A$0.col2));
 };
 
 /**
@@ -5407,6 +5601,8 @@ b2Island.prototype.UpdateSleep$N = function (dt) {
 	var linTolSqr;
 	/** @type {!number} */
 	var angTolSqr;
+	/** @type {!number} */
+	var b$0;
 	i = 0;
 	minSleepTime = Number.MAX_VALUE;
 	linTolSqr = 0.09;
@@ -5425,7 +5621,8 @@ b2Island.prototype.UpdateSleep$N = function (dt) {
 			minSleepTime = 0.0;
 		} else {
 			b.m_sleepTime += dt;
-			minSleepTime = b2Math.b2Min$NN(minSleepTime, b.m_sleepTime);
+			b$0 = b.m_sleepTime;
+			minSleepTime = (minSleepTime < b$0 ? minSleepTime : b$0);
 		}
 	}
 	if (minSleepTime >= 0.5) {
@@ -5632,6 +5829,12 @@ b2World.prototype.Step$NN = function (dt, iterations) {
 	var cn;
 	/** @type {!number} */
 	var i;
+	/** @type {b2Contact} */
+	var contact$0;
+	/** @type {!number} */
+	var a$0;
+	/** @type {!number} */
+	var b$0;
 	this.step.dt = dt;
 	this.step.iterations = iterations;
 	if (dt > 0.0) {
@@ -5677,7 +5880,8 @@ b2World.prototype.Step$NN = function (dt, iterations) {
 				if ((cn.contact.m_flags & 0x0001) !== 0) {
 					continue;
 				}
-				island.AddContact$Lb2Contact$(cn.contact);
+				contact$0 = cn.contact;
+				island.m_contacts[(island.m_contactCount++)] = contact$0;
 				cn.contact.m_flags |= 0x0001;
 				other = cn.other;
 				if ((other.m_flags & 0x0004) !== 0) {
@@ -5688,7 +5892,9 @@ b2World.prototype.Step$NN = function (dt, iterations) {
 			}
 		}
 		island.Solve$Lb2TimeStep$Lb2Vec2$(this.step, this.m_gravity);
-		this.m_positionIterationCount = b2Math.b2Max$NN(this.m_positionIterationCount, b2Island.m_positionIterationCount);
+		a$0 = this.m_positionIterationCount;
+		b$0 = b2Island.m_positionIterationCount;
+		this.m_positionIterationCount = (a$0 > b$0 ? a$0 : b$0);
 		if (this.m_allowSleep) {
 			island.UpdateSleep$N(dt);
 		}
@@ -5800,6 +6006,10 @@ b2Contact$.prototype = new b2Contact;
  * @param {b2Shape} s2
  */
 b2Contact.prototype.initializer$Lb2Shape$Lb2Shape$ = function (s1, s2) {
+	/** @type {!number} */
+	var a$0;
+	/** @type {!number} */
+	var b$0;
 	this.m_node1 = new b2ContactNode$();
 	this.m_node2 = new b2ContactNode$();
 	this.m_flags = 0;
@@ -5812,7 +6022,9 @@ b2Contact.prototype.initializer$Lb2Shape$Lb2Shape$ = function (s1, s2) {
 	this.m_shape2 = s2;
 	this.m_manifoldCount = 0;
 	this.m_friction = Math.sqrt(this.m_shape1.m_friction * this.m_shape2.m_friction);
-	this.m_restitution = b2Math.b2Max$NN(this.m_shape1.m_restitution, this.m_shape2.m_restitution);
+	a$0 = this.m_shape1.m_restitution;
+	b$0 = this.m_shape2.m_restitution;
+	this.m_restitution = (a$0 > b$0 ? a$0 : b$0);
 	this.m_prev = null;
 	this.m_next = null;
 	this.m_node1.contact = null;
@@ -6505,6 +6717,8 @@ b2ContactSolver.prototype.SolveVelocityConstraints$ = function () {
 	var vt;
 	/** @type {!number} */
 	var maxFriction;
+	/** @type {!number} */
+	var a$0;
 	j = 0;
 	for (i = 0; i < this.m_constraintCount; ++ i) {
 		c = this.m_constraints[i];
@@ -6537,7 +6751,8 @@ b2ContactSolver.prototype.SolveVelocityConstraints$ = function () {
 			dvY = b2_linearVelocity.y + b2_angularVelocity * r2X - b1_linearVelocity.y - b1_angularVelocity * r1X;
 			vn = dvX * normalX + dvY * normalY;
 			lambda = - ccp.normalMass * (vn - ccp.velocityBias);
-			newImpulse = b2Math.b2Max$NN(ccp.normalImpulse + lambda, 0.0);
+			a$0 = ccp.normalImpulse + lambda;
+			newImpulse = (a$0 > 0.0 ? a$0 : 0.0);
 			lambda = newImpulse - ccp.normalImpulse;
 			PX = lambda * normalX;
 			PY = lambda * normalY;
@@ -6651,6 +6866,8 @@ b2ContactSolver.prototype.SolvePositionConstraints$N = function (beta) {
 	var impulseX;
 	/** @type {!number} */
 	var impulseY;
+	/** @type {!number} */
+	var a$0;
 	minSeparation = 0.0;
 	for (i = 0; i < this.m_constraintCount; ++ i) {
 		c = this.m_constraints[i];
@@ -6690,7 +6907,8 @@ b2ContactSolver.prototype.SolvePositionConstraints$N = function (beta) {
 			C = beta * b2Math.b2Clamp$NNN(separation + 0.15, -6, 0.0);
 			dImpulse = - ccp.normalMass * C;
 			impulse0 = ccp.positionImpulse;
-			ccp.positionImpulse = b2Math.b2Max$NN(impulse0 + dImpulse, 0.0);
+			a$0 = impulse0 + dImpulse;
+			ccp.positionImpulse = (a$0 > 0.0 ? a$0 : 0.0);
 			dImpulse = ccp.positionImpulse - impulse0;
 			impulseX = dImpulse * normalX;
 			impulseY = dImpulse * normalY;
