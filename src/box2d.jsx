@@ -5,8 +5,7 @@ import "collision/shapes/*.jsx";
 import "dynamics/*.jsx";
 import "dynamics/contacts/*.jsx";
 
-import 'js/dom.jsx';
-import 'js/dom/canvas2d.jsx';
+import 'js/web.jsx';
 
 class _Main {
 	static var seed = 0;
