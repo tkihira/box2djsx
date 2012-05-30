@@ -78,6 +78,8 @@ _Main.random$ = function () {
 	return _Main.seed / 256;
 };
 
+_Main$random$ = _Main.random$;
+
 /**
  * @param {b2World} world
  * @param {CanvasRenderingContext2D} context
@@ -89,10 +91,12 @@ _Main.drawWorld$Lb2World$LCanvasRenderingContext2D$ = function (world, context) 
 	var s;
 	for (b = world.m_bodyList; b != null; b = b.m_next) {
 		for (s = b.m_shapeList; s != null; s = s.m_next) {
-			_Main.drawShape$Lb2Shape$LCanvasRenderingContext2D$(s, context);
+			_Main$drawShape$Lb2Shape$LCanvasRenderingContext2D$(s, context);
 		}
 	}
 };
+
+_Main$drawWorld$Lb2World$LCanvasRenderingContext2D$ = _Main.drawWorld$Lb2World$LCanvasRenderingContext2D$;
 
 /**
  * @param {b2Shape} shape
@@ -159,12 +163,12 @@ _Main.drawShape$Lb2Shape$LCanvasRenderingContext2D$ = function (shape, context) 
 	case 2:
 		poly = shape;
 		a$0 = poly.m_position;
-		b$0 = b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(poly.m_R, poly.m_vertices[(0)]);
+		b$0 = b2Math$b2MulMV$Lb2Mat22$Lb2Vec2$(poly.m_R, poly.m_vertices[(0)]);
 		tV = new b2Vec2$NN(a$0.x + b$0.x, a$0.y + b$0.y);
 		context.moveTo(tV.x, tV.y);
 		for (i = 0; i < poly.m_vertexCount; i++) {
 			a$1 = poly.m_position;
-			b$1 = b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(poly.m_R, poly.m_vertices[i]);
+			b$1 = b2Math$b2MulMV$Lb2Mat22$Lb2Vec2$(poly.m_R, poly.m_vertices[i]);
 			v = new b2Vec2$NN(a$1.x + b$1.x, a$1.y + b$1.y);
 			context.lineTo(v.x, v.y);
 		}
@@ -173,6 +177,8 @@ _Main.drawShape$Lb2Shape$LCanvasRenderingContext2D$ = function (shape, context) 
 	}
 	context.stroke();
 };
+
+_Main$drawShape$Lb2Shape$LCanvasRenderingContext2D$ = _Main.drawShape$Lb2Shape$LCanvasRenderingContext2D$;
 
 /**
  * @return {b2World}
@@ -186,17 +192,27 @@ _Main.createWorld$ = function () {
 	var doSleep;
 	/** @type {b2World} */
 	var world;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var this$1;
 	worldAABB = new b2AABB$();
-	worldAABB.minVertex.Set$NN(-1000, -1000);
-	worldAABB.maxVertex.Set$NN(1000, 1000);
+	this$0 = worldAABB.minVertex;
+	this$0.x = -1000;
+	this$0.y = -1000;
+	this$1 = worldAABB.maxVertex;
+	this$1.x = 1000;
+	this$1.y = 1000;
 	gravity = new b2Vec2$NN(0, 300);
 	doSleep = true;
 	world = new b2World$Lb2AABB$Lb2Vec2$B(worldAABB, gravity, doSleep);
-	_Main.createGround$Lb2World$(world);
-	_Main.createBox$Lb2World$NNNN(world, 0, 0, 10, 1000);
-	_Main.createBox$Lb2World$NNNN(world, 320, 0, 10, 1000);
+	_Main$createGround$Lb2World$(world);
+	_Main$createBox$Lb2World$NNNN(world, 0, 0, 10, 1000);
+	_Main$createBox$Lb2World$NNNN(world, 320, 0, 10, 1000);
 	return world;
 };
+
+_Main$createWorld$ = _Main.createWorld$;
 
 /**
  * @param {b2World} world
@@ -207,15 +223,25 @@ _Main.createGround$Lb2World$ = function (world) {
 	var groundSd;
 	/** @type {b2BodyDef} */
 	var groundBd;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var this$1;
 	groundSd = new b2BoxDef$();
-	groundSd.extents.Set$NN(1000, 10);
+	this$0 = groundSd.extents;
+	this$0.x = 1000;
+	this$0.y = 10;
 	groundSd.restitution = 0.2;
 	groundSd.friction = 0.2;
 	groundBd = new b2BodyDef$();
 	groundBd.AddShape$Lb2ShapeDef$(groundSd);
-	groundBd.position.Set$NN(-500, 400);
+	this$1 = groundBd.position;
+	this$1.x = -500;
+	this$1.y = 400;
 	return world.CreateBody$Lb2BodyDef$(groundBd);
 };
+
+_Main$createGround$Lb2World$ = _Main.createGround$Lb2World$;
 
 /**
  * @param {b2World} world
@@ -230,13 +256,23 @@ _Main.createBox$Lb2World$NNNN = function (world, x, y, width, height) {
 	var boxSd;
 	/** @type {b2BodyDef} */
 	var boxBd;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var this$1;
 	boxSd = new b2BoxDef$();
-	boxSd.extents.Set$NN(width, height);
+	this$0 = boxSd.extents;
+	this$0.x = width;
+	this$0.y = height;
 	boxBd = new b2BodyDef$();
 	boxBd.AddShape$Lb2ShapeDef$(boxSd);
-	boxBd.position.Set$NN(x, y);
+	this$1 = boxBd.position;
+	this$1.x = x;
+	this$1.y = y;
 	return world.CreateBody$Lb2BodyDef$(boxBd);
 };
+
+_Main$createBox$Lb2World$NNNN = _Main.createBox$Lb2World$NNNN;
 
 /**
  * @param {b2World} world
@@ -256,20 +292,36 @@ _Main.createMy$Lb2World$NNN = function (world, x, y, r) {
 	var ballBd;
 	/** @type {b2Body} */
 	var body;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {!number} */
+	var x$0;
+	/** @type {!number} */
+	var y$0;
+	/** @type {b2Vec2} */
+	var this$1;
 	ballSd = new b2PolyDef$();
 	ballSd.density = 1.0;
 	ballSd.restitution = 0.8;
-	v = 3 + (_Main.random$() * 5 | 0);
+	v = 3 + (_Main$random$() * 5 | 0);
 	ballSd.vertexCount = v;
 	for (i = 0; i < v; i++) {
-		ballSd.vertices[i].Set$NN(r * Math.cos(Math.PI * 2 / v * i), r * Math.sin(Math.PI * 2 / v * i));
+		this$0 = ballSd.vertices[i];
+		x$0 = r * Math.cos(Math.PI * 2 / v * i);
+		y$0 = r * Math.sin(Math.PI * 2 / v * i);
+		this$0.x = x$0;
+		this$0.y = y$0;
 	}
 	ballBd = new b2BodyDef$();
 	ballBd.AddShape$Lb2ShapeDef$(ballSd);
-	ballBd.position.Set$NN(x, y);
+	this$1 = ballBd.position;
+	this$1.x = x;
+	this$1.y = y;
 	body = world.CreateBody$Lb2BodyDef$(ballBd);
 	return body;
 };
+
+_Main$createMy$Lb2World$NNN = _Main.createMy$Lb2World$NNN;
 
 /**
  */
@@ -292,12 +344,12 @@ _Main.main$ = function () {
 	dom.window.setTimeout((function () {
 		dom.window.scrollTo(0, 0);
 	}), 100);
-	canvas = dom.window.document.getElementById("canvas");
+	canvas = (function (o) { return o instanceof HTMLElement ? o : null; })(dom.window.document.getElementById("canvas"));
 	ctx = canvas.getContext("2d");
-	world = _Main.createWorld$();
+	world = _Main$createWorld$();
 	count = 50;
 	for (i = 0; i < count; i++) {
-		_Main.createMy$Lb2World$NNN(world, i * 270 / count + 25, -200 + _Main.random$() * 300, 15 + _Main.random$() * 10);
+		_Main$createMy$Lb2World$NNN(world, i * 270 / count + 25, -200 + _Main$random$() * 300, 15 + _Main$random$() * 10);
 	}
 	frame = 0;
 	last = Date.now();
@@ -311,10 +363,10 @@ _Main.main$ = function () {
 		world.Step$NN(0.016666666666666666, 1);
 		ctx.fillStyle = "#000";
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
-		_Main.drawWorld$Lb2World$LCanvasRenderingContext2D$(world, ctx);
+		_Main$drawWorld$Lb2World$LCanvasRenderingContext2D$(world, ctx);
 		now = Date.now();
 		if (now - last > 1000) {
-			dom.id$S("fps").innerHTML = "fps:" + frame;
+			dom$id$S("fps").innerHTML = "fps:" + frame;
 			console.log("fps:" + frame);
 			frame = 0;
 			last = now;
@@ -322,6 +374,8 @@ _Main.main$ = function () {
 	});
 	tick();
 };
+
+_Main$main$ = _Main.main$;
 
 /**
  * class b2Settings extends Object
@@ -347,6 +401,8 @@ b2Settings.b2Assert$B = function (a) {
 		debugger;
 	}
 };
+
+b2Settings$b2Assert$B = b2Settings.b2Assert$B;
 
 /**
  * class b2Mat22 extends Object
@@ -403,11 +459,19 @@ b2Mat22.prototype.initializer$NLb2Vec2$Lb2Vec2$ = function (angle, c1, c2) {
 	var c;
 	/** @type {!number} */
 	var s;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var this$1;
 	this.col1 = new b2Vec2$();
 	this.col2 = new b2Vec2$();
 	if (c1 != null && c2 != null) {
-		this.col1.SetV$Lb2Vec2$(c1);
-		this.col2.SetV$Lb2Vec2$(c2);
+		this$0 = this.col1;
+		this$0.x = c1.x;
+		this$0.y = c1.y;
+		this$1 = this.col2;
+		this$1.x = c2.x;
+		this$1.y = c2.y;
 	} else {
 		c = Math.cos(angle);
 		s = Math.sin(angle);
@@ -439,8 +503,16 @@ b2Mat22.prototype.Set$N = function (angle) {
  * @param {b2Vec2} c2
  */
 b2Mat22.prototype.SetVV$Lb2Vec2$Lb2Vec2$ = function (c1, c2) {
-	this.col1.SetV$Lb2Vec2$(c1);
-	this.col2.SetV$Lb2Vec2$(c2);
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var this$1;
+	this$0 = this.col1;
+	this$0.x = c1.x;
+	this$0.y = c1.y;
+	this$1 = this.col2;
+	this$1.x = c2.x;
+	this$1.y = c2.y;
 };
 
 /**
@@ -454,8 +526,22 @@ b2Mat22.prototype.Copy$ = function () {
  * @param {b2Mat22} m
  */
 b2Mat22.prototype.SetM$Lb2Mat22$ = function (m) {
-	this.col1.SetV$Lb2Vec2$(m.col1);
-	this.col2.SetV$Lb2Vec2$(m.col2);
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var v$0;
+	/** @type {b2Vec2} */
+	var this$1;
+	/** @type {b2Vec2} */
+	var v$1;
+	this$0 = this.col1;
+	v$0 = m.col1;
+	this$0.x = v$0.x;
+	this$0.y = v$0.y;
+	this$1 = this.col2;
+	v$1 = m.col2;
+	this$1.x = v$1.x;
+	this$1.y = v$1.y;
 };
 
 /**
@@ -545,8 +631,17 @@ b2Mat22.prototype.Solve$Lb2Vec2$NN = function (out, bX, bY) {
 /**
  */
 b2Mat22.prototype.Abs$ = function () {
-	this.col1.Abs$();
-	this.col2.Abs$();
+	var $math_abs_t;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var this$1;
+	this$0 = this.col1;
+	this$0.x = (($math_abs_t = this$0.x) >= 0 ? $math_abs_t : -$math_abs_t);
+	this$0.y = (($math_abs_t = this$0.y) >= 0 ? $math_abs_t : -$math_abs_t);
+	this$1 = this.col2;
+	this$1.x = (($math_abs_t = this$1.x) >= 0 ? $math_abs_t : -$math_abs_t);
+	this$1.y = (($math_abs_t = this$1.y) >= 0 ? $math_abs_t : -$math_abs_t);
 };
 
 /**
@@ -573,6 +668,8 @@ b2Math.b2IsValid$N = function (x) {
 	return $__jsx_isFinite(x);
 };
 
+b2Math$b2IsValid$N = b2Math.b2IsValid$N;
+
 /**
  * @param {b2Vec2} a
  * @param {b2Vec2} b
@@ -581,6 +678,8 @@ b2Math.b2IsValid$N = function (x) {
 b2Math.b2Dot$Lb2Vec2$Lb2Vec2$ = function (a, b) {
 	return a.x * b.x + a.y * b.y;
 };
+
+b2Math$b2Dot$Lb2Vec2$Lb2Vec2$ = b2Math.b2Dot$Lb2Vec2$Lb2Vec2$;
 
 /**
  * @param {b2Vec2} a
@@ -591,6 +690,8 @@ b2Math.b2CrossVV$Lb2Vec2$Lb2Vec2$ = function (a, b) {
 	return a.x * b.y - a.y * b.x;
 };
 
+b2Math$b2CrossVV$Lb2Vec2$Lb2Vec2$ = b2Math.b2CrossVV$Lb2Vec2$Lb2Vec2$;
+
 /**
  * @param {b2Vec2} a
  * @param {!number} s
@@ -599,6 +700,8 @@ b2Math.b2CrossVV$Lb2Vec2$Lb2Vec2$ = function (a, b) {
 b2Math.b2CrossVF$Lb2Vec2$N = function (a, s) {
 	return new b2Vec2$NN(s * a.y, - s * a.x);
 };
+
+b2Math$b2CrossVF$Lb2Vec2$N = b2Math.b2CrossVF$Lb2Vec2$N;
 
 /**
  * @param {!number} s
@@ -609,6 +712,8 @@ b2Math.b2CrossFV$NLb2Vec2$ = function (s, a) {
 	return new b2Vec2$NN(- s * a.y, s * a.x);
 };
 
+b2Math$b2CrossFV$NLb2Vec2$ = b2Math.b2CrossFV$NLb2Vec2$;
+
 /**
  * @param {b2Mat22} A
  * @param {b2Vec2} v
@@ -618,14 +723,18 @@ b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$ = function (A, v) {
 	return new b2Vec2$NN(A.col1.x * v.x + A.col2.x * v.y, A.col1.y * v.x + A.col2.y * v.y);
 };
 
+b2Math$b2MulMV$Lb2Mat22$Lb2Vec2$ = b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$;
+
 /**
  * @param {b2Mat22} A
  * @param {b2Vec2} v
  * @return {b2Vec2}
  */
 b2Math.b2MulTMV$Lb2Mat22$Lb2Vec2$ = function (A, v) {
-	return new b2Vec2$NN(b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(v, A.col1), b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(v, A.col2));
+	return new b2Vec2$NN(b2Math$b2Dot$Lb2Vec2$Lb2Vec2$(v, A.col1), b2Math$b2Dot$Lb2Vec2$Lb2Vec2$(v, A.col2));
 };
+
+b2Math$b2MulTMV$Lb2Mat22$Lb2Vec2$ = b2Math.b2MulTMV$Lb2Mat22$Lb2Vec2$;
 
 /**
  * @param {b2Vec2} a
@@ -636,6 +745,8 @@ b2Math.AddVV$Lb2Vec2$Lb2Vec2$ = function (a, b) {
 	return new b2Vec2$NN(a.x + b.x, a.y + b.y);
 };
 
+b2Math$AddVV$Lb2Vec2$Lb2Vec2$ = b2Math.AddVV$Lb2Vec2$Lb2Vec2$;
+
 /**
  * @param {b2Vec2} a
  * @param {b2Vec2} b
@@ -644,6 +755,8 @@ b2Math.AddVV$Lb2Vec2$Lb2Vec2$ = function (a, b) {
 b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$ = function (a, b) {
 	return new b2Vec2$NN(a.x - b.x, a.y - b.y);
 };
+
+b2Math$SubtractVV$Lb2Vec2$Lb2Vec2$ = b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$;
 
 /**
  * @param {!number} s
@@ -654,14 +767,18 @@ b2Math.MulFV$NLb2Vec2$ = function (s, a) {
 	return new b2Vec2$NN(s * a.x, s * a.y);
 };
 
+b2Math$MulFV$NLb2Vec2$ = b2Math.MulFV$NLb2Vec2$;
+
 /**
  * @param {b2Mat22} A
  * @param {b2Mat22} B
  * @return {b2Mat22}
  */
 b2Math.AddMM$Lb2Mat22$Lb2Mat22$ = function (A, B) {
-	return new b2Mat22$NLb2Vec2$Lb2Vec2$(0, b2Math.AddVV$Lb2Vec2$Lb2Vec2$(A.col1, B.col1), b2Math.AddVV$Lb2Vec2$Lb2Vec2$(A.col2, B.col2));
+	return new b2Mat22$NLb2Vec2$Lb2Vec2$(0, b2Math$AddVV$Lb2Vec2$Lb2Vec2$(A.col1, B.col1), b2Math$AddVV$Lb2Vec2$Lb2Vec2$(A.col2, B.col2));
 };
+
+b2Math$AddMM$Lb2Mat22$Lb2Mat22$ = b2Math.AddMM$Lb2Mat22$Lb2Mat22$;
 
 /**
  * @param {b2Mat22} A
@@ -669,8 +786,10 @@ b2Math.AddMM$Lb2Mat22$Lb2Mat22$ = function (A, B) {
  * @return {b2Mat22}
  */
 b2Math.b2MulMM$Lb2Mat22$Lb2Mat22$ = function (A, B) {
-	return new b2Mat22$NLb2Vec2$Lb2Vec2$(0, b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(A, B.col1), b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(A, B.col2));
+	return new b2Mat22$NLb2Vec2$Lb2Vec2$(0, b2Math$b2MulMV$Lb2Mat22$Lb2Vec2$(A, B.col1), b2Math$b2MulMV$Lb2Mat22$Lb2Vec2$(A, B.col2));
 };
+
+b2Math$b2MulMM$Lb2Mat22$Lb2Mat22$ = b2Math.b2MulMM$Lb2Mat22$Lb2Mat22$;
 
 /**
  * @param {b2Mat22} A
@@ -684,11 +803,13 @@ b2Math.b2MulTMM$Lb2Mat22$Lb2Mat22$ = function (A, B) {
 	var c2;
 	/** @type {b2Mat22} */
 	var C;
-	c1 = new b2Vec2$NN(b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(A.col1, B.col1), b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(A.col2, B.col1));
-	c2 = new b2Vec2$NN(b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(A.col1, B.col2), b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(A.col2, B.col2));
+	c1 = new b2Vec2$NN(b2Math$b2Dot$Lb2Vec2$Lb2Vec2$(A.col1, B.col1), b2Math$b2Dot$Lb2Vec2$Lb2Vec2$(A.col2, B.col1));
+	c2 = new b2Vec2$NN(b2Math$b2Dot$Lb2Vec2$Lb2Vec2$(A.col1, B.col2), b2Math$b2Dot$Lb2Vec2$Lb2Vec2$(A.col2, B.col2));
 	C = new b2Mat22$NLb2Vec2$Lb2Vec2$(0, c1, c2);
 	return C;
 };
+
+b2Math$b2MulTMM$Lb2Mat22$Lb2Mat22$ = b2Math.b2MulTMM$Lb2Mat22$Lb2Mat22$;
 
 /**
  * @param {!number} a
@@ -698,21 +819,27 @@ b2Math.b2Abs$N = function (a) {
 	return (a >= 0 ? a : - a);
 };
 
+b2Math$b2Abs$N = b2Math.b2Abs$N;
+
 /**
  * @param {b2Vec2} a
  * @return {b2Vec2}
  */
 b2Math.b2AbsV$Lb2Vec2$ = function (a) {
-	return new b2Vec2$NN(b2Math.b2Abs$N(a.x), b2Math.b2Abs$N(a.y));
+	return new b2Vec2$NN(b2Math$b2Abs$N(a.x), b2Math$b2Abs$N(a.y));
 };
+
+b2Math$b2AbsV$Lb2Vec2$ = b2Math.b2AbsV$Lb2Vec2$;
 
 /**
  * @param {b2Mat22} A
  * @return {b2Mat22}
  */
 b2Math.b2AbsM$Lb2Mat22$ = function (A) {
-	return new b2Mat22$NLb2Vec2$Lb2Vec2$(0, b2Math.b2AbsV$Lb2Vec2$(A.col1), b2Math.b2AbsV$Lb2Vec2$(A.col2));
+	return new b2Mat22$NLb2Vec2$Lb2Vec2$(0, b2Math$b2AbsV$Lb2Vec2$(A.col1), b2Math$b2AbsV$Lb2Vec2$(A.col2));
 };
+
+b2Math$b2AbsM$Lb2Mat22$ = b2Math.b2AbsM$Lb2Mat22$;
 
 /**
  * @param {!number} a
@@ -723,14 +850,18 @@ b2Math.b2Min$NN = function (a, b) {
 	return a < b ? a : b;
 };
 
+b2Math$b2Min$NN = b2Math.b2Min$NN;
+
 /**
  * @param {b2Vec2} a
  * @param {b2Vec2} b
  * @return {b2Vec2}
  */
 b2Math.b2MinV$Lb2Vec2$Lb2Vec2$ = function (a, b) {
-	return new b2Vec2$NN(b2Math.b2Min$NN(a.x, b.x), b2Math.b2Min$NN(a.y, b.y));
+	return new b2Vec2$NN(b2Math$b2Min$NN(a.x, b.x), b2Math$b2Min$NN(a.y, b.y));
 };
+
+b2Math$b2MinV$Lb2Vec2$Lb2Vec2$ = b2Math.b2MinV$Lb2Vec2$Lb2Vec2$;
 
 /**
  * @param {!number} a
@@ -741,14 +872,18 @@ b2Math.b2Max$NN = function (a, b) {
 	return a > b ? a : b;
 };
 
+b2Math$b2Max$NN = b2Math.b2Max$NN;
+
 /**
  * @param {b2Vec2} a
  * @param {b2Vec2} b
  * @return {b2Vec2}
  */
 b2Math.b2MaxV$Lb2Vec2$Lb2Vec2$ = function (a, b) {
-	return new b2Vec2$NN(b2Math.b2Max$NN(a.x, b.x), b2Math.b2Max$NN(a.y, b.y));
+	return new b2Vec2$NN(b2Math$b2Max$NN(a.x, b.x), b2Math$b2Max$NN(a.y, b.y));
 };
+
+b2Math$b2MaxV$Lb2Vec2$Lb2Vec2$ = b2Math.b2MaxV$Lb2Vec2$Lb2Vec2$;
 
 /**
  * @param {!number} a
@@ -763,6 +898,8 @@ b2Math.b2Clamp$NNN = function (a, low, high) {
 	return low > b$0 ? low : b$0;
 };
 
+b2Math$b2Clamp$NNN = b2Math.b2Clamp$NNN;
+
 /**
  * @param {b2Vec2} a
  * @param {b2Vec2} low
@@ -772,9 +909,11 @@ b2Math.b2Clamp$NNN = function (a, low, high) {
 b2Math.b2ClampV$Lb2Vec2$Lb2Vec2$Lb2Vec2$ = function (a, low, high) {
 	/** @type {b2Vec2} */
 	var b$0;
-	b$0 = new b2Vec2$NN(b2Math.b2Min$NN(a.x, high.x), b2Math.b2Min$NN(a.y, high.y));
-	return new b2Vec2$NN(b2Math.b2Max$NN(low.x, b$0.x), b2Math.b2Max$NN(low.y, b$0.y));
+	b$0 = new b2Vec2$NN(b2Math$b2Min$NN(a.x, high.x), b2Math$b2Min$NN(a.y, high.y));
+	return new b2Vec2$NN(b2Math$b2Max$NN(low.x, b$0.x), b2Math$b2Max$NN(low.y, b$0.y));
 };
+
+b2Math$b2ClampV$Lb2Vec2$Lb2Vec2$Lb2Vec2$ = b2Math.b2ClampV$Lb2Vec2$Lb2Vec2$Lb2Vec2$;
 
 /**
  * @return {!number}
@@ -782,6 +921,8 @@ b2Math.b2ClampV$Lb2Vec2$Lb2Vec2$Lb2Vec2$ = function (a, low, high) {
 b2Math.b2Random$ = function () {
 	return Math.random() * 2 - 1;
 };
+
+b2Math$b2Random$ = b2Math.b2Random$;
 
 /**
  * @param {!number} x
@@ -796,6 +937,8 @@ b2Math.b2NextPowerOfTwo$N = function (x) {
 	return x + 1;
 };
 
+b2Math$b2NextPowerOfTwo$N = b2Math.b2NextPowerOfTwo$N;
+
 /**
  * @param {!number} x
  * @return {!boolean}
@@ -803,6 +946,8 @@ b2Math.b2NextPowerOfTwo$N = function (x) {
 b2Math.b2IsPowerOfTwo$N = function (x) {
 	return x > 0 && (x & x - 1) === 0;
 };
+
+b2Math$b2IsPowerOfTwo$N = b2Math.b2IsPowerOfTwo$N;
 
 /**
  * class b2Vec2 extends Object
@@ -1003,7 +1148,7 @@ b2Vec2.prototype.Normalize$ = function () {
  * @return {!boolean}
  */
 b2Vec2.prototype.IsValid$ = function () {
-	return b2Math.b2IsValid$N(this.x) && b2Math.b2IsValid$N(this.y);
+	return b2Math$b2IsValid$N(this.x) && b2Math$b2IsValid$N(this.y);
 };
 
 /**
@@ -1014,6 +1159,8 @@ b2Vec2.prototype.IsValid$ = function () {
 b2Vec2.Make$NN = function (x, y) {
 	return new b2Vec2$NN(x, y);
 };
+
+b2Vec2$Make$NN = b2Vec2.Make$NN;
 
 /**
  * class b2AABB extends Object
@@ -1150,6 +1297,8 @@ function b2BroadPhase$Lb2AABB$Lb2PairCallback$(worldAABB, callback) {
 	var dY;
 	/** @type {b2Proxy} */
 	var tProxy;
+	/** @type {b2PairManager} */
+	var this$0;
 	/** @type {!number} */
 	var next$0;
 	/** @type {!number} */
@@ -1174,7 +1323,9 @@ function b2BroadPhase$Lb2AABB$Lb2PairCallback$(worldAABB, callback) {
 	this.m_queryResults.length = 1024;
 	this.m_quantizationFactor = new b2Vec2$();
 	i = 0;
-	this.m_pairManager.Initialize$Lb2BroadPhase$Lb2PairCallback$(this, callback);
+	this$0 = this.m_pairManager;
+	this$0.m_broadPhase = this;
+	this$0.m_callback = callback;
 	this.m_worldAABB = worldAABB;
 	this.m_proxyCount = 0;
 	for (i = 0; i < 1024; i++) {
@@ -1297,6 +1448,8 @@ b2BroadPhase.prototype.CreateProxy$Lb2AABB$X = function (aabb, userData) {
 	var proxy2;
 	/** @type {!number} */
 	var i;
+	/** @type {b2Bound} */
+	var this$0;
 	index = 0;
 	proxyId = this.m_freeProxy;
 	proxy = this.m_proxyPool[proxyId];
@@ -1367,7 +1520,8 @@ b2BroadPhase.prototype.CreateProxy$Lb2AABB$X = function (aabb, userData) {
 		}
 		for (index = lowerIndex; index < boundCount + 2; ++ index) {
 			proxy2 = this.m_proxyPool[bounds[index].proxyId];
-			if (bounds[index].IsLower$()) {
+			this$0 = bounds[index];
+			if ((this$0.value & 1) === 0) {
 				proxy2.lowerBounds[axis] = index;
 			} else {
 				proxy2.upperBounds[axis] = index;
@@ -1424,6 +1578,8 @@ b2BroadPhase.prototype.DestroyProxy$N = function (proxyId) {
 	var index2;
 	/** @type {!number} */
 	var i;
+	/** @type {b2Bound} */
+	var this$0;
 	/** @type {!number} */
 	var next$0;
 	proxy = this.m_proxyPool[proxyId];
@@ -1476,7 +1632,8 @@ b2BroadPhase.prototype.DestroyProxy$N = function (proxyId) {
 		tEnd = boundCount - 2;
 		for (index = lowerIndex; index < tEnd; ++ index) {
 			proxy2 = this.m_proxyPool[bounds[index].proxyId];
-			if (bounds[index].IsLower$()) {
+			this$0 = bounds[index];
+			if ((this$0.value & 1) === 0) {
 				proxy2.lowerBounds[axis] = index;
 			} else {
 				proxy2.upperBounds[axis] = index;
@@ -1854,10 +2011,15 @@ b2BroadPhase.prototype.Query$ANANNNALb2Bound$NN = function (lowerQueryOut, upper
 	var s;
 	/** @type {undefined|b2Proxy} */
 	var proxy;
-	lowerQuery = b2BroadPhase.BinarySearch$ALb2Bound$NN(bounds, boundCount, lowerValue);
-	upperQuery = b2BroadPhase.BinarySearch$ALb2Bound$NN(bounds, boundCount, upperValue);
+	/** @type {b2Bound} */
+	var this$0;
+	/** @type {b2Bound} */
+	var this$1;
+	lowerQuery = b2BroadPhase$BinarySearch$ALb2Bound$NN(bounds, boundCount, lowerValue);
+	upperQuery = b2BroadPhase$BinarySearch$ALb2Bound$NN(bounds, boundCount, upperValue);
 	for (j = lowerQuery; j < upperQuery; ++ j) {
-		if (bounds[j].IsLower$()) {
+		this$0 = bounds[j];
+		if ((this$0.value & 1) === 0) {
 			this.IncrementOverlapCount$N(bounds[j].proxyId);
 		}
 	}
@@ -1865,7 +2027,8 @@ b2BroadPhase.prototype.Query$ANANNNALb2Bound$NN = function (lowerQueryOut, upper
 		i = lowerQuery - 1;
 		s = bounds[i].stabbingCount;
 		while (s !== 0) {
-			if (bounds[i].IsLower$()) {
+			this$1 = bounds[i];
+			if ((this$1.value & 1) === 0) {
 				proxy = this.m_proxyPool[bounds[i].proxyId];
 				if (lowerQuery <= proxy.upperBounds[axis]) {
 					this.IncrementOverlapCount$N(bounds[i].proxyId);
@@ -1941,6 +2104,8 @@ b2BroadPhase.BinarySearch$ALb2Bound$NN = function (bounds, count, value) {
 	return low;
 };
 
+b2BroadPhase$BinarySearch$ALb2Bound$NN = b2BroadPhase.BinarySearch$ALb2Bound$NN;
+
 /**
  * class b2BufferedPair extends Object
  * @constructor
@@ -2000,8 +2165,8 @@ b2Collision.ClipSegmentToLine$ALClipVertex$ALClipVertex$Lb2Vec2$N = function (vO
 	numOut = 0;
 	vIn0 = vIn[(0)].v;
 	vIn1 = vIn[(1)].v;
-	distance0 = b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(normal, vIn[(0)].v) - offset;
-	distance1 = b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(normal, vIn[(1)].v) - offset;
+	distance0 = b2Math$b2Dot$Lb2Vec2$Lb2Vec2$(normal, vIn[(0)].v) - offset;
+	distance1 = b2Math$b2Dot$Lb2Vec2$Lb2Vec2$(normal, vIn[(1)].v) - offset;
 	if (distance0 <= 0.0) {
 		vOut[(numOut++)] = vIn[(0)];
 	}
@@ -2022,6 +2187,8 @@ b2Collision.ClipSegmentToLine$ALClipVertex$ALClipVertex$Lb2Vec2$N = function (vO
 	}
 	return numOut;
 };
+
+b2Collision$ClipSegmentToLine$ALClipVertex$ALClipVertex$Lb2Vec2$N = b2Collision.ClipSegmentToLine$ALClipVertex$ALClipVertex$Lb2Vec2$N;
 
 /**
  * @param {b2PolyShape} poly1
@@ -2105,6 +2272,8 @@ b2Collision.EdgeSeparation$Lb2PolyShape$NLb2PolyShape$ = function (poly1, edge1,
 	return separation;
 };
 
+b2Collision$EdgeSeparation$Lb2PolyShape$NLb2PolyShape$ = b2Collision.EdgeSeparation$Lb2PolyShape$NLb2PolyShape$;
+
 /**
  * @param {Array.<undefined|!number>} edgeIndex
  * @param {b2PolyShape} poly1
@@ -2161,17 +2330,17 @@ b2Collision.FindMaxSeparation$ANLb2PolyShape$Lb2PolyShape$B = function (edgeInde
 			edge = i;
 		}
 	}
-	s = b2Collision.EdgeSeparation$Lb2PolyShape$NLb2PolyShape$(poly1, edge, poly2);
+	s = b2Collision$EdgeSeparation$Lb2PolyShape$NLb2PolyShape$(poly1, edge, poly2);
 	if (s > 0.0 && conservative === false) {
 		return s;
 	}
 	prevEdge = (edge - 1 >= 0 ? edge - 1 : count1 - 1);
-	sPrev = b2Collision.EdgeSeparation$Lb2PolyShape$NLb2PolyShape$(poly1, prevEdge, poly2);
+	sPrev = b2Collision$EdgeSeparation$Lb2PolyShape$NLb2PolyShape$(poly1, prevEdge, poly2);
 	if (sPrev > 0.0 && conservative === false) {
 		return sPrev;
 	}
 	nextEdge = (edge + 1 < count1 ? edge + 1 : 0);
-	sNext = b2Collision.EdgeSeparation$Lb2PolyShape$NLb2PolyShape$(poly1, nextEdge, poly2);
+	sNext = b2Collision$EdgeSeparation$Lb2PolyShape$NLb2PolyShape$(poly1, nextEdge, poly2);
 	if (sNext > 0.0 && conservative === false) {
 		return sNext;
 	}
@@ -2197,7 +2366,7 @@ b2Collision.FindMaxSeparation$ANLb2PolyShape$Lb2PolyShape$B = function (edgeInde
 		} else {
 			edge = (bestEdge + 1 < count1 ? bestEdge + 1 : 0);
 		}
-		s = b2Collision.EdgeSeparation$Lb2PolyShape$NLb2PolyShape$(poly1, edge, poly2);
+		s = b2Collision$EdgeSeparation$Lb2PolyShape$NLb2PolyShape$(poly1, edge, poly2);
 		if (s > 0.0 && conservative === false) {
 			return s;
 		}
@@ -2211,6 +2380,8 @@ b2Collision.FindMaxSeparation$ANLb2PolyShape$Lb2PolyShape$B = function (edgeInde
 	edgeIndex[(0)] = bestEdge;
 	return bestSeparation;
 };
+
+b2Collision$FindMaxSeparation$ANLb2PolyShape$Lb2PolyShape$B = b2Collision.FindMaxSeparation$ANLb2PolyShape$Lb2PolyShape$B;
 
 /**
  * @param {Array.<undefined|ClipVertex>} c
@@ -2360,6 +2531,8 @@ b2Collision.FindIncidentEdge$ALClipVertex$Lb2PolyShape$NLb2PolyShape$ = function
 	tClip.id.features.incidentVertex = vertex22;
 };
 
+b2Collision$FindIncidentEdge$ALClipVertex$Lb2PolyShape$NLb2PolyShape$ = b2Collision.FindIncidentEdge$ALClipVertex$Lb2PolyShape$NLb2PolyShape$;
+
 /**
  * @param {b2Manifold} manifold
  * @param {b2PolyShape} polyA
@@ -2449,17 +2622,37 @@ b2Collision.b2CollidePoly$Lb2Manifold$Lb2PolyShape$Lb2PolyShape$B = function (ma
 	var separation;
 	/** @type {undefined|b2ContactPoint} */
 	var cp;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {!number} */
+	var x$0;
+	/** @type {!number} */
+	var y$0;
+	/** @type {b2Vec2} */
+	var this$1;
+	/** @type {b2Vec2} */
+	var this$2;
+	/** @type {!number} */
+	var x$1;
+	/** @type {!number} */
+	var y$1;
+	/** @type {b2Vec2} */
+	var this$3;
+	/** @type {b2Vec2} */
+	var this$4;
+	/** @type {b2Vec2} */
+	var v$0;
 	manifold.pointCount = 0;
 	edgeA = 0;
 	edgeAOut = [ edgeA ];
-	separationA = b2Collision.FindMaxSeparation$ANLb2PolyShape$Lb2PolyShape$B(edgeAOut, polyA, polyB, conservative);
+	separationA = b2Collision$FindMaxSeparation$ANLb2PolyShape$Lb2PolyShape$B(edgeAOut, polyA, polyB, conservative);
 	edgeA = edgeAOut[(0)];
 	if (separationA > 0.0 && conservative === false) {
 		return;
 	}
 	edgeB = 0;
 	edgeBOut = [ edgeB ];
-	separationB = b2Collision.FindMaxSeparation$ANLb2PolyShape$Lb2PolyShape$B(edgeBOut, polyB, polyA, conservative);
+	separationB = b2Collision$FindMaxSeparation$ANLb2PolyShape$Lb2PolyShape$B(edgeBOut, polyB, polyA, conservative);
 	edgeB = edgeBOut[(0)];
 	if (separationB > 0.0 && conservative === false) {
 		return;
@@ -2480,7 +2673,7 @@ b2Collision.b2CollidePoly$Lb2Manifold$Lb2PolyShape$Lb2PolyShape$B = function (ma
 		flip = 0;
 	}
 	incidentEdge = [ new ClipVertex$(), new ClipVertex$() ];
-	b2Collision.FindIncidentEdge$ALClipVertex$Lb2PolyShape$NLb2PolyShape$(incidentEdge, poly1, edge1, poly2);
+	b2Collision$FindIncidentEdge$ALClipVertex$Lb2PolyShape$NLb2PolyShape$(incidentEdge, poly1, edge1, poly2);
 	count1 = poly1.m_vertexCount;
 	vert1s = poly1.m_vertices;
 	v11 = vert1s[edge1];
@@ -2523,20 +2716,32 @@ b2Collision.b2CollidePoly$Lb2Manifold$Lb2PolyShape$Lb2PolyShape$B = function (ma
 	clipPoints1 = [ new ClipVertex$(), new ClipVertex$() ];
 	clipPoints2 = [ new ClipVertex$(), new ClipVertex$() ];
 	np = 0;
-	b2Collision.b2CollidePolyTempVec.Set$NN(- sideNormalX, - sideNormalY);
-	np = b2Collision.ClipSegmentToLine$ALClipVertex$ALClipVertex$Lb2Vec2$N(clipPoints1, incidentEdge, b2Collision.b2CollidePolyTempVec, sideOffset1);
+	this$0 = b2Collision.b2CollidePolyTempVec;
+	x$0 = - sideNormalX;
+	y$0 = - sideNormalY;
+	this$0.x = x$0;
+	this$0.y = y$0;
+	np = b2Collision$ClipSegmentToLine$ALClipVertex$ALClipVertex$Lb2Vec2$N(clipPoints1, incidentEdge, b2Collision.b2CollidePolyTempVec, sideOffset1);
 	if (np < 2) {
 		return;
 	}
-	b2Collision.b2CollidePolyTempVec.Set$NN(sideNormalX, sideNormalY);
-	np = b2Collision.ClipSegmentToLine$ALClipVertex$ALClipVertex$Lb2Vec2$N(clipPoints2, clipPoints1, b2Collision.b2CollidePolyTempVec, sideOffset2);
+	this$1 = b2Collision.b2CollidePolyTempVec;
+	this$1.x = sideNormalX;
+	this$1.y = sideNormalY;
+	np = b2Collision$ClipSegmentToLine$ALClipVertex$ALClipVertex$Lb2Vec2$N(clipPoints2, clipPoints1, b2Collision.b2CollidePolyTempVec, sideOffset2);
 	if (np < 2) {
 		return;
 	}
 	if (flip !== 0) {
-		manifold.normal.Set$NN(- frontNormalX, - frontNormalY);
+		this$2 = manifold.normal;
+		x$1 = - frontNormalX;
+		y$1 = - frontNormalY;
+		this$2.x = x$1;
+		this$2.y = y$1;
 	} else {
-		manifold.normal.Set$NN(frontNormalX, frontNormalY);
+		this$3 = manifold.normal;
+		this$3.x = frontNormalX;
+		this$3.y = frontNormalY;
 	}
 	pointCount = 0;
 	for (i = 0; i < 2; ++ i) {
@@ -2545,7 +2750,10 @@ b2Collision.b2CollidePoly$Lb2Manifold$Lb2PolyShape$Lb2PolyShape$B = function (ma
 		if (separation <= 0.0 || conservative === true) {
 			cp = manifold.points[pointCount];
 			cp.separation = separation;
-			cp.position.SetV$Lb2Vec2$(clipPoints2[i].v);
+			this$4 = cp.position;
+			v$0 = clipPoints2[i].v;
+			this$4.x = v$0.x;
+			this$4.y = v$0.y;
 			cp.id.Set$Lb2ContactID$(clipPoints2[i].id);
 			cp.id.features.flip = flip;
 			++ pointCount;
@@ -2553,6 +2761,8 @@ b2Collision.b2CollidePoly$Lb2Manifold$Lb2PolyShape$Lb2PolyShape$B = function (ma
 	}
 	manifold.pointCount = pointCount;
 };
+
+b2Collision$b2CollidePoly$Lb2Manifold$Lb2PolyShape$Lb2PolyShape$B = b2Collision.b2CollidePoly$Lb2Manifold$Lb2PolyShape$Lb2PolyShape$B;
 
 /**
  * @param {b2Manifold} manifold
@@ -2577,6 +2787,10 @@ b2Collision.b2CollideCircle$Lb2Manifold$Lb2CircleShape$Lb2CircleShape$B = functi
 	var a;
 	/** @type {undefined|b2ContactPoint} */
 	var tPoint;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2ContactID} */
+	var this$1;
 	manifold.pointCount = 0;
 	dX = circle2.m_position.x - circle1.m_position.x;
 	dY = circle2.m_position.y - circle1.m_position.y;
@@ -2587,7 +2801,9 @@ b2Collision.b2CollideCircle$Lb2Manifold$Lb2CircleShape$Lb2CircleShape$B = functi
 	}
 	if (distSqr < Number.MIN_VALUE) {
 		separation = - radiusSum;
-		manifold.normal.Set$NN(0.0, 1.0);
+		this$0 = manifold.normal;
+		this$0.x = 0.0;
+		this$0.y = 1.0;
 	} else {
 		dist = Math.sqrt(distSqr);
 		separation = dist - radiusSum;
@@ -2597,11 +2813,18 @@ b2Collision.b2CollideCircle$Lb2Manifold$Lb2CircleShape$Lb2CircleShape$B = functi
 	}
 	manifold.pointCount = 1;
 	tPoint = manifold.points[(0)];
-	tPoint.id.set_key$N(0);
+	this$1 = tPoint.id;
+	this$1._key = 0;
+	this$1.features._referenceFace = this$1._key & 0x000000ff;
+	this$1.features._incidentEdge = (this$1._key & 0x0000ff00) >> 8 & 0x000000ff;
+	this$1.features._incidentVertex = (this$1._key & 0x00ff0000) >> 16 & 0x000000ff;
+	this$1.features._flip = (this$1._key & 0xff000000) >> 24 & 0x000000ff;
 	tPoint.separation = separation;
 	tPoint.position.x = circle2.m_position.x - circle2.m_radius * manifold.normal.x;
 	tPoint.position.y = circle2.m_position.y - circle2.m_radius * manifold.normal.y;
 };
+
+b2Collision$b2CollideCircle$Lb2Manifold$Lb2CircleShape$Lb2CircleShape$B = b2Collision.b2CollideCircle$Lb2Manifold$Lb2CircleShape$Lb2CircleShape$B;
 
 /**
  * @param {b2Manifold} manifold
@@ -2654,6 +2877,18 @@ b2Collision.b2CollidePolyAndCircle$Lb2Manifold$Lb2PolyShape$Lb2CircleShape$B = f
 	var pX;
 	/** @type {!number} */
 	var pY;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {!number} */
+	var x$0;
+	/** @type {!number} */
+	var y$0;
+	/** @type {b2Vec2} */
+	var this$1;
+	/** @type {!number} */
+	var x$1;
+	/** @type {!number} */
+	var y$1;
 	manifold.pointCount = 0;
 	xLocalX = circle.m_position.x - poly.m_position.x;
 	xLocalY = circle.m_position.y - poly.m_position.y;
@@ -2706,7 +2941,11 @@ b2Collision.b2CollidePolyAndCircle$Lb2Manifold$Lb2PolyShape$Lb2CircleShape$B = f
 			return;
 		}
 		manifold.pointCount = 1;
-		manifold.normal.Set$NN(tMat.col1.x * dX + tMat.col2.x * dY, tMat.col1.y * dX + tMat.col2.y * dY);
+		this$0 = manifold.normal;
+		x$0 = tMat.col1.x * dX + tMat.col2.x * dY;
+		y$0 = tMat.col1.y * dX + tMat.col2.y * dY;
+		this$0.x = x$0;
+		this$0.y = y$0;
 		tPoint = manifold.points[(0)];
 		tPoint.id.features.incidentEdge = b2Collision.b2_nullFeature;
 		tPoint.id.features.incidentVertex = vertIndex1;
@@ -2747,11 +2986,17 @@ b2Collision.b2CollidePolyAndCircle$Lb2Manifold$Lb2PolyShape$Lb2CircleShape$B = f
 		return;
 	}
 	manifold.pointCount = 1;
-	manifold.normal.Set$NN(tMat.col1.x * dX + tMat.col2.x * dY, tMat.col1.y * dX + tMat.col2.y * dY);
+	this$1 = manifold.normal;
+	x$1 = tMat.col1.x * dX + tMat.col2.x * dY;
+	y$1 = tMat.col1.y * dX + tMat.col2.y * dY;
+	this$1.x = x$1;
+	this$1.y = y$1;
 	tPoint.position.x = circle.m_position.x - radius * manifold.normal.x;
 	tPoint.position.y = circle.m_position.y - radius * manifold.normal.y;
 	tPoint.separation = dist - radius;
 };
+
+b2Collision$b2CollidePolyAndCircle$Lb2Manifold$Lb2PolyShape$Lb2CircleShape$B = b2Collision.b2CollidePolyAndCircle$Lb2Manifold$Lb2PolyShape$Lb2CircleShape$B;
 
 /**
  * class b2ContactID extends Object
@@ -3158,7 +3403,7 @@ b2PairManager.prototype.AddPair$NN = function (proxyId1, proxyId2) {
 		proxyId1 = proxyId2;
 		proxyId2 = temp;
 	}
-	hash = b2PairManager.Hash$NN(proxyId1, proxyId2) & b2Pair.b2_tableMask;
+	hash = b2PairManager$Hash$NN(proxyId1, proxyId2) & b2Pair.b2_tableMask;
 	pair = pair = this.FindHash$NNN(proxyId1, proxyId2, hash);
 	if (pair != null) {
 		return pair;
@@ -3203,7 +3448,7 @@ b2PairManager.prototype.RemovePair$NN = function (proxyId1, proxyId2) {
 		proxyId1 = proxyId2;
 		proxyId2 = temp;
 	}
-	hash = b2PairManager.Hash$NN(proxyId1, proxyId2) & b2Pair.b2_tableMask;
+	hash = b2PairManager$Hash$NN(proxyId1, proxyId2) & b2Pair.b2_tableMask;
 	node = this.m_hashTable[hash];
 	pNode = null;
 	while (node !== b2Pair.b2_nullPair) {
@@ -3248,7 +3493,7 @@ b2PairManager.prototype.Find$NN = function (proxyId1, proxyId2) {
 		proxyId1 = proxyId2;
 		proxyId2 = temp;
 	}
-	hash = b2PairManager.Hash$NN(proxyId1, proxyId2) & b2Pair.b2_tableMask;
+	hash = b2PairManager$Hash$NN(proxyId1, proxyId2) & b2Pair.b2_tableMask;
 	return this.FindHash$NNN(proxyId1, proxyId2, hash);
 };
 
@@ -3262,7 +3507,7 @@ b2PairManager.prototype.FindHash$NNN = function (proxyId1, proxyId2, hash) {
 	/** @type {undefined|!number} */
 	var index;
 	index = this.m_hashTable[hash];
-	while (index !== b2Pair.b2_nullPair && b2PairManager.Equals$Lb2Pair$NN(this.m_pairs[index], proxyId1, proxyId2) === false) {
+	while (index !== b2Pair.b2_nullPair && b2PairManager$Equals$Lb2Pair$NN(this.m_pairs[index], proxyId1, proxyId2) === false) {
 		index = this.m_pairs[index].next;
 	}
 	return index === b2Pair.b2_nullPair ? null : this.m_pairs[index];
@@ -3296,6 +3541,8 @@ b2PairManager.Hash$NN = function (proxyId1, proxyId2) {
 	return key;
 };
 
+b2PairManager$Hash$NN = b2PairManager.Hash$NN;
+
 /**
  * @param {b2Pair} pair
  * @param {!number} proxyId1
@@ -3306,6 +3553,8 @@ b2PairManager.Equals$Lb2Pair$NN = function (pair, proxyId1, proxyId2) {
 	return pair.proxyId1 === proxyId1 && pair.proxyId2 === proxyId2;
 };
 
+b2PairManager$Equals$Lb2Pair$NN = b2PairManager.Equals$Lb2Pair$NN;
+
 /**
  * @param {b2Pair} pair1
  * @param {b2Pair} pair2
@@ -3314,6 +3563,8 @@ b2PairManager.Equals$Lb2Pair$NN = function (pair, proxyId1, proxyId2) {
 b2PairManager.EqualsPair$Lb2Pair$Lb2Pair$ = function (pair1, pair2) {
 	return pair1.proxyId1 === pair2.proxyId1 && pair1.proxyId2 === pair2.proxyId2;
 };
+
+b2PairManager$EqualsPair$Lb2Pair$Lb2Pair$ = b2PairManager.EqualsPair$Lb2Pair$Lb2Pair$;
 
 /**
  * class b2Proxy extends Object
@@ -3615,6 +3866,8 @@ b2Shape.Create$Lb2ShapeDef$Lb2Body$Lb2Vec2$ = function (def, body, center) {
 	return null;
 };
 
+b2Shape$Create$Lb2ShapeDef$Lb2Body$Lb2Vec2$ = b2Shape.Create$Lb2ShapeDef$Lb2Body$Lb2Vec2$;
+
 /**
  * @param {b2Shape} shape
  */
@@ -3623,6 +3876,8 @@ b2Shape.Destroy$Lb2Shape$ = function (shape) {
 		shape.m_body.m_world.m_broadPhase.DestroyProxy$N(shape.m_proxyId);
 	}
 };
+
+b2Shape$Destroy$Lb2Shape$ = b2Shape.Destroy$Lb2Shape$;
 
 /**
  * @param {b2MassData} massData
@@ -3726,6 +3981,8 @@ b2Shape.PolyMass$Lb2MassData$ALb2Vec2$NN = function (massData, vs, count, rho) {
 	massData.I = I;
 };
 
+b2Shape$PolyMass$Lb2MassData$ALb2Vec2$NN = b2Shape.PolyMass$Lb2MassData$ALb2Vec2$NN;
+
 /**
  * @param {Array.<undefined|b2Vec2>} vs
  * @param {!number} count
@@ -3799,6 +4056,8 @@ b2Shape.PolyCentroid$ALb2Vec2$NLb2Vec2$ = function (vs, count, out) {
 	out.y = cY;
 };
 
+b2Shape$PolyCentroid$ALb2Vec2$NLb2Vec2$ = b2Shape.PolyCentroid$ALb2Vec2$NLb2Vec2$;
+
 /**
  * class b2PolyShape extends b2Shape
  * @constructor
@@ -3864,6 +4123,20 @@ function b2PolyShape$Lb2ShapeDef$Lb2Body$Lb2Vec2$(def, body, newOrigin) {
 	var positionY;
 	/** @type {b2BroadPhase} */
 	var broadPhase;
+	/** @type {b2Mat22} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var this$1;
+	/** @type {!number} */
+	var x$0;
+	/** @type {!number} */
+	var y$0;
+	/** @type {b2Vec2} */
+	var this$2;
+	/** @type {!number} */
+	var x$1;
+	/** @type {!number} */
+	var y$1;
 	this.m_next = null;
 	this.m_type = 0;
 	this.m_R = new b2Mat22$();
@@ -3930,7 +4203,7 @@ function b2PolyShape$Lb2ShapeDef$Lb2Body$Lb2Vec2$(def, body, newOrigin) {
 	} else {
 		poly = def;
 		this.m_vertexCount = poly.vertexCount;
-		b2Shape.PolyCentroid$ALb2Vec2$NLb2Vec2$(poly.vertices, poly.vertexCount, b2PolyShape.tempVec);
+		b2Shape$PolyCentroid$ALb2Vec2$NLb2Vec2$(poly.vertices, poly.vertexCount, b2PolyShape.tempVec);
 		centroidX = b2PolyShape.tempVec.x;
 		centroidY = b2PolyShape.tempVec.y;
 		this.m_localCentroid.x = def.localPosition.x + localR.col1.x * centroidX + localR.col2.x * centroidY - newOrigin.x;
@@ -3966,9 +4239,21 @@ function b2PolyShape$Lb2ShapeDef$Lb2Body$Lb2Vec2$(def, body, newOrigin) {
 		maxVertexY = Math.max(maxVertexY, v.y);
 		this.m_maxRadius = Math.max(this.m_maxRadius, Math.sqrt(v.x * v.x + v.y * v.y));
 	}
-	this.m_localOBB.R.SetIdentity$();
-	this.m_localOBB.center.Set$NN((minVertexX + maxVertexX) * 0.5, (minVertexY + maxVertexY) * 0.5);
-	this.m_localOBB.extents.Set$NN((maxVertexX - minVertexX) * 0.5, (maxVertexY - minVertexY) * 0.5);
+	this$0 = this.m_localOBB.R;
+	this$0.col1.x = 1.0;
+	this$0.col2.x = 0.0;
+	this$0.col1.y = 0.0;
+	this$0.col2.y = 1.0;
+	this$1 = this.m_localOBB.center;
+	x$0 = (minVertexX + maxVertexX) * 0.5;
+	y$0 = (minVertexY + maxVertexY) * 0.5;
+	this$1.x = x$0;
+	this$1.y = y$0;
+	this$2 = this.m_localOBB.extents;
+	x$1 = (maxVertexX - minVertexX) * 0.5;
+	y$1 = (maxVertexY - minVertexY) * 0.5;
+	this$2.x = x$1;
+	this$2.y = y$1;
 	i1 = 0;
 	i2 = 0;
 	for (i = 0; i < this.m_vertexCount; ++ i) {
@@ -4171,6 +4456,14 @@ b2PolyShape.prototype.ResetProxy$Lb2BroadPhase$ = function (broadPhase) {
 	var v$1;
 	/** @type {b2Vec2} */
 	var v$2;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var this$1;
+	/** @type {b2Vec2} */
+	var this$2;
+	/** @type {b2Vec2} */
+	var this$3;
 	if (this.m_proxyId === b2Pair.b2_nullProxy) {
 		return;
 	}
@@ -4180,8 +4473,8 @@ b2PolyShape.prototype.ResetProxy$Lb2BroadPhase$ = function (broadPhase) {
 	proxy = null;
 	A$0 = this.m_R;
 	B$0 = this.m_localOBB.R;
-	R = new b2Mat22$NLb2Vec2$Lb2Vec2$(0, b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(A$0, B$0.col1), b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(A$0, B$0.col2));
-	absR = new b2Mat22$NLb2Vec2$Lb2Vec2$(0, b2Math.b2AbsV$Lb2Vec2$(R.col1), b2Math.b2AbsV$Lb2Vec2$(R.col2));
+	R = new b2Mat22$NLb2Vec2$Lb2Vec2$(0, b2Math$b2MulMV$Lb2Mat22$Lb2Vec2$(A$0, B$0.col1), b2Math$b2MulMV$Lb2Mat22$Lb2Vec2$(A$0, B$0.col2));
+	absR = new b2Mat22$NLb2Vec2$Lb2Vec2$(0, b2Math$b2AbsV$Lb2Vec2$(R.col1), b2Math$b2AbsV$Lb2Vec2$(R.col2));
 	v$0 = this.m_localOBB.extents;
 	h = new b2Vec2$NN(absR.col1.x * v$0.x + absR.col2.x * v$0.y, absR.col1.y * v$0.x + absR.col2.y * v$0.y);
 	A$1 = this.m_R;
@@ -4191,10 +4484,18 @@ b2PolyShape.prototype.ResetProxy$Lb2BroadPhase$ = function (broadPhase) {
 	position.x += v$2.x;
 	position.y += v$2.y;
 	aabb = new b2AABB$();
-	aabb.minVertex.SetV$Lb2Vec2$(position);
-	aabb.minVertex.Subtract$Lb2Vec2$(h);
-	aabb.maxVertex.SetV$Lb2Vec2$(position);
-	aabb.maxVertex.Add$Lb2Vec2$(h);
+	this$0 = aabb.minVertex;
+	this$0.x = position.x;
+	this$0.y = position.y;
+	this$1 = aabb.minVertex;
+	this$1.x -= h.x;
+	this$1.y -= h.y;
+	this$2 = aabb.maxVertex;
+	this$2.x = position.x;
+	this$2.y = position.y;
+	this$3 = aabb.maxVertex;
+	this$3.x += h.x;
+	this$3.y += h.y;
 	if (broadPhase.InRange$Lb2AABB$(aabb)) {
 		this.m_proxyId = broadPhase.CreateProxy$Lb2AABB$X(aabb, this);
 	} else {
@@ -4269,6 +4570,24 @@ function b2CircleShape$Lb2CircleDef$Lb2Body$Lb2Vec2$(def, body, localCenter) {
 	var aabb;
 	/** @type {b2BroadPhase} */
 	var broadPhase;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {!number} */
+	var x$0;
+	/** @type {!number} */
+	var y$0;
+	/** @type {b2Vec2} */
+	var this$1;
+	/** @type {!number} */
+	var x$1;
+	/** @type {!number} */
+	var y$1;
+	/** @type {b2Vec2} */
+	var this$2;
+	/** @type {!number} */
+	var x$2;
+	/** @type {!number} */
+	var y$2;
 	this.m_next = null;
 	this.m_type = 0;
 	this.m_R = new b2Mat22$();
@@ -4285,7 +4604,11 @@ function b2CircleShape$Lb2CircleDef$Lb2Body$Lb2Vec2$(def, body, localCenter) {
 	this.m_radius = 0;
 	this.m_localPosition = new b2Vec2$();
 	circle = def;
-	this.m_localPosition.Set$NN(def.localPosition.x - localCenter.x, def.localPosition.y - localCenter.y);
+	this$0 = this.m_localPosition;
+	x$0 = def.localPosition.x - localCenter.x;
+	y$0 = def.localPosition.y - localCenter.y;
+	this$0.x = x$0;
+	this$0.y = y$0;
 	this.m_type = 0;
 	this.m_radius = circle.radius;
 	this.m_R.SetM$Lb2Mat22$(this.m_body.m_R);
@@ -4295,8 +4618,16 @@ function b2CircleShape$Lb2CircleDef$Lb2Body$Lb2Vec2$(def, body, localCenter) {
 	this.m_position.y = this.m_body.m_position.y + rY;
 	this.m_maxRadius = Math.sqrt(rX * rX + rY * rY) + this.m_radius;
 	aabb = new b2AABB$();
-	aabb.minVertex.Set$NN(this.m_position.x - this.m_radius, this.m_position.y - this.m_radius);
-	aabb.maxVertex.Set$NN(this.m_position.x + this.m_radius, this.m_position.y + this.m_radius);
+	this$1 = aabb.minVertex;
+	x$1 = this.m_position.x - this.m_radius;
+	y$1 = this.m_position.y - this.m_radius;
+	this$1.x = x$1;
+	this$1.y = y$1;
+	this$2 = aabb.maxVertex;
+	x$2 = this.m_position.x + this.m_radius;
+	y$2 = this.m_position.y + this.m_radius;
+	this$2.x = x$2;
+	this$2.y = y$2;
 	broadPhase = this.m_body.m_world.m_broadPhase;
 	if (broadPhase.InRange$Lb2AABB$(aabb)) {
 		this.m_proxyId = broadPhase.CreateProxy$Lb2AABB$X(aabb, this);
@@ -4351,6 +4682,18 @@ b2CircleShape.prototype.Synchronize$Lb2Vec2$Lb2Mat22$Lb2Vec2$Lb2Mat22$ = functio
 	var aabb;
 	/** @type {b2BroadPhase} */
 	var broadPhase;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {!number} */
+	var x$0;
+	/** @type {!number} */
+	var y$0;
+	/** @type {b2Vec2} */
+	var this$1;
+	/** @type {!number} */
+	var x$1;
+	/** @type {!number} */
+	var y$1;
 	this.m_R.SetM$Lb2Mat22$(R2);
 	this.m_position.x = R2.col1.x * this.m_localPosition.x + R2.col2.x * this.m_localPosition.y + position2.x;
 	this.m_position.y = R2.col1.y * this.m_localPosition.x + R2.col2.y * this.m_localPosition.y + position2.y;
@@ -4364,8 +4707,16 @@ b2CircleShape.prototype.Synchronize$Lb2Vec2$Lb2Mat22$Lb2Vec2$Lb2Mat22$ = functio
 	upperX = Math.max(p1X, this.m_position.x);
 	upperY = Math.max(p1Y, this.m_position.y);
 	aabb = new b2AABB$();
-	aabb.minVertex.Set$NN(lowerX - this.m_radius, lowerY - this.m_radius);
-	aabb.maxVertex.Set$NN(upperX + this.m_radius, upperY + this.m_radius);
+	this$0 = aabb.minVertex;
+	x$0 = lowerX - this.m_radius;
+	y$0 = lowerY - this.m_radius;
+	this$0.x = x$0;
+	this$0.y = y$0;
+	this$1 = aabb.maxVertex;
+	x$1 = upperX + this.m_radius;
+	y$1 = upperY + this.m_radius;
+	this$1.x = x$1;
+	this$1.y = y$1;
 	broadPhase = this.m_body.m_world.m_broadPhase;
 	if (broadPhase.InRange$Lb2AABB$(aabb)) {
 		broadPhase.MoveProxy$NLb2AABB$(this.m_proxyId, aabb);
@@ -4394,6 +4745,18 @@ b2CircleShape.prototype.ResetProxy$Lb2BroadPhase$ = function (broadPhase) {
 	var aabb;
 	/** @type {!number} */
 	var proxyId$0;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {!number} */
+	var x$0;
+	/** @type {!number} */
+	var y$0;
+	/** @type {b2Vec2} */
+	var this$1;
+	/** @type {!number} */
+	var x$1;
+	/** @type {!number} */
+	var y$1;
 	if (this.m_proxyId === b2Pair.b2_nullProxy) {
 		return;
 	}
@@ -4402,8 +4765,16 @@ b2CircleShape.prototype.ResetProxy$Lb2BroadPhase$ = function (broadPhase) {
 	broadPhase.DestroyProxy$N(this.m_proxyId);
 	proxy = null;
 	aabb = new b2AABB$();
-	aabb.minVertex.Set$NN(this.m_position.x - this.m_radius, this.m_position.y - this.m_radius);
-	aabb.maxVertex.Set$NN(this.m_position.x + this.m_radius, this.m_position.y + this.m_radius);
+	this$0 = aabb.minVertex;
+	x$0 = this.m_position.x - this.m_radius;
+	y$0 = this.m_position.y - this.m_radius;
+	this$0.x = x$0;
+	this$0.y = y$0;
+	this$1 = aabb.maxVertex;
+	x$1 = this.m_position.x + this.m_radius;
+	y$1 = this.m_position.y + this.m_radius;
+	this$1.x = x$1;
+	this$1.y = y$1;
 	if (broadPhase.InRange$Lb2AABB$(aabb)) {
 		this.m_proxyId = broadPhase.CreateProxy$Lb2AABB$X(aabb, this);
 	} else {
@@ -4471,32 +4842,48 @@ b2ShapeDef.prototype.ComputeMass$Lb2MassData$ = function (massData) {
 	var box;
 	/** @type {b2PolyDef} */
 	var poly;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var this$1;
+	/** @type {b2Vec2} */
+	var this$2;
+	/** @type {b2Vec2} */
+	var this$3;
 	massData.center = new b2Vec2$NN(0.0, 0.0);
 	if (this.density === 0.0) {
 		massData.mass = 0.0;
-		massData.center.Set$NN(0.0, 0.0);
+		this$0 = massData.center;
+		this$0.x = 0.0;
+		this$0.y = 0.0;
 		massData.I = 0.0;
 	}
 	switch (this.type) {
 	case 0:
 		circle = this;
 		massData.mass = this.density * b2Settings.b2_pi * circle.radius * circle.radius;
-		massData.center.Set$NN(0.0, 0.0);
+		this$1 = massData.center;
+		this$1.x = 0.0;
+		this$1.y = 0.0;
 		massData.I = 0.5 * massData.mass * circle.radius * circle.radius;
 		break;
 	case 1:
 		box = this;
 		massData.mass = 4.0 * this.density * box.extents.x * box.extents.y;
-		massData.center.Set$NN(0.0, 0.0);
-		massData.I = massData.mass / 3.0 * b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(box.extents, box.extents);
+		this$2 = massData.center;
+		this$2.x = 0.0;
+		this$2.y = 0.0;
+		massData.I = massData.mass / 3.0 * b2Math$b2Dot$Lb2Vec2$Lb2Vec2$(box.extents, box.extents);
 		break;
 	case 2:
 		poly = this;
-		b2Shape.PolyMass$Lb2MassData$ALb2Vec2$NN(massData, poly.vertices, poly.vertexCount, this.density);
+		b2Shape$PolyMass$Lb2MassData$ALb2Vec2$NN(massData, poly.vertices, poly.vertexCount, this.density);
 		break;
 	default:
 		massData.mass = 0.0;
-		massData.center.Set$NN(0.0, 0.0);
+		this$3 = massData.center;
+		this$3.x = 0.0;
+		this$3.y = 0.0;
 		massData.I = 0.0;
 		break;
 	}
@@ -4651,13 +5038,31 @@ function b2Body$Lb2BodyDef$Lb2World$(bd, world) {
 	/** @type {b2Shape} */
 	var shape;
 	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var v$0;
+	/** @type {b2Vec2} */
+	var this$1;
+	/** @type {b2Vec2} */
+	var v$1;
+	/** @type {b2Vec2} */
+	var this$2;
+	/** @type {!number} */
 	var a$0;
 	/** @type {b2Vec2} */
-	var b$0;
+	var this$3;
+	/** @type {b2Vec2} */
+	var v$2;
 	/** @type {b2Vec2} */
 	var a$1;
 	/** @type {b2Vec2} */
+	var b$0;
+	/** @type {b2Vec2} */
+	var a$2;
+	/** @type {b2Vec2} */
 	var b$1;
+	/** @type {b2Vec2} */
+	var this$4;
 	this.m_rotation = 0;
 	this.m_rotation0 = 0;
 	this.m_linearVelocity = null;
@@ -4686,14 +5091,20 @@ function b2Body$Lb2BodyDef$Lb2World$(bd, world) {
 	this.m_position0 = new b2Vec2$();
 	i = 0;
 	this.m_flags = 0;
-	this.m_position.SetV$Lb2Vec2$(bd.position);
+	this$0 = this.m_position;
+	v$0 = bd.position;
+	this$0.x = v$0.x;
+	this$0.y = v$0.y;
 	this.m_rotation = bd.rotation;
 	this.m_R.Set$N(this.m_rotation);
-	this.m_position0.SetV$Lb2Vec2$(this.m_position);
+	this$1 = this.m_position0;
+	v$1 = this.m_position;
+	this$1.x = v$1.x;
+	this$1.y = v$1.y;
 	this.m_rotation0 = this.m_rotation;
 	this.m_world = world;
-	this.m_linearDamping = b2Math.b2Clamp$NNN(1.0 - bd.linearDamping, 0.0, 1.0);
-	this.m_angularDamping = b2Math.b2Clamp$NNN(1.0 - bd.angularDamping, 0.0, 1.0);
+	this.m_linearDamping = b2Math$b2Clamp$NNN(1.0 - bd.linearDamping, 0.0, 1.0);
+	this.m_angularDamping = b2Math$b2Clamp$NNN(1.0 - bd.angularDamping, 0.0, 1.0);
 	this.m_force = new b2Vec2$NN(0.0, 0.0);
 	this.m_torque = 0.0;
 	this.m_mass = 0.0;
@@ -4717,8 +5128,14 @@ function b2Body$Lb2BodyDef$Lb2World$(bd, world) {
 		++ this.m_shapeCount;
 	}
 	if (this.m_mass > 0.0) {
-		this.m_center.Multiply$N(1.0 / this.m_mass);
-		this.m_position.Add$Lb2Vec2$(b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, this.m_center));
+		this$2 = this.m_center;
+		a$0 = 1.0 / this.m_mass;
+		this$2.x *= a$0;
+		this$2.y *= a$0;
+		this$3 = this.m_position;
+		v$2 = b2Math$b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, this.m_center);
+		this$3.x += v$2.x;
+		this$3.y += v$2.y;
 	} else {
 		this.m_flags |= 0x0001;
 	}
@@ -4727,9 +5144,9 @@ function b2Body$Lb2BodyDef$Lb2World$(bd, world) {
 		sd = bd.shapes[i];
 		massData = massDatas[i];
 		this.m_I += massData.I;
-		a$0 = b2Math.AddVV$Lb2Vec2$Lb2Vec2$(sd.localPosition, massData.center);
+		a$1 = b2Math$AddVV$Lb2Vec2$Lb2Vec2$(sd.localPosition, massData.center);
 		b$0 = this.m_center;
-		r = new b2Vec2$NN(a$0.x - b$0.x, a$0.y - b$0.y);
+		r = new b2Vec2$NN(a$1.x - b$0.x, a$1.y - b$0.y);
 		this.m_I += massData.mass * (r.x * r.x + r.y * r.y);
 	}
 	if (this.m_mass > 0.0) {
@@ -4743,9 +5160,9 @@ function b2Body$Lb2BodyDef$Lb2World$(bd, world) {
 		this.m_I = 0.0;
 		this.m_invI = 0.0;
 	}
-	a$1 = bd.linearVelocity;
-	b$1 = b2Math.b2CrossFV$NLb2Vec2$(bd.angularVelocity, this.m_center);
-	this.m_linearVelocity = new b2Vec2$NN(a$1.x + b$1.x, a$1.y + b$1.y);
+	a$2 = bd.linearVelocity;
+	b$1 = b2Math$b2CrossFV$NLb2Vec2$(bd.angularVelocity, this.m_center);
+	this.m_linearVelocity = new b2Vec2$NN(a$2.x + b$1.x, a$2.y + b$1.y);
 	this.m_angularVelocity = bd.angularVelocity;
 	this.m_jointList = null;
 	this.m_contactList = null;
@@ -4754,7 +5171,7 @@ function b2Body$Lb2BodyDef$Lb2World$(bd, world) {
 	this.m_shapeList = null;
 	for (i = 0; i < this.m_shapeCount; ++ i) {
 		sd = bd.shapes[i];
-		shape = b2Shape.Create$Lb2ShapeDef$Lb2Body$Lb2Vec2$(sd, this, this.m_center);
+		shape = b2Shape$Create$Lb2ShapeDef$Lb2Body$Lb2Vec2$(sd, this, this.m_center);
 		shape.m_next = this.m_shapeList;
 		this.m_shapeList = shape;
 	}
@@ -4766,7 +5183,9 @@ function b2Body$Lb2BodyDef$Lb2World$(bd, world) {
 		this.m_flags |= 0x0008;
 	}
 	if ((this.m_flags & 0x0008) !== 0 || this.m_invMass === 0.0) {
-		this.m_linearVelocity.Set$NN(0.0, 0.0);
+		this$4 = this.m_linearVelocity;
+		this$4.x = 0.0;
+		this$4.y = 0.0;
 		this.m_angularVelocity = 0.0;
 	}
 	this.m_userData = bd.userData;
@@ -4783,19 +5202,29 @@ b2Body.prototype.SetOriginPosition$Lb2Vec2$N = function (position, rotation) {
 	var s;
 	/** @type {b2Vec2} */
 	var b$0;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var v$0;
+	/** @type {b2BroadPhase} */
+	var this$1;
 	if ((this.m_flags & 0x0002) === 0x0002) {
 		return;
 	}
 	this.m_rotation = rotation;
 	this.m_R.Set$N(this.m_rotation);
-	b$0 = b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, this.m_center);
+	b$0 = b2Math$b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, this.m_center);
 	this.m_position = new b2Vec2$NN(position.x + b$0.x, position.y + b$0.y);
-	this.m_position0.SetV$Lb2Vec2$(this.m_position);
+	this$0 = this.m_position0;
+	v$0 = this.m_position;
+	this$0.x = v$0.x;
+	this$0.y = v$0.y;
 	this.m_rotation0 = this.m_rotation;
 	for (s = this.m_shapeList; s != null; s = s.m_next) {
 		s.Synchronize$Lb2Vec2$Lb2Mat22$Lb2Vec2$Lb2Mat22$(this.m_position, this.m_R, this.m_position, this.m_R);
 	}
-	this.m_world.m_broadPhase.Commit$();
+	this$1 = this.m_world.m_broadPhase;
+	this$1.m_pairManager.Commit$();
 };
 
 /**
@@ -4807,7 +5236,7 @@ b2Body.prototype.GetOriginPosition$ = function () {
 	/** @type {b2Vec2} */
 	var b$0;
 	a$0 = this.m_position;
-	b$0 = b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, this.m_center);
+	b$0 = b2Math$b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, this.m_center);
 	return new b2Vec2$NN(a$0.x - b$0.x, a$0.y - b$0.y);
 };
 
@@ -4818,18 +5247,32 @@ b2Body.prototype.GetOriginPosition$ = function () {
 b2Body.prototype.SetCenterPosition$Lb2Vec2$N = function (position, rotation) {
 	/** @type {b2Shape} */
 	var s;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var this$1;
+	/** @type {b2Vec2} */
+	var v$0;
+	/** @type {b2BroadPhase} */
+	var this$2;
 	if ((this.m_flags & 0x0002) === 0x0002) {
 		return;
 	}
 	this.m_rotation = rotation;
 	this.m_R.Set$N(this.m_rotation);
-	this.m_position.SetV$Lb2Vec2$(position);
-	this.m_position0.SetV$Lb2Vec2$(this.m_position);
+	this$0 = this.m_position;
+	this$0.x = position.x;
+	this$0.y = position.y;
+	this$1 = this.m_position0;
+	v$0 = this.m_position;
+	this$1.x = v$0.x;
+	this$1.y = v$0.y;
 	this.m_rotation0 = this.m_rotation;
 	for (s = this.m_shapeList; s != null; s = s.m_next) {
 		s.Synchronize$Lb2Vec2$Lb2Mat22$Lb2Vec2$Lb2Mat22$(this.m_position, this.m_R, this.m_position, this.m_R);
 	}
-	this.m_world.m_broadPhase.Commit$();
+	this$2 = this.m_world.m_broadPhase;
+	this$2.m_pairManager.Commit$();
 };
 
 /**
@@ -4857,7 +5300,11 @@ b2Body.prototype.GetRotationMatrix$ = function () {
  * @param {b2Vec2} v
  */
 b2Body.prototype.SetLinearVelocity$Lb2Vec2$ = function (v) {
-	this.m_linearVelocity.SetV$Lb2Vec2$(v);
+	/** @type {b2Vec2} */
+	var this$0;
+	this$0 = this.m_linearVelocity;
+	this$0.x = v.x;
+	this$0.y = v.y;
 };
 
 /**
@@ -4887,10 +5334,14 @@ b2Body.prototype.GetAngularVelocity$ = function () {
  */
 b2Body.prototype.ApplyForce$Lb2Vec2$Lb2Vec2$ = function (force, point) {
 	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
 	var a$0;
 	if ((this.m_flags & 0x0008) === 0x0008 === false) {
-		this.m_force.Add$Lb2Vec2$(force);
-		a$0 = b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$(point, this.m_position);
+		this$0 = this.m_force;
+		this$0.x += force.x;
+		this$0.y += force.y;
+		a$0 = b2Math$SubtractVV$Lb2Vec2$Lb2Vec2$(point, this.m_position);
 		this.m_torque += a$0.x * force.y - a$0.y * force.x;
 	}
 };
@@ -4909,9 +5360,16 @@ b2Body.prototype.ApplyTorque$N = function (torque) {
  * @param {b2Vec2} point
  */
 b2Body.prototype.ApplyImpulse$Lb2Vec2$Lb2Vec2$ = function (impulse, point) {
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var v$0;
 	if ((this.m_flags & 0x0008) === 0x0008 === false) {
-		this.m_linearVelocity.Add$Lb2Vec2$(b2Math.MulFV$NLb2Vec2$(this.m_invMass, impulse));
-		this.m_angularVelocity += this.m_invI * b2Math.b2CrossVV$Lb2Vec2$Lb2Vec2$(b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$(point, this.m_position), impulse);
+		this$0 = this.m_linearVelocity;
+		v$0 = b2Math$MulFV$NLb2Vec2$(this.m_invMass, impulse);
+		this$0.x += v$0.x;
+		this$0.y += v$0.y;
+		this.m_angularVelocity += this.m_invI * b2Math$b2CrossVV$Lb2Vec2$Lb2Vec2$(b2Math$SubtractVV$Lb2Vec2$Lb2Vec2$(point, this.m_position), impulse);
 	}
 };
 
@@ -4939,7 +5397,7 @@ b2Body.prototype.GetWorldPoint$Lb2Vec2$ = function (localPoint) {
 	/** @type {b2Vec2} */
 	var b$0;
 	a$0 = this.m_position;
-	b$0 = b2Math.b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, localPoint);
+	b$0 = b2Math$b2MulMV$Lb2Mat22$Lb2Vec2$(this.m_R, localPoint);
 	return new b2Vec2$NN(a$0.x + b$0.x, a$0.y + b$0.y);
 };
 
@@ -4964,8 +5422,8 @@ b2Body.prototype.GetLocalPoint$Lb2Vec2$ = function (worldPoint) {
 	/** @type {b2Vec2} */
 	var v$0;
 	A$0 = this.m_R;
-	v$0 = b2Math.SubtractVV$Lb2Vec2$Lb2Vec2$(worldPoint, this.m_position);
-	return new b2Vec2$NN(b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(v$0, A$0.col1), b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(v$0, A$0.col2));
+	v$0 = b2Math$SubtractVV$Lb2Vec2$Lb2Vec2$(worldPoint, this.m_position);
+	return new b2Vec2$NN(b2Math$b2Dot$Lb2Vec2$Lb2Vec2$(v$0, A$0.col1), b2Math$b2Dot$Lb2Vec2$Lb2Vec2$(v$0, A$0.col2));
 };
 
 /**
@@ -4976,7 +5434,7 @@ b2Body.prototype.GetLocalVector$Lb2Vec2$ = function (worldVector) {
 	/** @type {b2Mat22} */
 	var A$0;
 	A$0 = this.m_R;
-	return new b2Vec2$NN(b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(worldVector, A$0.col1), b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(worldVector, A$0.col2));
+	return new b2Vec2$NN(b2Math$b2Dot$Lb2Vec2$Lb2Vec2$(worldVector, A$0.col1), b2Math$b2Dot$Lb2Vec2$Lb2Vec2$(worldVector, A$0.col2));
 };
 
 /**
@@ -5066,7 +5524,7 @@ b2Body.prototype.Destroy$ = function () {
 	while (s != null) {
 		s0 = s;
 		s = s.m_next;
-		b2Shape.Destroy$Lb2Shape$(s0);
+		b2Shape$Destroy$Lb2Shape$(s0);
 	}
 };
 
@@ -5104,8 +5562,12 @@ b2Body.prototype.IsConnected$X = function (other) {
 b2Body.prototype.Freeze$ = function () {
 	/** @type {b2Shape} */
 	var s;
+	/** @type {b2Vec2} */
+	var this$0;
 	this.m_flags |= 0x0002;
-	this.m_linearVelocity.SetZero$();
+	this$0 = this.m_linearVelocity;
+	this$0.x = 0;
+	this$0.y = 0;
 	this.m_angularVelocity = 0.0;
 	for (s = this.m_shapeList; s != null; s = s.m_next) {
 		s.DestroyProxy$();
@@ -5261,7 +5723,7 @@ b2ContactManager.prototype.PairAdded$XX = function (proxyUserData1, proxyUserDat
 		body1 = body2;
 		body2 = tempBody;
 	}
-	contact = b2Contact.Create$Lb2Shape$Lb2Shape$X(shape1, shape2, this.m_world.m_blockAllocator);
+	contact = b2Contact$Create$Lb2Shape$Lb2Shape$X(shape1, shape2, this.m_world.m_blockAllocator);
 	if (contact == null) {
 		return this.m_nullContact;
 	} else {
@@ -5351,7 +5813,7 @@ b2ContactManager.prototype.DestroyContact$Lb2Contact$ = function (c) {
 		node2.prev = null;
 		node2.next = null;
 	}
-	b2Contact.Destroy$Lb2Contact$X(c, this.m_world.m_blockAllocator);
+	b2Contact$Destroy$Lb2Contact$X(c, this.m_world.m_blockAllocator);
 	-- this.m_world.m_contactCount;
 };
 
@@ -5525,17 +5987,40 @@ b2Island.prototype.Solve$Lb2TimeStep$Lb2Vec2$ = function (step, gravity) {
 	var contactsOkay;
 	/** @type {!boolean} */
 	var jointsOkay;
+	/** @type {b2Vec2} */
+	var this$0;
+	/** @type {b2Vec2} */
+	var v$0;
+	/** @type {b2Vec2} */
+	var this$1;
+	/** @type {!number} */
+	var a$0;
+	/** @type {b2Vec2} */
+	var this$2;
+	/** @type {b2Vec2} */
+	var v$1;
+	/** @type {b2Vec2} */
+	var this$3;
 	i = 0;
 	for (i = 0; i < this.m_bodyCount; ++ i) {
 		b = this.m_bodies[i];
 		if (b.m_invMass === 0.0) {
 			continue;
 		}
-		b.m_linearVelocity.Add$Lb2Vec2$(b2Math.MulFV$NLb2Vec2$(step.dt, b2Math.AddVV$Lb2Vec2$Lb2Vec2$(gravity, b2Math.MulFV$NLb2Vec2$(b.m_invMass, b.m_force))));
+		this$0 = b.m_linearVelocity;
+		v$0 = b2Math$MulFV$NLb2Vec2$(step.dt, b2Math$AddVV$Lb2Vec2$Lb2Vec2$(gravity, b2Math$MulFV$NLb2Vec2$(b.m_invMass, b.m_force)));
+		this$0.x += v$0.x;
+		this$0.y += v$0.y;
 		b.m_angularVelocity += step.dt * b.m_invI * b.m_torque;
-		b.m_linearVelocity.Multiply$N(b.m_linearDamping);
+		this$1 = b.m_linearVelocity;
+		a$0 = b.m_linearDamping;
+		this$1.x *= a$0;
+		this$1.y *= a$0;
 		b.m_angularVelocity *= b.m_angularDamping;
-		b.m_position0.SetV$Lb2Vec2$(b.m_position);
+		this$2 = b.m_position0;
+		v$1 = b.m_position;
+		this$2.x = v$1.x;
+		this$2.y = v$1.y;
 		b.m_rotation0 = b.m_rotation;
 	}
 	contactSolver = new b2ContactSolver$ALb2Contact$NX(this.m_contacts, this.m_contactCount, this.m_allocator);
@@ -5582,7 +6067,9 @@ b2Island.prototype.Solve$Lb2TimeStep$Lb2Vec2$ = function (step, gravity) {
 		}
 		b.m_R.Set$N(b.m_rotation);
 		b.SynchronizeShapes$();
-		b.m_force.Set$NN(0.0, 0.0);
+		this$3 = b.m_force;
+		this$3.x = 0.0;
+		this$3.y = 0.0;
 		b.m_torque = 0.0;
 	}
 };
@@ -5616,7 +6103,7 @@ b2Island.prototype.UpdateSleep$N = function (dt) {
 			b.m_sleepTime = 0.0;
 			minSleepTime = 0.0;
 		}
-		if ((b.m_flags & 0x0010) === 0 || b.m_angularVelocity * b.m_angularVelocity > angTolSqr || b2Math.b2Dot$Lb2Vec2$Lb2Vec2$(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr) {
+		if ((b.m_flags & 0x0010) === 0 || b.m_angularVelocity * b.m_angularVelocity > angTolSqr || b2Math$b2Dot$Lb2Vec2$Lb2Vec2$(b.m_linearVelocity, b.m_linearVelocity) > linTolSqr) {
 			b.m_sleepTime = 0.0;
 			minSleepTime = 0.0;
 		} else {
@@ -5835,6 +6322,8 @@ b2World.prototype.Step$NN = function (dt, iterations) {
 	var a$0;
 	/** @type {!number} */
 	var b$0;
+	/** @type {b2BroadPhase} */
+	var this$0;
 	this.step.dt = dt;
 	this.step.iterations = iterations;
 	if (dt > 0.0) {
@@ -5908,7 +6397,8 @@ b2World.prototype.Step$NN = function (dt, iterations) {
 			}
 		}
 	}
-	this.m_broadPhase.Commit$();
+	this$0 = this.m_broadPhase;
+	this$0.m_pairManager.Commit$();
 };
 
 /**
@@ -6092,6 +6582,8 @@ b2Contact.AddType$F$Lb2Shape$Lb2Shape$XLb2Contact$$F$Lb2Contact$XV$NN = function
 	}
 };
 
+b2Contact$AddType$F$Lb2Shape$Lb2Shape$XLb2Contact$$F$Lb2Contact$XV$NN = b2Contact.AddType$F$Lb2Shape$Lb2Shape$XLb2Contact$$F$Lb2Contact$XV$NN;
+
 /**
  */
 b2Contact.InitializeRegisters$ = function () {
@@ -6111,27 +6603,29 @@ b2Contact.InitializeRegisters$ = function () {
 		}
 	}
 	c = (function (s1, s2, al) {
-		return b2CircleContact.Create$Lb2CircleShape$Lb2CircleShape$X(s1, s2, al);
+		return b2CircleContact$Create$Lb2CircleShape$Lb2CircleShape$X(s1, s2, al);
 	});
 	d = (function (c, al) {
-		b2CircleContact.Destroy$Lb2Contact$X(c, al);
+		b2CircleContact$Destroy$Lb2Contact$X(c, al);
 	});
-	b2Contact.AddType$F$Lb2Shape$Lb2Shape$XLb2Contact$$F$Lb2Contact$XV$NN(c, d, 0, 0);
+	b2Contact$AddType$F$Lb2Shape$Lb2Shape$XLb2Contact$$F$Lb2Contact$XV$NN(c, d, 0, 0);
 	c = (function (s1, s2, al) {
-		return b2PolyAndCircleContact.Create$Lb2PolyShape$Lb2CircleShape$X(s1, s2, al);
+		return b2PolyAndCircleContact$Create$Lb2PolyShape$Lb2CircleShape$X(s1, s2, al);
 	});
 	d = (function (c, al) {
-		b2PolyAndCircleContact.Destroy$Lb2Contact$X(c, al);
+		b2PolyAndCircleContact$Destroy$Lb2Contact$X(c, al);
 	});
-	b2Contact.AddType$F$Lb2Shape$Lb2Shape$XLb2Contact$$F$Lb2Contact$XV$NN(c, d, 2, 0);
+	b2Contact$AddType$F$Lb2Shape$Lb2Shape$XLb2Contact$$F$Lb2Contact$XV$NN(c, d, 2, 0);
 	c = (function (s1, s2, al) {
-		return b2PolyContact.Create$Lb2PolyShape$Lb2PolyShape$X(s1, s2, al);
+		return b2PolyContact$Create$Lb2PolyShape$Lb2PolyShape$X(s1, s2, al);
 	});
 	d = (function (c, al) {
-		b2PolyContact.Destroy$Lb2Contact$X(c, al);
+		b2PolyContact$Destroy$Lb2Contact$X(c, al);
 	});
-	b2Contact.AddType$F$Lb2Shape$Lb2Shape$XLb2Contact$$F$Lb2Contact$XV$NN(c, d, 2, 2);
+	b2Contact$AddType$F$Lb2Shape$Lb2Shape$XLb2Contact$$F$Lb2Contact$XV$NN(c, d, 2, 2);
 };
+
+b2Contact$InitializeRegisters$ = b2Contact.InitializeRegisters$;
 
 /**
  * @param {b2Shape} shape1
@@ -6151,8 +6645,10 @@ b2Contact.Create$Lb2Shape$Lb2Shape$X = function (shape1, shape2, allocator) {
 	var i;
 	/** @type {undefined|b2Manifold} */
 	var m;
+	/** @type {b2Vec2} */
+	var this$0;
 	if (b2Contact.s_initialized === false) {
-		b2Contact.InitializeRegisters$();
+		b2Contact$InitializeRegisters$();
 		b2Contact.s_initialized = true;
 	}
 	type1 = shape1.m_type;
@@ -6165,7 +6661,8 @@ b2Contact.Create$Lb2Shape$Lb2Shape$X = function (shape1, shape2, allocator) {
 			c = createFcn(shape2, shape1, allocator);
 			for (i = 0; i < c.m_manifoldCount; ++ i) {
 				m = c.GetManifolds$()[i];
-				m.normal = m.normal.Negative$();
+				this$0 = m.normal;
+				m.normal = new b2Vec2$NN(- this$0.x, - this$0.y);
 			}
 			return c;
 		}
@@ -6173,6 +6670,8 @@ b2Contact.Create$Lb2Shape$Lb2Shape$X = function (shape1, shape2, allocator) {
 		return null;
 	}
 };
+
+b2Contact$Create$Lb2Shape$Lb2Shape$X = b2Contact.Create$Lb2Shape$Lb2Shape$X;
 
 /**
  * @param {b2Contact} contact
@@ -6184,15 +6683,25 @@ b2Contact.Destroy$Lb2Contact$X = function (contact, allocator) {
 	/** @type {!number} */
 	var type2;
 	var destroyFcn;
+	/** @type {b2Body} */
+	var this$0;
+	/** @type {b2Body} */
+	var this$1;
 	if (contact.m_manifoldCount > 0) {
-		contact.m_shape1.m_body.WakeUp$();
-		contact.m_shape2.m_body.WakeUp$();
+		this$0 = contact.m_shape1.m_body;
+		this$0.m_flags &= ~ 0x0008;
+		this$0.m_sleepTime = 0.0;
+		this$1 = contact.m_shape2.m_body;
+		this$1.m_flags &= ~ 0x0008;
+		this$1.m_sleepTime = 0.0;
 	}
 	type1 = contact.m_shape1.m_type;
 	type2 = contact.m_shape2.m_type;
 	destroyFcn = b2Contact.s_registers[type1][type2].destroyFcn;
 	destroyFcn(contact, allocator);
 };
+
+b2Contact$Destroy$Lb2Contact$X = b2Contact.Destroy$Lb2Contact$X;
 
 /**
  * class b2CircleContact extends b2Contact
@@ -6234,7 +6743,7 @@ b2CircleContact$Lb2CircleShape$Lb2CircleShape$.prototype = new b2CircleContact;
 /**
  */
 b2CircleContact.prototype.Evaluate$ = function () {
-	b2Collision.b2CollideCircle$Lb2Manifold$Lb2CircleShape$Lb2CircleShape$B(this.m_manifold[(0)], this.m_shape1, this.m_shape2, false);
+	b2Collision$b2CollideCircle$Lb2Manifold$Lb2CircleShape$Lb2CircleShape$B(this.m_manifold[(0)], this.m_shape1, this.m_shape2, false);
 	if (this.m_manifold[(0)].pointCount > 0) {
 		this.m_manifoldCount = 1;
 	} else {
@@ -6259,12 +6768,16 @@ b2CircleContact.Create$Lb2CircleShape$Lb2CircleShape$X = function (shape1, shape
 	return new b2CircleContact$Lb2CircleShape$Lb2CircleShape$(shape1, shape2);
 };
 
+b2CircleContact$Create$Lb2CircleShape$Lb2CircleShape$X = b2CircleContact.Create$Lb2CircleShape$Lb2CircleShape$X;
+
 /**
  * @param {b2Contact} contact
  * @param {*} allocator
  */
 b2CircleContact.Destroy$Lb2Contact$X = function (contact, allocator) {
 };
+
+b2CircleContact$Destroy$Lb2Contact$X = b2CircleContact.Destroy$Lb2Contact$X;
 
 /**
  * class b2ContactConstraint extends Object
@@ -6459,12 +6972,15 @@ function b2ContactSolver$ALb2Contact$NX(contacts, contactCount, allocator) {
 	var tY;
 	/** @type {!number} */
 	var vRel;
+	/** @type {b2Contact} */
+	var this$0;
 	this.m_constraints = [  ];
 	this.m_allocator = allocator;
 	i = 0;
 	this.m_constraintCount = 0;
 	for (i = 0; i < contactCount; ++ i) {
-		this.m_constraintCount += contacts[i].GetManifoldCount$();
+		this$0 = contacts[i];
+		this.m_constraintCount += this$0.m_manifoldCount;
 	}
 	for (i = 0; i < this.m_constraintCount; i++) {
 		this.m_constraints[i] = new b2ContactConstraint$();
@@ -6768,7 +7284,7 @@ b2ContactSolver.prototype.SolveVelocityConstraints$ = function () {
 			vt = dvX * tangentX + dvY * tangentY;
 			lambda = ccp.tangentMass * - vt;
 			maxFriction = c.friction * ccp.normalImpulse;
-			newImpulse = b2Math.b2Clamp$NNN(ccp.tangentImpulse + lambda, - maxFriction, maxFriction);
+			newImpulse = b2Math$b2Clamp$NNN(ccp.tangentImpulse + lambda, - maxFriction, maxFriction);
 			lambda = newImpulse - ccp.tangentImpulse;
 			PX = lambda * tangentX;
 			PY = lambda * tangentY;
@@ -6904,7 +7420,7 @@ b2ContactSolver.prototype.SolvePositionConstraints$N = function (beta) {
 			dpY = p2Y - p1Y;
 			separation = dpX * normalX + dpY * normalY + ccp.separation;
 			minSeparation = (minSeparation < separation ? minSeparation : separation);
-			C = beta * b2Math.b2Clamp$NNN(separation + 0.15, -6, 0.0);
+			C = beta * b2Math$b2Clamp$NNN(separation + 0.15, -6, 0.0);
 			dImpulse = - ccp.normalMass * C;
 			impulse0 = ccp.positionImpulse;
 			a$0 = impulse0 + dImpulse;
@@ -7040,8 +7556,8 @@ function b2PolyAndCircleContact$Lb2PolyShape$Lb2CircleShape$(s1, s2) {
 	this.m_restitution = 0;
 	this.initializer$Lb2Shape$Lb2Shape$(s1, s2);
 	this.m_manifold = [ new b2Manifold$() ];
-	b2Settings.b2Assert$B(this.m_shape1.m_type === 2);
-	b2Settings.b2Assert$B(this.m_shape2.m_type === 0);
+	b2Settings$b2Assert$B(this.m_shape1.m_type === 2);
+	b2Settings$b2Assert$B(this.m_shape2.m_type === 0);
 	this.m_manifold[(0)].pointCount = 0;
 	this.m_manifold[(0)].points[(0)].normalImpulse = 0.0;
 	this.m_manifold[(0)].points[(0)].tangentImpulse = 0.0;
@@ -7052,7 +7568,7 @@ b2PolyAndCircleContact$Lb2PolyShape$Lb2CircleShape$.prototype = new b2PolyAndCir
 /**
  */
 b2PolyAndCircleContact.prototype.Evaluate$ = function () {
-	b2Collision.b2CollidePolyAndCircle$Lb2Manifold$Lb2PolyShape$Lb2CircleShape$B(this.m_manifold[(0)], this.m_shape1, this.m_shape2, false);
+	b2Collision$b2CollidePolyAndCircle$Lb2Manifold$Lb2PolyShape$Lb2CircleShape$B(this.m_manifold[(0)], this.m_shape1, this.m_shape2, false);
 	if (this.m_manifold[(0)].pointCount > 0) {
 		this.m_manifoldCount = 1;
 	} else {
@@ -7077,12 +7593,16 @@ b2PolyAndCircleContact.Create$Lb2PolyShape$Lb2CircleShape$X = function (shape1, 
 	return new b2PolyAndCircleContact$Lb2PolyShape$Lb2CircleShape$(shape1, shape2);
 };
 
+b2PolyAndCircleContact$Create$Lb2PolyShape$Lb2CircleShape$X = b2PolyAndCircleContact.Create$Lb2PolyShape$Lb2CircleShape$X;
+
 /**
  * @param {b2Contact} contact
  * @param {*} allocator
  */
 b2PolyAndCircleContact.Destroy$Lb2Contact$X = function (contact, allocator) {
 };
+
+b2PolyAndCircleContact$Destroy$Lb2Contact$X = b2PolyAndCircleContact.Destroy$Lb2Contact$X;
 
 /**
  * class b2PolyContact extends b2Contact
@@ -7153,7 +7673,7 @@ b2PolyContact.prototype.Evaluate$ = function () {
 		tPoint.id = tPoint0.id.Copy$();
 	}
 	this.m0.pointCount = tMani.pointCount;
-	b2Collision.b2CollidePoly$Lb2Manifold$Lb2PolyShape$Lb2PolyShape$B(tMani, this.m_shape1, this.m_shape2, false);
+	b2Collision$b2CollidePoly$Lb2Manifold$Lb2PolyShape$Lb2PolyShape$B(tMani, this.m_shape1, this.m_shape2, false);
 	if (tMani.pointCount > 0) {
 		match = [ false, false ];
 		for (i = 0; i < tMani.pointCount; ++ i) {
@@ -7198,6 +7718,8 @@ b2PolyContact.Create$Lb2PolyShape$Lb2PolyShape$X = function (shape1, shape2, all
 	return new b2PolyContact$Lb2PolyShape$Lb2PolyShape$(shape1, shape2);
 };
 
+b2PolyContact$Create$Lb2PolyShape$Lb2PolyShape$X = b2PolyContact.Create$Lb2PolyShape$Lb2PolyShape$X;
+
 /**
  * @param {b2Contact} contact
  * @param {*} allocator
@@ -7205,23 +7727,7 @@ b2PolyContact.Create$Lb2PolyShape$Lb2PolyShape$X = function (shape1, shape2, all
 b2PolyContact.Destroy$Lb2Contact$X = function (contact, allocator) {
 };
 
-/**
- * class CanvasRenderingContext extends Object
- * @constructor
- */
-function CanvasRenderingContext() {
-}
-
-CanvasRenderingContext.prototype = new Object;
-CanvasRenderingContext.prototype.$__jsx_implements_CanvasRenderingContext = true;
-
-/**
- * @constructor
- */
-function CanvasRenderingContext$() {
-};
-
-CanvasRenderingContext$.prototype = new CanvasRenderingContext;
+b2PolyContact$Destroy$Lb2Contact$X = b2PolyContact.Destroy$Lb2Contact$X;
 
 /**
  * class dom extends Object
@@ -7240,33 +7746,694 @@ function dom$() {
 dom$.prototype = new dom;
 
 /**
- * @return {Window}
- */
-dom.getWindow$ = function () {
-	return dom.window;
-};
-
-/**
- * @param {!string} identifier
+ * @param {!string} id
  * @return {HTMLElement}
  */
-dom.id$S = function (identifier) {
-	return dom.window.document.getElementById(identifier);
+dom.id$S = function (id) {
+	return (function (o) { return o instanceof HTMLElement ? o : null; })(dom.window.document.getElementById(id));
 };
 
+dom$id$S = dom.id$S;
+
 /**
- * @return {HTMLCanvasElement}
+ * @param {!string} tag
+ * @return {HTMLElement}
  */
-dom.createCanvas$ = function () {
-	return dom.window.document.createElement("canvas");
+dom.createElement$S = function (tag) {
+	return dom.window.document.createElement(tag);
 };
 
+dom$createElement$S = dom.createElement$S;
+
 /**
+ * @param {!string} id
+ * @return {HTMLUnknownElement}
+ */
+dom.getUnknownElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLUnknownElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getUnknownElementById$S = dom.getUnknownElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLHtmlElement}
+ */
+dom.getHtmlElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLHtmlElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getHtmlElementById$S = dom.getHtmlElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLHeadElement}
+ */
+dom.getHeadElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLHeadElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getHeadElementById$S = dom.getHeadElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLTitleElement}
+ */
+dom.getTitleElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLTitleElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getTitleElementById$S = dom.getTitleElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLBaseElement}
+ */
+dom.getBaseElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLBaseElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getBaseElementById$S = dom.getBaseElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLLinkElement}
+ */
+dom.getLinkElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLLinkElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getLinkElementById$S = dom.getLinkElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLMetaElement}
+ */
+dom.getMetaElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLMetaElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getMetaElementById$S = dom.getMetaElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLStyleElement}
+ */
+dom.getStyleElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLStyleElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getStyleElementById$S = dom.getStyleElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLScriptElement}
+ */
+dom.getScriptElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLScriptElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getScriptElementById$S = dom.getScriptElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLBodyElement}
+ */
+dom.getBodyElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLBodyElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getBodyElementById$S = dom.getBodyElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLHeadingElement}
+ */
+dom.getHeadingElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLHeadingElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getHeadingElementById$S = dom.getHeadingElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLParagraphElement}
+ */
+dom.getParagraphElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLParagraphElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getParagraphElementById$S = dom.getParagraphElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLHRElement}
+ */
+dom.getHRElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLHRElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getHRElementById$S = dom.getHRElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLPreElement}
+ */
+dom.getPreElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLPreElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getPreElementById$S = dom.getPreElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLQuoteElement}
+ */
+dom.getQuoteElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLQuoteElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getQuoteElementById$S = dom.getQuoteElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLOListElement}
+ */
+dom.getOListElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLOListElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getOListElementById$S = dom.getOListElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLUListElement}
+ */
+dom.getUListElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLUListElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getUListElementById$S = dom.getUListElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLLIElement}
+ */
+dom.getLIElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLLIElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getLIElementById$S = dom.getLIElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLDListElement}
+ */
+dom.getDListElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLDListElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getDListElementById$S = dom.getDListElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLDivElement}
+ */
+dom.getDivElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLDivElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getDivElementById$S = dom.getDivElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLAnchorElement}
+ */
+dom.getAnchorElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLAnchorElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getAnchorElementById$S = dom.getAnchorElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLTimeElement}
+ */
+dom.getTimeElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLTimeElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getTimeElementById$S = dom.getTimeElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLSpanElement}
+ */
+dom.getSpanElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLSpanElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getSpanElementById$S = dom.getSpanElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLBRElement}
+ */
+dom.getBRElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLBRElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getBRElementById$S = dom.getBRElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLModElement}
+ */
+dom.getModElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLModElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getModElementById$S = dom.getModElementById$S;
+
+/**
+ * @param {!string} id
  * @return {HTMLImageElement}
  */
-dom.createImage$ = function () {
-	return dom.window.document.createElement("img");
+dom.getImageElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLImageElement ? o : null; })(dom.window.document.getElementById(id));
 };
+
+dom$getImageElementById$S = dom.getImageElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLIFrameElement}
+ */
+dom.getIFrameElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLIFrameElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getIFrameElementById$S = dom.getIFrameElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLEmbedElement}
+ */
+dom.getEmbedElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLEmbedElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getEmbedElementById$S = dom.getEmbedElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLObjectElement}
+ */
+dom.getObjectElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLObjectElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getObjectElementById$S = dom.getObjectElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLParamElement}
+ */
+dom.getParamElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLParamElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getParamElementById$S = dom.getParamElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLSourceElement}
+ */
+dom.getSourceElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLSourceElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getSourceElementById$S = dom.getSourceElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLTrackElement}
+ */
+dom.getTrackElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLTrackElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getTrackElementById$S = dom.getTrackElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLMediaElement}
+ */
+dom.getMediaElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLMediaElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getMediaElementById$S = dom.getMediaElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLCanvasElement}
+ */
+dom.getCanvasElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLCanvasElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getCanvasElementById$S = dom.getCanvasElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLMapElement}
+ */
+dom.getMapElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLMapElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getMapElementById$S = dom.getMapElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLAreaElement}
+ */
+dom.getAreaElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLAreaElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getAreaElementById$S = dom.getAreaElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLTableElement}
+ */
+dom.getTableElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLTableElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getTableElementById$S = dom.getTableElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLTableCaptionElement}
+ */
+dom.getTableCaptionElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLTableCaptionElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getTableCaptionElementById$S = dom.getTableCaptionElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLTableColElement}
+ */
+dom.getTableColElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLTableColElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getTableColElementById$S = dom.getTableColElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLTableSectionElement}
+ */
+dom.getTableSectionElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLTableSectionElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getTableSectionElementById$S = dom.getTableSectionElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLTableRowElement}
+ */
+dom.getTableRowElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLTableRowElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getTableRowElementById$S = dom.getTableRowElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLTableCellElement}
+ */
+dom.getTableCellElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLTableCellElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getTableCellElementById$S = dom.getTableCellElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLFormElement}
+ */
+dom.getFormElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLFormElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getFormElementById$S = dom.getFormElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLFieldSetElement}
+ */
+dom.getFieldSetElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLFieldSetElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getFieldSetElementById$S = dom.getFieldSetElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLLegendElement}
+ */
+dom.getLegendElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLLegendElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getLegendElementById$S = dom.getLegendElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLLabelElement}
+ */
+dom.getLabelElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLLabelElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getLabelElementById$S = dom.getLabelElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLInputElement}
+ */
+dom.getInputElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLInputElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getInputElementById$S = dom.getInputElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLButtonElement}
+ */
+dom.getButtonElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLButtonElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getButtonElementById$S = dom.getButtonElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLSelectElement}
+ */
+dom.getSelectElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLSelectElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getSelectElementById$S = dom.getSelectElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLDataListElement}
+ */
+dom.getDataListElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLDataListElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getDataListElementById$S = dom.getDataListElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLOptGroupElement}
+ */
+dom.getOptGroupElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLOptGroupElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getOptGroupElementById$S = dom.getOptGroupElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLOptionElement}
+ */
+dom.getOptionElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLOptionElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getOptionElementById$S = dom.getOptionElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLTextAreaElement}
+ */
+dom.getTextAreaElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLTextAreaElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getTextAreaElementById$S = dom.getTextAreaElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLKeygenElement}
+ */
+dom.getKeygenElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLKeygenElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getKeygenElementById$S = dom.getKeygenElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLOutputElement}
+ */
+dom.getOutputElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLOutputElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getOutputElementById$S = dom.getOutputElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLProgressElement}
+ */
+dom.getProgressElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLProgressElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getProgressElementById$S = dom.getProgressElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLMeterElement}
+ */
+dom.getMeterElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLMeterElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getMeterElementById$S = dom.getMeterElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLDetailsElement}
+ */
+dom.getDetailsElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLDetailsElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getDetailsElementById$S = dom.getDetailsElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLCommandElement}
+ */
+dom.getCommandElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLCommandElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getCommandElementById$S = dom.getCommandElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLMenuElement}
+ */
+dom.getMenuElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLMenuElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getMenuElementById$S = dom.getMenuElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLAppletElement}
+ */
+dom.getAppletElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLAppletElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getAppletElementById$S = dom.getAppletElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLMarqueeElement}
+ */
+dom.getMarqueeElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLMarqueeElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getMarqueeElementById$S = dom.getMarqueeElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLFrameSetElement}
+ */
+dom.getFrameSetElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLFrameSetElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getFrameSetElementById$S = dom.getFrameSetElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLFrameElement}
+ */
+dom.getFrameElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLFrameElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getFrameElementById$S = dom.getFrameElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLBaseFontElement}
+ */
+dom.getBaseFontElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLBaseFontElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getBaseFontElementById$S = dom.getBaseFontElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLDirectoryElement}
+ */
+dom.getDirectoryElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLDirectoryElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getDirectoryElementById$S = dom.getDirectoryElementById$S;
+
+/**
+ * @param {!string} id
+ * @return {HTMLFontElement}
+ */
+dom.getFontElementById$S = function (id) {
+	return (function (o) { return o instanceof HTMLFontElement ? o : null; })(dom.window.document.getElementById(id));
+};
+
+dom$getFontElementById$S = dom.getFontElementById$S;
 
 /**
  * class js extends Object
@@ -7572,9 +8739,7 @@ var $__jsx_classMap = {
 		b2PolyContact: b2PolyContact,
 		b2PolyContact$Lb2PolyShape$Lb2PolyShape$: b2PolyContact$Lb2PolyShape$Lb2PolyShape$
 	},
-	"system:lib/js/js/dom.jsx": {
-		CanvasRenderingContext: CanvasRenderingContext,
-		CanvasRenderingContext$: CanvasRenderingContext$,
+	"system:lib/js/js/web.jsx": {
 		dom: dom,
 		dom$: dom$
 	},
