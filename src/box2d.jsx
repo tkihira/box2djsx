@@ -6,6 +6,7 @@ import "dynamics/*.jsx";
 import "dynamics/contacts/*.jsx";
 
 import 'js/web.jsx';
+import "console.jsx";
 
 class _Main {
 	static var seed = 0;
@@ -140,10 +141,18 @@ class _Main {
 		}
 		
 		var frame = 0;
+		var frameTotal = 0;
+		dom.window.setTimeout(function () {
+			if (JSX.profilerIsRunning()) {
+				JSX.postProfileResults("http://172.25.4.50:5001/post-profile");
+			}
+			console.log("ave. fps:" + (frameTotal / 10) as string);
+		}, 10000);
 		var last = Date.now();
 		var tick = function (): void {};
 		var tick = function (): void {
 			frame++;
+			frameTotal++;
 			dom.window.setTimeout(tick, 0);
 			world.Step(1 / 60, 1);
 			
