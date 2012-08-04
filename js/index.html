@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=320px" />
+    <title>Box2DJS test</title>
+
+		<!--=============================-->
+		<!-- Copy this part to your app. -->
+		<!-- START                       -->
+		<!--=============================-->
+    <script src="prototype-1.6.0.2.js"></script>
+    <!--script src="box2d.js"></script-->
+    
+    <script src='box2d/common/b2Settings.js'></script>
+    <script src='box2d/common/math/b2Vec2.js'></script>
+    <script src='box2d/common/math/b2Mat22.js'></script>
+    <script src='box2d/common/math/b2Math.js'></script>
+    <script src='box2d/collision/b2AABB.js'></script>
+    <script src='box2d/collision/b2Bound.js'></script>
+    <script src='box2d/collision/b2BoundValues.js'></script>
+    <script src='box2d/collision/b2Pair.js'></script>
+    <script src='box2d/collision/b2PairCallback.js'></script>
+    <script src='box2d/collision/b2BufferedPair.js'></script>
+    <script src='box2d/collision/b2PairManager.js'></script>
+    <script src='box2d/collision/b2BroadPhase.js'></script>
+    <script src='box2d/collision/b2Collision.js'></script>
+    <script src='box2d/collision/Features.js'></script>
+    <script src='box2d/collision/b2ContactID.js'></script>
+    <script src='box2d/collision/b2ContactPoint.js'></script>
+    <!--script src='box2d/collision/b2Distance.js'></script-->
+    <script src='box2d/collision/b2Manifold.js'></script>
+    <script src='box2d/collision/b2OBB.js'></script>
+    <script src='box2d/collision/b2Proxy.js'></script>
+    <script src='box2d/collision/ClipVertex.js'></script>
+    <script src='box2d/collision/shapes/b2Shape.js'></script>
+    <script src='box2d/collision/shapes/b2ShapeDef.js'></script>
+    <script src='box2d/collision/shapes/b2BoxDef.js'></script>
+    <!--script src='box2d/collision/shapes/b2CircleDef.js'></script-->
+    <!--script src='box2d/collision/shapes/b2CircleShape.js'></script-->
+    <script src='box2d/collision/shapes/b2MassData.js'></script>
+    <script src='box2d/collision/shapes/b2PolyDef.js'></script>
+    <script src='box2d/collision/shapes/b2PolyShape.js'></script>
+    <script src='box2d/dynamics/b2Body.js'></script>
+    <script src='box2d/dynamics/b2BodyDef.js'></script>
+    <script src='box2d/dynamics/b2CollisionFilter.js'></script>
+    <script src='box2d/dynamics/b2Island.js'></script>
+    <script src='box2d/dynamics/b2TimeStep.js'></script>
+    <script src='box2d/dynamics/contacts/b2ContactNode.js'></script>
+    <script src='box2d/dynamics/contacts/b2Contact.js'></script>
+    <script src='box2d/dynamics/contacts/b2ContactConstraint.js'></script>
+    <script src='box2d/dynamics/contacts/b2ContactConstraintPoint.js'></script>
+    <script src='box2d/dynamics/contacts/b2ContactRegister.js'></script>
+    <script src='box2d/dynamics/contacts/b2ContactSolver.js'></script>
+    <script src='box2d/dynamics/contacts/b2CircleContact.js'></script>
+    <!--script src='box2d/dynamics/contacts/b2Conservative.js'></script-->
+    <script src='box2d/dynamics/contacts/b2NullContact.js'></script>
+    <script src='box2d/dynamics/contacts/b2PolyAndCircleContact.js'></script>
+    <script src='box2d/dynamics/contacts/b2PolyContact.js'></script>
+    <script src='box2d/dynamics/b2ContactManager.js'></script>
+    <script src='box2d/dynamics/b2World.js'></script>
+    <!--script src='box2d/dynamics/b2WorldListener.js'></script-->
+    <!--script src='box2d/dynamics/joints/b2JointNode.js'></script>
+    <script src='box2d/dynamics/joints/b2Joint.js'></script>
+    <script src='box2d/dynamics/joints/b2JointDef.js'></script>
+    <script src='box2d/dynamics/joints/b2DistanceJoint.js'></script>
+    <script src='box2d/dynamics/joints/b2DistanceJointDef.js'></script>
+    <script src='box2d/dynamics/joints/b2Jacobian.js'></script>
+    <script src='box2d/dynamics/joints/b2GearJoint.js'></script>
+    <script src='box2d/dynamics/joints/b2GearJointDef.js'></script>
+    <script src='box2d/dynamics/joints/b2MouseJoint.js'></script>
+    <script src='box2d/dynamics/joints/b2MouseJointDef.js'></script>
+    <script src='box2d/dynamics/joints/b2PrismaticJoint.js'></script>
+    <script src='box2d/dynamics/joints/b2PrismaticJointDef.js'></script>
+    <script src='box2d/dynamics/joints/b2PulleyJoint.js'></script>
+    <script src='box2d/dynamics/joints/b2PulleyJointDef.js'></script>
+    <script src='box2d/dynamics/joints/b2RevoluteJoint.js'></script>
+    <script src='box2d/dynamics/joints/b2RevoluteJointDef.js'></script-->
+
+<script>
+var seed = 0;
+function random() {
+	seed = (seed * 713 + 17) & 0xFF;
+	return seed / 256;
+}
+function createWorld() {
+	var worldAABB = new b2AABB();
+	worldAABB.minVertex.Set(-1000, -1000);
+	worldAABB.maxVertex.Set(1000, 1000);
+	var gravity = new b2Vec2(0, 300);
+	var doSleep = true;
+	var world = new b2World(worldAABB, gravity, doSleep);
+	createGround(world);
+	createBox(world, 0, 0, 10, 1000);
+	createBox(world, 320, 0, 10, 1000);
+	return world;
+}
+
+function createGround(world) {
+	var groundSd = new b2BoxDef();
+	groundSd.extents.Set(1000, 10);
+	groundSd.restitution = 0.2;
+//	groundSd.restitution = 0;
+	groundSd.friction = 0.2;
+	var groundBd = new b2BodyDef();
+	groundBd.AddShape(groundSd);
+	groundBd.position.Set(-500, 400);
+	return world.CreateBody(groundBd)
+}
+
+function createBox(world, x, y, width, height, fixed, density) {
+	if (typeof(fixed) == 'undefined') fixed = true;
+	var boxSd = new b2BoxDef();
+	if (!fixed) boxSd.density = density || 1.0;
+	boxSd.extents.Set(width, height);
+	var boxBd = new b2BodyDef();
+	boxBd.AddShape(boxSd);
+	boxBd.position.Set(x,y);
+	return world.CreateBody(boxBd)
+}
+
+function createMy(world, x, y, r) {
+	var ballSd = new b2PolyDef();
+	ballSd.density = 1.0;
+	ballSd.restitution = 0.8;
+	var v = 3 + ((random() * 5) | 0);
+	ballSd.vertexCount = v;
+	for(var i = 0; i < v; i++) {
+		//var r = 5;
+		ballSd.vertices[i].Set(r * Math.cos(Math.PI * 2 / v * i), r * Math.sin(Math.PI * 2 / v * i));
+	}
+	//ballSd.restitution = 0.2;
+	//ballSd.friction = ;
+	var ballBd = new b2BodyDef();
+	ballBd.AddShape(ballSd);
+	ballBd.position.Set(x,y);
+	
+	var body = world.CreateBody(ballBd);
+	
+	/*var mass = new b2MassData();
+	mass.mass = body.GetMass();
+	mass.center = new b2Vec2(0, 0);
+	console.log(
+	body.SetMass(mass);*/
+	//body.SetCenterPosition(new b2Vec2(0, 0), new b2Vec2(0, 0));
+	
+	return body;
+}
+
+function drawWorld(world, context) {
+	for (var b = world.m_bodyList; b; b = b.m_next) {
+		for (var s = b.GetShapeList(); s != null; s = s.GetNext()) {
+			drawShape(s, context);
+		}
+	}
+}
+function drawShape(shape, context) {
+	context.strokeStyle = '#ffffff';
+	context.beginPath();
+	switch (shape.m_type) {
+	case b2Shape.e_circleShape:
+		{
+			var circle = shape;
+			var pos = circle.m_position;
+			var r = circle.m_radius;
+			var segments = 16.0;
+			var theta = 0.0;
+			var dtheta = 2.0 * Math.PI / segments;
+			// draw circle
+			context.moveTo(pos.x + r, pos.y);
+			for (var i = 0; i < segments; i++) {
+				var d = new b2Vec2(r * Math.cos(theta), r * Math.sin(theta));
+				var v = b2Math.AddVV(pos, d);
+				context.lineTo(v.x, v.y);
+				theta += dtheta;
+			}
+			context.lineTo(pos.x + r, pos.y);
+	
+			// draw radius
+			context.moveTo(pos.x, pos.y);
+			var ax = circle.m_R.col1;
+			var pos2 = new b2Vec2(pos.x + r * ax.x, pos.y + r * ax.y);
+			context.lineTo(pos2.x, pos2.y);
+		}
+		break;
+	case b2Shape.e_polyShape:
+		{
+			var poly = shape;
+			var tV = b2Math.AddVV(poly.m_position, b2Math.b2MulMV(poly.m_R, poly.m_vertices[0]));
+			context.moveTo(tV.x, tV.y);
+			for (var i = 0; i < poly.m_vertexCount; i++) {
+				var v = b2Math.AddVV(poly.m_position, b2Math.b2MulMV(poly.m_R, poly.m_vertices[i]));
+				context.lineTo(v.x, v.y);
+			}
+			context.lineTo(tV.x, tV.y);
+		}
+		break;
+	}
+	context.stroke();
+}
+
+
+(function() {
+	window.onload = function() {
+		setTimeout(function() { scrollTo(0, 0); }, 100);
+		var canvas = document.getElementById("canvas");
+		var ctx = canvas.getContext("2d");
+		
+		var world = createWorld();
+		
+		//var box = createBox(world, 250, 200, 180, 10);
+		var count = 50;
+		for(var i = 0; i < count; i++) {
+			createMy(world, i * (270 / count) + 25, -200 + random() * 300, 15 + random() * 10);
+		}
+		
+		var frame = 0;
+		var totalFrame = 0;
+		setTimeout(function () {
+			console.log("ave. fps:" + (totalFrame / 10));
+		}, 10000);
+		var last = Date.now();
+		(function tick() {
+			frame++;
+			totalFrame++;
+			setTimeout(tick, 0);
+			world.Step(1 / 60, 1);
+			
+			ctx.fillStyle = "#000";
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			drawWorld(world, ctx);
+			var now = Date.now();
+			if(now - last > 1000) {
+				document.getElementById("fps").innerHTML = "fps:" + frame;
+				frame = 0;
+				last = now;
+			}
+		})();
+	};
+})();
+</script>
+	</head>
+<body style="margin:0;position:relative;"><canvas id="canvas" width="320" height="400"></canvas>
+<div id="fps" style="position:absolute;top:0;left:0;color:#f00">test</div>
+</body>
+</html>
