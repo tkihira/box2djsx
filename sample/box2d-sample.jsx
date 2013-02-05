@@ -9,7 +9,7 @@ import 'js/web.jsx';
 import "console.jsx";
 
 class _Main {
-	static const PROFILER_URL = "http://localhosrt:5001/post-profile");
+	static const PROFILER_URL = "http://localhosrt:5001/post-profile";
 
 
 	static var seed = 0;
