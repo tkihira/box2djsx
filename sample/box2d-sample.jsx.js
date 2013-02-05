@@ -443,7 +443,7 @@ _Main.main$AS = function (args) {
 	frameTotal = 0;
 	dom.window.setTimeout((function () {
 		if (JSX.profilerIsRunning()) {
-			JSX.postProfileResults("http://172.25.4.50:5001/post-profile");
+			JSX.postProfileResults("http://localhosrt:5001/post-profile");
 		}
 		console.log("ave. fps:" + (frameTotal / 10 + "") + " in the first 10 sec.");
 	}), 10000);
@@ -9812,6 +9812,7 @@ function js$() {
 
 js$.prototype = new js;
 
+_Main.PROFILER_URL = "http://localhosrt:5001/post-profile";
 _Main.seed = 0;
 b2Settings.USHRT_MAX = 0x0000ffff;
 b2Settings.b2_pi = 3.141592653589793;
