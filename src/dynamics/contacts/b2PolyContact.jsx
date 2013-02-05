@@ -8,7 +8,7 @@ import "dynamics/contacts/*.jsx";
 class b2PolyContact extends b2Contact {
 	var m0: b2Manifold;
 	var m_manifold: b2Manifold[];
-	
+
 	function constructor(s1: b2PolyShape, s2: b2PolyShape) {
 		super(s1, s2);
 		this.m0 = new b2Manifold();
@@ -20,7 +20,7 @@ class b2PolyContact extends b2Contact {
 		//b2Settings.b2Assert(this.m_shape2.m_type == b2Shape.e_polyShape);
 		this.m_manifold[0].pointCount = 0;
 	}
-	
+
 	override function Evaluate(): void {
 		var tMani = this.m_manifold[0];
 		// replace memcpy
@@ -90,15 +90,14 @@ class b2PolyContact extends b2Contact {
 			this.m_manifoldCount = 0;
 		}
 	}
-	
+
 	override function GetManifolds(): b2Manifold[] {
 		return this.m_manifold;
 	}
-	
-	//override static function Create(shape1: b2Shape, shape2: b2Shape, allocator: variant): b2CircleContact {
+
 	static function Create(shape1: b2PolyShape, shape2: b2PolyShape, allocator: variant): b2PolyContact {
 		return new b2PolyContact(shape1, shape2);
 	}
-	override static function Destroy(contact: b2Contact, allocator: variant): void {
+	static function Destroy(contact: b2Contact, allocator: variant): void {
 	}
 }
