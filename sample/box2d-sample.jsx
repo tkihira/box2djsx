@@ -27,7 +27,7 @@ class _Main {
 	switch (shape.m_type) {
 		case b2Shape.e_circleShape:
 			{
-				var circle = shape as __noconvert__ b2CircleShape;
+				var circle = shape as b2CircleShape;
 				var pos = circle.m_position;
 				var r = circle.m_radius;
 				var segments = 16.0;
@@ -42,7 +42,7 @@ class _Main {
 					theta += dtheta;
 				}
 				context.lineTo(pos.x + r, pos.y);
-		
+
 				// draw radius
 				context.moveTo(pos.x, pos.y);
 				var ax = circle.m_R.col1;
@@ -52,7 +52,7 @@ class _Main {
 			break;
 		case b2Shape.e_polyShape:
 			{
-				var poly = shape as __noconvert__ b2PolyShape;
+				var poly = shape as b2PolyShape;
 				var tV = b2Math.AddVV(poly.m_position, b2Math.b2MulMV(poly.m_R, poly.m_vertices[0]));
 				context.moveTo(tV.x, tV.y);
 				for (var i = 0; i < poly.m_vertexCount; i++) {
@@ -69,12 +69,12 @@ class _Main {
 		var worldAABB = new b2AABB();
 		worldAABB.minVertex.Set(-1000, -1000);
 		worldAABB.maxVertex.Set(1000, 1000);
-		
+
 		var gravity = new b2Vec2(0, 300);
-		
+
 		var doSleep = true;
 		var world = new b2World(worldAABB, gravity, doSleep);
-		
+
 		_Main.createGround(world);
 		_Main.createBox(world, 0, 0, 10, 1000);
 		_Main.createBox(world, 320, 0, 10, 1000);
@@ -85,7 +85,7 @@ class _Main {
 		groundSd.extents.Set(1000, 10);
 		groundSd.restitution = 0.2;
 		groundSd.friction = 0.2;
-		
+
 		var groundBd = new b2BodyDef();
 		groundBd.AddShape(groundSd);
 		groundBd.position.Set(-500, 400);
@@ -94,7 +94,7 @@ class _Main {
 	static function createBox(world: b2World, x: number, y: number, width: number, height: number): b2Body {
 		var boxSd = new b2BoxDef();
 		boxSd.extents.Set(width, height);
-		
+
 		var boxBd = new b2BodyDef();
 		boxBd.AddShape(boxSd);
 		boxBd.position.Set(x,y);
@@ -115,54 +115,52 @@ class _Main {
 		var ballBd = new b2BodyDef();
 		ballBd.AddShape(ballSd);
 		ballBd.position.Set(x,y);
-		
+
 		var body = world.CreateBody(ballBd);
-		
+
 		/*var mass = new b2MassData();
 		mass.mass = body.GetMass();
 		mass.center = new b2Vec2(0, 0);
 		console.log(
 		body.SetMass(mass);*/
 		//body.SetCenterPosition(new b2Vec2(0, 0), new b2Vec2(0, 0));
-		
+
 		return body;
 	}
-	
-	static function main() :void {
+
+	static function main(args : string[]) :void {
 		dom.window.setTimeout(function():void { dom.window.scrollTo(0, 0); }, 100);
-		var canvas = dom.id("canvas") as __noconvert__ HTMLCanvasElement;
-		var ctx = canvas.getContext("2d") as __noconvert__ CanvasRenderingContext2D;
-		
+		var canvas = dom.id("canvas") as HTMLCanvasElement;
+		var ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+
 		var world = _Main.createWorld();
-		
+
 		var count = 50;
 		for(var i = 0; i < count; i++) {
 			_Main.createMy(world, i * (270 / count) + 25, -200 + _Main.random() * 300, 15 + _Main.random() * 10);
 		}
-		
+
 		var frame = 0;
 		var frameTotal = 0;
 		dom.window.setTimeout(function () {
 			if (JSX.profilerIsRunning()) {
 				JSX.postProfileResults("http://172.25.4.50:5001/post-profile");
 			}
-			console.log("ave. fps:" + (frameTotal / 10) as string);
+			console.log("ave. fps:" + (frameTotal / 10) as string + " in the first 10 sec.");
 		}, 10000);
 		var last = Date.now();
-		var tick = function (): void {};
-		var tick = function (): void {
+		function tick(): void {
 			frame++;
 			frameTotal++;
 			dom.window.setTimeout(tick, 0);
 			world.Step(1 / 60, 1);
-			
+
 			ctx.fillStyle = "#000";
 			ctx.fillRect(0, 0, canvas.width, canvas.height);
 			_Main.drawWorld(world, ctx);
 			var now = Date.now();
 			if(now - last > 1000) {
-				(dom.id("fps") as __noconvert__ HTMLDivElement).innerHTML = "fps:" + frame as __noconvert__ string;
-				log "fps:" + frame as __noconvert__ string;
+				(dom.id("fps") as HTMLDivElement).innerHTML = "fps:" + frame as string;
 				frame = 0;
 				last = now;
 			}

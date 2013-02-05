@@ -2,5 +2,5 @@
 JSX = jsx
 
 all:
-	(cd .. && $(JSX) --add-search-path src --release --output sample/box2d.js src/box2d.jsx)
+	$(JSX) --executable web --add-search-path ../src/box2d --release --output box2d-sample.jsx.js box2d-sample.jsx
 
