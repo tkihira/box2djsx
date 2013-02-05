@@ -9,6 +9,9 @@ import 'js/web.jsx';
 import "console.jsx";
 
 class _Main {
+	static const PROFILER_URL = "http://localhosrt:5001/post-profile");
+
+
 	static var seed = 0;
 	static function random(): number {
 		_Main.seed = (_Main.seed * 713 + 17) & 0xFF;
@@ -144,7 +147,7 @@ class _Main {
 		var frameTotal = 0;
 		dom.window.setTimeout(function () {
 			if (JSX.profilerIsRunning()) {
-				JSX.postProfileResults("http://172.25.4.50:5001/post-profile");
+				JSX.postProfileResults(_Main.PROFILER_URL);
 			}
 			console.log("ave. fps:" + (frameTotal / 10) as string + " in the first 10 sec.");
 		}, 10000);
