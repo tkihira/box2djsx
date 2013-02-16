@@ -1,9 +1,9 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
-import "dynamics/contacts/*.jsx";
+import "../common/*.jsx";
+import "../common/math/*.jsx";
+import "../collision/*.jsx";
+import "../collision/shapes/*.jsx";
+import "../dynamics/*.jsx";
+import "../dynamics/contacts/*.jsx";
 
 
 class b2Body {
@@ -46,7 +46,7 @@ class b2Body {
 	var m_sleepTime: number;
 
 	var m_userData: variant;
-	
+
 	var sMat0: b2Mat22;
 
 	function constructor(bd: b2BodyDef, world: b2World){
@@ -197,7 +197,7 @@ class b2Body {
 
 		this.m_world.m_broadPhase.Commit();
 	}
-	
+
 	function GetOriginPosition(): b2Vec2 {
 		return b2Math.SubtractVV(this.m_position, b2Math.b2MulMV(this.m_R, this.m_center));
 	}
@@ -222,7 +222,7 @@ class b2Body {
 
 		this.m_world.m_broadPhase.Commit();
 	}
-	
+
 	function GetCenterPosition(): b2Vec2 {
 		return this.m_position;
 	}
@@ -332,7 +332,7 @@ class b2Body {
 		this.m_flags &= ~b2Body.e_sleepFlag;
 		this.m_sleepTime = 0.0;
 	}
-	
+
 	function GetShapeList(): b2Shape {
 		return this.m_shapeList;
 	}
@@ -353,7 +353,7 @@ class b2Body {
 	function GetUserData(): variant {
 		return this.m_userData;
 	}
-	
+
 	function Destroy(): void {
 		var s = this.m_shapeList;
 		while (s != null)
@@ -380,7 +380,7 @@ class b2Body {
 			s.QuickSync(this.m_position, this.m_R);
 		}
 	}
-	
+
 	function IsConnected(other: variant): boolean {return false;}
 	/*function IsConnected(other: variant): boolean {
 		debugger;
@@ -392,7 +392,7 @@ class b2Body {
 
 		return false;
 	}*/
-	
+
 
 	function Freeze(): void{
 		this.m_flags |= b2Body.e_frozenFlag;

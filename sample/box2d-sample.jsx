@@ -1,16 +1,16 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
-import "dynamics/contacts/*.jsx";
+import "../src/box2d/common/*.jsx";
+import "../src/box2d/common/math/*.jsx";
+import "../src/box2d/collision/*.jsx";
+import "../src/box2d/collision/shapes/*.jsx";
+import "../src/box2d/dynamics/*.jsx";
+import "../src/box2d/dynamics/contacts/*.jsx";
 
 import 'js/web.jsx';
 import "console.jsx";
 
+
 class _Main {
 	static const PROFILER_URL = "http://localhosrt:5001/post-profile";
-
 
 	static var seed = 0;
 	static function random(): number {

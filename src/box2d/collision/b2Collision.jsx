@@ -1,8 +1,8 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
+import "../common/*.jsx";
+import "../common/math/*.jsx";
+import "../collision/*.jsx";
+import "../collision/shapes/*.jsx";
+import "../dynamics/*.jsx";
 
 class b2Collision {
 	static var b2_nullFeature = 0x000000ff;
@@ -465,7 +465,7 @@ class b2Collision {
 
 		manifold.pointCount = pointCount;
 	}
-	
+
 	static function b2CollideCircle(manifold: b2Manifold, circle1: b2CircleShape, circle2: b2CircleShape, conservative: boolean): void {
 		manifold.pointCount = 0;
 
@@ -503,7 +503,7 @@ class b2Collision {
 		tPoint.position.x = circle2.m_position.x - (circle2.m_radius * manifold.normal.x);
 		tPoint.position.y = circle2.m_position.y - (circle2.m_radius * manifold.normal.y);
 	}
-	
+
 	static function b2CollidePolyAndCircle(manifold: b2Manifold, poly: b2PolyShape, circle: b2CircleShape, conservative: boolean): void{
 		manifold.pointCount = 0;
 		var tPoint;

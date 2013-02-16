@@ -1,9 +1,9 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
-import "dynamics/contacts/*.jsx";
+import "../common/*.jsx";
+import "../common/math/*.jsx";
+import "../collision/*.jsx";
+import "../collision/shapes/*.jsx";
+import "../dynamics/*.jsx";
+import "../dynamics/contacts/*.jsx";
 
 class b2ContactManager extends b2PairCallback {
 	var m_world: b2World;
@@ -86,7 +86,7 @@ class b2ContactManager extends b2PairCallback {
 
 		return contact;
 	}
-	
+
 	override function PairRemoved(proxyUserData1: variant, proxyUserData2: variant, pairUserData: variant): void{
 
 		if (pairUserData == null)

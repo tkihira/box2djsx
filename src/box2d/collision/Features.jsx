@@ -1,7 +1,7 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
+import "../common/*.jsx";
+import "../common/math/*.jsx";
+import "../collision/*.jsx";
+import "../collision/shapes/*.jsx";
 
 class Features {
 	var _referenceFace = 0;
@@ -9,7 +9,7 @@ class Features {
 	var _incidentVertex = 0;
 	var _flip = 0;
 	var _m_id: b2ContactID = null;
-	
+
 	function set_referenceFace(value: number): void {
 		this._referenceFace = value;
 		this._m_id._key = (this._m_id._key & 0xffffff00) | (this._referenceFace & 0x000000ff);

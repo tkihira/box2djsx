@@ -1,6 +1,6 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
+import "../common/*.jsx";
+import "../common/math/*.jsx";
+import "../collision/*.jsx";
 
 class b2BroadPhase {
 	var m_pairManager: b2PairManager;
@@ -17,7 +17,7 @@ class b2BroadPhase {
 	var m_quantizationFactor: b2Vec2;
 	var m_proxyCount: number;
 	var m_timeStamp: number;
-	
+
 	function constructor(worldAABB: b2AABB, callback: b2PairCallback){
 		// initialize instance variables for references
 		this.m_queryResults = []: number[]; this.m_queryResults.length = b2Settings.b2_maxProxies;
@@ -104,7 +104,7 @@ class b2BroadPhase {
 
 		return b2Math.b2Max(dX, dY) < 0.0;
 	}
-	
+
 	function GetProxy(proxyId: number): b2Proxy {
 		if (proxyId == b2Pair.b2_nullProxy || this.m_proxyPool[proxyId].IsValid() == false)
 		{
@@ -702,7 +702,7 @@ class b2BroadPhase {
 		lowerValues[1] = /*uint*/(this.m_quantizationFactor.y * (minVertexY - this.m_worldAABB.minVertex.y)) & (b2Settings.USHRT_MAX - 1);
 		upperValues[1] = (/*uint*/(this.m_quantizationFactor.y * (maxVertexY - this.m_worldAABB.minVertex.y))& 0x0000ffff) | 1;
 	}
-	
+
 	/*function TestOverlapValidate(p1, p2): boolean{
 
 		for (var axis = 0; axis < 2; ++axis)
@@ -723,7 +723,7 @@ class b2BroadPhase {
 
 		return true;
 	}*/
-	
+
 	function TestOverlap(b: b2BoundValues, p: b2Proxy): boolean
 	{
 		for (var axis = 0; axis < 2; ++axis)
@@ -742,8 +742,8 @@ class b2BroadPhase {
 
 		return true;
 	}
-	
-	
+
+
 	function Query(lowerQueryOut: number[], upperQueryOut: number[], lowerValue: number, upperValue: number, bounds: b2Bound[], boundCount: number, axis: number): void {
 
 		var lowerQuery = b2BroadPhase.BinarySearch(bounds, boundCount, lowerValue);
@@ -787,7 +787,7 @@ class b2BroadPhase {
 		lowerQueryOut[0] = lowerQuery;
 		upperQueryOut[0] = upperQuery;
 	}
-	
+
 	function IncrementOverlapCount(proxyId: number): void{
 		var proxy = this.m_proxyPool[ proxyId ];
 		if (proxy.timeStamp < this.m_timeStamp)
@@ -823,7 +823,7 @@ class b2BroadPhase {
 	static const s_validate = false;
 	static const b2_invalid = b2Settings.USHRT_MAX;
 	static const b2_nullEdge = b2Settings.USHRT_MAX;
-	
+
 	static function BinarySearch(bounds: b2Bound[], count: number, value: number): number {
 		var low = 0;
 		var high = count - 1;

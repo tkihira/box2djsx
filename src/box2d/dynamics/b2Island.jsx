@@ -1,9 +1,9 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
-import "dynamics/contacts/*.jsx";
+import "../common/*.jsx";
+import "../common/math/*.jsx";
+import "../collision/*.jsx";
+import "../collision/shapes/*.jsx";
+import "../dynamics/*.jsx";
+import "../dynamics/contacts/*.jsx";
 
 class b2Island {
 	var m_allocator: variant;
@@ -21,7 +21,7 @@ class b2Island {
 	var m_jointCapacity: number;
 
 	var m_positionError: variant = null;
-	
+
 	function constructor(bodyCapacity: number, contactCapacity: number, jointCapacity: number, allocator: variant)
 	{
 		var i = 0;
@@ -51,14 +51,14 @@ class b2Island {
 
 		this.m_allocator = allocator;
 	}
-	
+
 	function Clear(): void
 	{
 		this.m_bodyCount = 0;
 		this.m_contactCount = 0;
 		this.m_jointCount = 0;
 	}
-	
+
 	function Solve(step: b2TimeStep, gravity: b2Vec2): void {
 		var i = 0;
 		var b;
@@ -167,7 +167,7 @@ class b2Island {
 			b.m_torque = 0.0;
 		}
 	}
-	
+
 	function UpdateSleep(dt: number): void {
 		var i = 0;
 		var b;
@@ -214,7 +214,7 @@ class b2Island {
 			}
 		}
 	}
-	
+
 	function AddBody(body: b2Body): void {
 		//b2Settings.b2Assert(this.m_bodyCount < this.m_bodyCapacity);
 		this.m_bodies[this.m_bodyCount++] = body;
@@ -230,6 +230,6 @@ class b2Island {
 		//b2Settings.b2Assert(this.m_jointCount < this.m_jointCapacity);
 		//this.m_joints[this.m_jointCount++] = joint;
 	}
-	
+
 	static var m_positionIterationCount = 0;
 }

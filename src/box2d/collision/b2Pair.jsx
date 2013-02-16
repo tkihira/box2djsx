@@ -1,4 +1,4 @@
-import "common/b2Settings.jsx";
+import "../common/b2Settings.jsx";
 
 class b2Pair {
 	var userData: variant;
@@ -6,7 +6,7 @@ class b2Pair {
 	var proxyId2 = 0;
 	var next = 0;
 	var status = 0;
-	
+
 	function SetBuffered(): void	{ this.status |= b2Pair.e_pairBuffered; }
 	function ClearBuffered(): void	{ this.status &= ~b2Pair.e_pairBuffered; }
 	function IsBuffered(): boolean	{ return (this.status & b2Pair.e_pairBuffered) == b2Pair.e_pairBuffered; }

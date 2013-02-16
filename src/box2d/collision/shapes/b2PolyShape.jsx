@@ -1,8 +1,8 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
+import "../../common/*.jsx";
+import "../../common/math/*.jsx";
+import "../../collision/*.jsx";
+import "../../collision/shapes/*.jsx";
+import "../../dynamics/*.jsx";
 
 class b2PolyShape extends b2Shape {
 	var syncAABB = new b2AABB();
@@ -16,7 +16,7 @@ class b2PolyShape extends b2Shape {
 	var m_coreVertices: b2Vec2[];
 	var m_vertexCount = 0;
 	var m_normals: b2Vec2[];
-	
+
 	function TestPoint(p: b2Vec2): boolean {
 
 		//var pLocal = b2Math.b2MulTMV(this.m_R, b2Math.SubtractVV(p, this.m_position));
@@ -380,7 +380,7 @@ class b2PolyShape extends b2Shape {
 			this.m_body.Freeze();
 		}
 	}
-	
+
 	override function QuickSync(position: b2Vec2, R: b2Mat22): void {
 		//this.m_R = R;
 		this.m_R.SetM(R);
@@ -388,7 +388,7 @@ class b2PolyShape extends b2Shape {
 		this.m_position.x = position.x + (R.col1.x * this.m_localCentroid.x + R.col2.x * this.m_localCentroid.y);
 		this.m_position.y = position.y + (R.col1.y * this.m_localCentroid.x + R.col2.y * this.m_localCentroid.y);
 	}
-	
+
 	override function ResetProxy(broadPhase: b2BroadPhase): void {
 
 		if (this.m_proxyId == b2Pair.b2_nullProxy)
@@ -430,7 +430,7 @@ class b2PolyShape extends b2Shape {
 			this.m_body.Freeze();
 		}
 	}
-	
+
 	override function Support(dX: number, dY: number, out: b2Vec2): void{
 		//b2Vec2 dLocal = b2MulT(this.m_R, d);
 		var dLocalX = (dX*this.m_R.col1.x + dY*this.m_R.col1.y);

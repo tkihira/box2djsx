@@ -1,12 +1,12 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
+import "../common/*.jsx";
+import "../common/math/*.jsx";
+import "../collision/*.jsx";
+import "../collision/shapes/*.jsx";
+import "../dynamics/*.jsx";
 
 class b2BodyDef {
 	var userData: variant;
-	
+
 	var shapes: b2ShapeDef[];
 	var position: b2Vec2;
 	var rotation: number;
@@ -17,7 +17,7 @@ class b2BodyDef {
 	var allowSleep: boolean;
 	var isSleeping: boolean;
 	var preventRotation: boolean;
-	
+
 	function constructor() {
 		this.shapes = []: b2ShapeDef[];
 		//

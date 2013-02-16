@@ -1,4 +1,4 @@
-import "common/math/*.jsx";
+import "../../common/math/*.jsx";
 
 class b2Mat22 {
 	var col1: b2Vec2;
@@ -25,7 +25,7 @@ class b2Mat22 {
 	function constructor() {
 		this.initializer(0, null, null);
 	}
-	
+
 	function Set(angle: number): void {
 		var c = Math.cos(angle);
 		var s = Math.sin(angle);

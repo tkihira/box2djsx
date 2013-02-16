@@ -1,8 +1,8 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
+import "../../common/*.jsx";
+import "../../common/math/*.jsx";
+import "../../collision/*.jsx";
+import "../../collision/shapes/*.jsx";
+import "../../dynamics/*.jsx";
 
 class b2CircleDef extends b2ShapeDef {
 	var radius = 0;
@@ -17,7 +17,7 @@ class b2CircleDef extends b2ShapeDef {
 		this.density = 0.0;
 		this.categoryBits = 0x0001;
 		this.maskBits = 0xFFFF;
-		this.groupIndex = 0;	
+		this.groupIndex = 0;
 		//
 
 		this.type = b2Shape.e_circleShape;

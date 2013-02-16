@@ -1,14 +1,14 @@
-import "common/math/b2Vec2.jsx";
+import "../common/math/b2Vec2.jsx";
 
 class b2AABB {
 	var minVertex: b2Vec2;
 	var maxVertex: b2Vec2;
-	
+
 	function constructor() {
 		this.minVertex = new b2Vec2();
 		this.maxVertex = new b2Vec2();
 	}
-	
+
 	function IsValid(): boolean {
 		//var d = b2Math.SubtractVV(this.maxVertex, this.minVertex);
 		var dX = this.maxVertex.x;

@@ -1,8 +1,8 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
+import "../../common/*.jsx";
+import "../../common/math/*.jsx";
+import "../../collision/*.jsx";
+import "../../collision/shapes/*.jsx";
+import "../../dynamics/*.jsx";
 
 class b2ShapeDef {
 	var type: number;
@@ -15,7 +15,7 @@ class b2ShapeDef {
 	var categoryBits: number;
 	var maskBits: number;
 	var groupIndex: number;
-	
+
 	function constructor()
 	{
 		this.type = b2Shape.e_unknownShape;

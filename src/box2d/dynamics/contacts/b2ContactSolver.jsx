@@ -1,9 +1,9 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
-import "dynamics/contacts/*.jsx";
+import "../../common/*.jsx";
+import "../../common/math/*.jsx";
+import "../../collision/*.jsx";
+import "../../collision/shapes/*.jsx";
+import "../../dynamics/*.jsx";
+import "../../dynamics/contacts/*.jsx";
 
 class b2ContactSolver {
 	var m_allocator: variant;
@@ -150,7 +150,7 @@ class b2ContactSolver {
 
 		//b2Settings.b2Assert(count == this.m_constraintCount);
 	}
-	
+
 	function PreSolve(): void {
 		var tVec;
 		var tVec2;
@@ -225,7 +225,7 @@ class b2ContactSolver {
 			}
 		}
 	}
-	
+
 	function SolveVelocityConstraints (): void {
 		var j = 0;
 		var ccp;

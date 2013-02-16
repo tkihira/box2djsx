@@ -1,7 +1,6 @@
-// generatedy by JSX compiler 0.9.4 (2013-02-05 02:15:22 +0900; 3a61f2b9fc031f140b52ae22d5e4c1416dcb0195)
+// generatedy by JSX compiler 0.9.7 (2013-02-15 16:54:28 +0900; bb2790e717f103d1d9fc14fa05beb202c1f5d293)
 var JSX = {};
 (function (JSX) {
-
 /**
  * copies the implementations from source interface to target
  */
@@ -41,8 +40,7 @@ function $__jsx_div_assign(obj, prop, divisor) {
 }
 
 /*
- * global functions called by JSX
- * (enamed so that they do not conflict with local variable names)
+ * global functions, renamed to avoid conflict with local variable names
  */
 var $__jsx_parseInt = parseInt;
 var $__jsx_parseFloat = parseFloat;
@@ -98,7 +96,6 @@ JSX.DEBUG = false;
 function _Main() {
 }
 
-_Main.prototype = new Object;
 /**
  * @constructor
  */
@@ -477,7 +474,6 @@ var _Main$main$AS = _Main.main$AS;
 function b2Settings() {
 }
 
-b2Settings.prototype = new Object;
 /**
  * @constructor
  */
@@ -504,7 +500,6 @@ var b2Settings$b2Assert$B = b2Settings.b2Assert$B;
 function b2Mat22() {
 }
 
-b2Mat22.prototype = new Object;
 /**
  * @constructor
  * @param {!number} angle
@@ -791,7 +786,6 @@ b2Mat22.prototype.Abs$ = function () {
 function b2Math() {
 }
 
-b2Math.prototype = new Object;
 /**
  * @constructor
  */
@@ -1104,7 +1098,6 @@ var b2Math$b2IsPowerOfTwo$N = b2Math.b2IsPowerOfTwo$N;
 function b2Vec2() {
 }
 
-b2Vec2.prototype = new Object;
 /**
  * @constructor
  */
@@ -1390,7 +1383,6 @@ var b2Vec2$Make$NN = b2Vec2.Make$NN;
 function b2AABB() {
 }
 
-b2AABB.prototype = new Object;
 /**
  * @constructor
  */
@@ -1434,7 +1426,6 @@ var b2AABB$IsValid$Lb2AABB$ = b2AABB.IsValid$Lb2AABB$;
 function b2Bound() {
 }
 
-b2Bound.prototype = new Object;
 /**
  * @constructor
  */
@@ -1497,7 +1488,6 @@ var b2Bound$Swap$Lb2Bound$Lb2Bound$ = b2Bound.Swap$Lb2Bound$Lb2Bound$;
 function b2BoundValues() {
 }
 
-b2BoundValues.prototype = new Object;
 /**
  * @constructor
  */
@@ -1515,7 +1505,6 @@ b2BoundValues$.prototype = new b2BoundValues;
 function b2BroadPhase() {
 }
 
-b2BroadPhase.prototype = new Object;
 /**
  * @constructor
  * @param {b2AABB} worldAABB
@@ -2372,7 +2361,6 @@ var b2BroadPhase$BinarySearch$ALb2Bound$NN = b2BroadPhase.BinarySearch$ALb2Bound
 function b2BufferedPair() {
 }
 
-b2BufferedPair.prototype = new Object;
 /**
  * @constructor
  */
@@ -2390,7 +2378,6 @@ b2BufferedPair$.prototype = new b2BufferedPair;
 function b2Collision() {
 }
 
-b2Collision.prototype = new Object;
 /**
  * @constructor
  */
@@ -2737,12 +2724,12 @@ b2Collision.FindIncidentEdge$ALClipVertex$Lb2PolyShape$NLb2PolyShape$ = function
 	var tClip;
 	/** @type {b2Vec2} */
 	var v$0;
-	/** @type {b2Mat22} */
-	var A$0;
 	/** @type {b2Vec2} */
 	var v$1;
 	/** @type {b2Vec2} */
 	var v$2;
+	/** @type {b2Vec2} */
+	var v$3;
 	/** @type {b2Vec2} */
 	var col1$0;
 	/** @type {b2Vec2} */
@@ -2751,28 +2738,8 @@ b2Collision.FindIncidentEdge$ALClipVertex$Lb2PolyShape$NLb2PolyShape$ = function
 	var col1$1;
 	/** @type {b2Vec2} */
 	var col2$1;
-	/** @type {!number} */
-	var x$0;
-	/** @type {!number} */
-	var y$0;
-	/** @type {b2Vec2} */
-	var col1$2;
-	/** @type {b2Vec2} */
-	var col2$2;
 	/** @type {Features} */
 	var features$0;
-	/** @type {b2Mat22} */
-	var m_R$0;
-	/** @type {!number} */
-	var x$1;
-	/** @type {!number} */
-	var y$1;
-	/** @type {b2Vec2} */
-	var col1$3;
-	/** @type {b2Vec2} */
-	var col2$3;
-	/** @type {b2Vec2} */
-	var m_position$0;
 	/** @type {Features} */
 	var features$1;
 	count1 = poly1.m_vertexCount;
@@ -2830,12 +2797,10 @@ b2Collision.FindIncidentEdge$ALClipVertex$Lb2PolyShape$NLb2PolyShape$ = function
 	tClip = c[0];
 	tVec = tClip.v;
 	v$0 = vert2s[vertex21];
-	x$0 = tVec.x = v$0.x;
-	y$0 = tVec.y = v$0.y;
-	A$0 = m_R$0 = poly2.m_R;
-	tVec.x = (col1$2 = A$0.col1).x * x$0 + (col2$2 = A$0.col2).x * y$0;
-	tVec.y = col1$2.y * x$0 + col2$2.y * y$0;
-	v$1 = m_position$0 = poly2.m_position;
+	tVec.x = v$0.x;
+	tVec.y = v$0.y;
+	b2Vec2$MulM$Lb2Vec2$Lb2Mat22$(tVec, poly2.m_R);
+	v$1 = poly2.m_position;
 	tVec.x += v$1.x;
 	tVec.y += v$1.y;
 	(features$0 = tClip.id.features).referenceFace = edge1;
@@ -2844,12 +2809,12 @@ b2Collision.FindIncidentEdge$ALClipVertex$Lb2PolyShape$NLb2PolyShape$ = function
 	tClip = c[1];
 	tVec = tClip.v;
 	v$2 = vert2s[vertex22];
-	x$1 = tVec.x = v$2.x;
-	y$1 = tVec.y = v$2.y;
-	tVec.x = (col1$3 = m_R$0.col1).x * x$1 + (col2$3 = m_R$0.col2).x * y$1;
-	tVec.y = col1$3.y * x$1 + col2$3.y * y$1;
-	tVec.x += m_position$0.x;
-	tVec.y += m_position$0.y;
+	tVec.x = v$2.x;
+	tVec.y = v$2.y;
+	b2Vec2$MulM$Lb2Vec2$Lb2Mat22$(tVec, poly2.m_R);
+	v$3 = poly2.m_position;
+	tVec.x += v$3.x;
+	tVec.y += v$3.y;
 	(features$1 = tClip.id.features).referenceFace = edge1;
 	features$1.incidentEdge = vertex21;
 	features$1.incidentVertex = vertex22;
@@ -3416,7 +3381,6 @@ var b2Collision$b2CollidePolyAndCircle$Lb2Manifold$Lb2PolyShape$Lb2CircleShape$B
 function b2ContactID() {
 }
 
-b2ContactID.prototype = new Object;
 /**
  * @constructor
  */
@@ -3478,7 +3442,6 @@ b2ContactID.prototype.set_key$N = function (value) {
 function b2ContactPoint() {
 }
 
-b2ContactPoint.prototype = new Object;
 /**
  * @constructor
  */
@@ -3499,7 +3462,6 @@ b2ContactPoint$.prototype = new b2ContactPoint;
 function b2Manifold() {
 }
 
-b2Manifold.prototype = new Object;
 /**
  * @constructor
  */
@@ -3527,7 +3489,6 @@ b2Manifold$.prototype = new b2Manifold;
 function b2OBB() {
 }
 
-b2OBB.prototype = new Object;
 /**
  * @constructor
  */
@@ -3546,7 +3507,6 @@ b2OBB$.prototype = new b2OBB;
 function b2Pair() {
 }
 
-b2Pair.prototype = new Object;
 /**
  * @constructor
  */
@@ -3642,7 +3602,6 @@ var b2Pair$IsFinal$Lb2Pair$ = b2Pair.IsFinal$Lb2Pair$;
 function b2PairCallback() {
 }
 
-b2PairCallback.prototype = new Object;
 /**
  * @constructor
  */
@@ -3675,7 +3634,6 @@ b2PairCallback.prototype.PairRemoved$XXX = function (proxyUserData1, proxyUserDa
 function b2PairManager() {
 }
 
-b2PairManager.prototype = new Object;
 /**
  * @constructor
  */
@@ -4020,7 +3978,6 @@ var b2PairManager$EqualsPair$Lb2Pair$Lb2Pair$ = b2PairManager.EqualsPair$Lb2Pair
 function b2Proxy() {
 }
 
-b2Proxy.prototype = new Object;
 /**
  * @constructor
  */
@@ -4071,7 +4028,6 @@ var b2Proxy$IsValid$Lb2Proxy$ = b2Proxy.IsValid$Lb2Proxy$;
 function ClipVertex() {
 }
 
-ClipVertex.prototype = new Object;
 /**
  * @constructor
  */
@@ -4089,7 +4045,6 @@ ClipVertex$.prototype = new ClipVertex;
 function Features() {
 }
 
-Features.prototype = new Object;
 /**
  * @constructor
  */
@@ -4214,7 +4169,6 @@ var Features$get_flip$LFeatures$ = Features.get_flip$LFeatures$;
 function b2MassData() {
 }
 
-b2MassData.prototype = new Object;
 /**
  * @constructor
  */
@@ -4233,7 +4187,6 @@ b2MassData$.prototype = new b2MassData;
 function b2Shape() {
 }
 
-b2Shape.prototype = new Object;
 /**
  * @constructor
  * @param {b2ShapeDef} def
@@ -5698,7 +5651,6 @@ b2CircleShape.prototype.Support$NNLb2Vec2$ = function (dX, dY, out) {
 function b2ShapeDef() {
 }
 
-b2ShapeDef.prototype = new Object;
 /**
  * @constructor
  */
@@ -5886,7 +5838,6 @@ b2BoxDef$.prototype = new b2BoxDef;
 function b2Body() {
 }
 
-b2Body.prototype = new Object;
 /**
  * @constructor
  * @param {b2BodyDef} bd
@@ -6593,7 +6544,6 @@ b2Body.prototype.Freeze$ = function () {
 function b2BodyDef() {
 }
 
-b2BodyDef.prototype = new Object;
 /**
  * @constructor
  */
@@ -6648,7 +6598,6 @@ b2BodyDef.prototype.AddShape$Lb2ShapeDef$ = function (shape) {
 function b2CollisionFilter() {
 }
 
-b2CollisionFilter.prototype = new Object;
 /**
  * @constructor
  */
@@ -6947,7 +6896,6 @@ b2ContactManager.prototype.Collide$ = function () {
 function b2Island() {
 }
 
-b2Island.prototype = new Object;
 /**
  * @constructor
  * @param {!number} bodyCapacity
@@ -7217,7 +7165,6 @@ b2Island.prototype.AddJoint$X = function (joint) {
 function b2TimeStep() {
 }
 
-b2TimeStep.prototype = new Object;
 /**
  * @constructor
  */
@@ -7236,7 +7183,6 @@ b2TimeStep$.prototype = new b2TimeStep;
 function b2World() {
 }
 
-b2World.prototype = new Object;
 /**
  * @constructor
  * @param {b2AABB} worldAABB
@@ -7524,7 +7470,6 @@ b2World.prototype.GetContactList$ = function () {
 function b2Contact() {
 }
 
-b2Contact.prototype = new Object;
 /**
  * @constructor
  * @param {b2Shape} s1
@@ -7881,7 +7826,6 @@ var b2CircleContact$Destroy$Lb2Contact$X = b2CircleContact.Destroy$Lb2Contact$X;
 function b2ContactConstraint() {
 }
 
-b2ContactConstraint.prototype = new Object;
 /**
  * @constructor
  */
@@ -7913,7 +7857,6 @@ b2ContactConstraint$.prototype = new b2ContactConstraint;
 function b2ContactConstraintPoint() {
 }
 
-b2ContactConstraintPoint.prototype = new Object;
 /**
  * @constructor
  */
@@ -7938,7 +7881,6 @@ b2ContactConstraintPoint$.prototype = new b2ContactConstraintPoint;
 function b2ContactNode() {
 }
 
-b2ContactNode.prototype = new Object;
 /**
  * @constructor
  */
@@ -7958,7 +7900,6 @@ b2ContactNode$.prototype = new b2ContactNode;
 function b2ContactRegister() {
 }
 
-b2ContactRegister.prototype = new Object;
 /**
  * @constructor
  */
@@ -7977,7 +7918,6 @@ b2ContactRegister$.prototype = new b2ContactRegister;
 function b2ContactSolver() {
 }
 
-b2ContactSolver.prototype = new Object;
 /**
  * @constructor
  * @param {Array.<undefined|b2Contact>} contacts
@@ -8916,7 +8856,6 @@ var b2PolyContact$Destroy$Lb2Contact$X = b2PolyContact.Destroy$Lb2Contact$X;
 function dom() {
 }
 
-dom.prototype = new Object;
 /**
  * @constructor
  */
@@ -8962,7 +8901,6 @@ var dom$createElement$S = dom.createElement$S;
 function EventInit() {
 }
 
-EventInit.prototype = new Object;
 /**
  * @constructor
  */
@@ -8999,7 +8937,6 @@ CustomEventInit$.prototype = new CustomEventInit;
 function MutationObserverInit() {
 }
 
-MutationObserverInit.prototype = new Object;
 /**
  * @constructor
  */
@@ -9042,7 +8979,6 @@ UIEventInit$.prototype = new UIEventInit;
 function FocusEventInit() {
 }
 
-FocusEventInit.prototype = new Object;
 /**
  * @constructor
  */
@@ -9095,7 +9031,6 @@ MouseEventInit$.prototype = new MouseEventInit;
 function WheelEventInit() {
 }
 
-WheelEventInit.prototype = new Object;
 /**
  * @constructor
  */
@@ -9130,7 +9065,6 @@ WheelEventInit$.prototype = new WheelEventInit;
 function KeyboardEventInit() {
 }
 
-KeyboardEventInit.prototype = new Object;
 /**
  * @constructor
  */
@@ -9162,7 +9096,6 @@ KeyboardEventInit$.prototype = new KeyboardEventInit;
 function CompositionEventInit() {
 }
 
-CompositionEventInit.prototype = new Object;
 /**
  * @constructor
  */
@@ -9205,7 +9138,6 @@ ProgressEventInit$.prototype = new ProgressEventInit;
 function XMLHttpRequestOptions() {
 }
 
-XMLHttpRequestOptions.prototype = new Object;
 /**
  * @constructor
  */
@@ -9419,7 +9351,6 @@ ErrorEventInit$.prototype = new ErrorEventInit;
 function EventSourceInit() {
 }
 
-EventSourceInit.prototype = new Object;
 /**
  * @constructor
  */
@@ -9436,7 +9367,6 @@ EventSourceInit$.prototype = new EventSourceInit;
 function IDBObjectStoreParameters() {
 }
 
-IDBObjectStoreParameters.prototype = new Object;
 /**
  * @constructor
  */
@@ -9454,7 +9384,6 @@ IDBObjectStoreParameters$.prototype = new IDBObjectStoreParameters;
 function IDBIndexParameters() {
 }
 
-IDBIndexParameters.prototype = new Object;
 /**
  * @constructor
  */
@@ -9492,7 +9421,6 @@ IDBVersionChangeEventInit$.prototype = new IDBVersionChangeEventInit;
 function NotificationOptions() {
 }
 
-NotificationOptions.prototype = new Object;
 /**
  * @constructor
  */
@@ -9513,7 +9441,6 @@ NotificationOptions$.prototype = new NotificationOptions;
 function RTCSessionDescriptionInit() {
 }
 
-RTCSessionDescriptionInit.prototype = new Object;
 /**
  * @constructor
  */
@@ -9531,7 +9458,6 @@ RTCSessionDescriptionInit$.prototype = new RTCSessionDescriptionInit;
 function RTCIceCandidateInit() {
 }
 
-RTCIceCandidateInit.prototype = new Object;
 /**
  * @constructor
  */
@@ -9550,7 +9476,6 @@ RTCIceCandidateInit$.prototype = new RTCIceCandidateInit;
 function RTCIceServer() {
 }
 
-RTCIceServer.prototype = new Object;
 /**
  * @constructor
  */
@@ -9568,7 +9493,6 @@ RTCIceServer$.prototype = new RTCIceServer;
 function RTCConfiguration() {
 }
 
-RTCConfiguration.prototype = new Object;
 /**
  * @constructor
  */
@@ -9585,7 +9509,6 @@ RTCConfiguration$.prototype = new RTCConfiguration;
 function DataChannelInit() {
 }
 
-DataChannelInit.prototype = new Object;
 /**
  * @constructor
  */
@@ -9659,7 +9582,6 @@ DataChannelEventInit$.prototype = new DataChannelEventInit;
 function MediaStreamConstraints() {
 }
 
-MediaStreamConstraints.prototype = new Object;
 /**
  * @constructor
  */
@@ -9677,7 +9599,6 @@ MediaStreamConstraints$.prototype = new MediaStreamConstraints;
 function MediaTrackConstraints() {
 }
 
-MediaTrackConstraints.prototype = new Object;
 /**
  * @constructor
  */
@@ -9695,7 +9616,6 @@ MediaTrackConstraints$.prototype = new MediaTrackConstraints;
 function HitRegionOptions() {
 }
 
-HitRegionOptions.prototype = new Object;
 /**
  * @constructor
  */
@@ -9718,7 +9638,6 @@ HitRegionOptions$.prototype = new HitRegionOptions;
 function WebGLContextAttributes() {
 }
 
-WebGLContextAttributes.prototype = new Object;
 /**
  * @constructor
  */
@@ -9803,7 +9722,6 @@ DeviceMotionEventInit$.prototype = new DeviceMotionEventInit;
 function js() {
 }
 
-js.prototype = new Object;
 /**
  * @constructor
  */
@@ -10198,14 +10116,13 @@ var $__jsx_classMap = {
 JSX.runMain = function (sourceFile, args) {
 	var module = JSX.require(sourceFile);
 	if (! module) {
-		throw new Error("entry point module not found in " + sourceFile);
+		throw new ReferenceError("entry point module not found in " + sourceFile);
 	}
-
 	if (! module._Main) {
-		throw new Error("entry point _Main not found in " + sourceFile);
+		throw new ReferenceError("entry point _Main not found in " + sourceFile);
 	}
 	if (! module._Main.main$AS) {
-		throw new Error("entry point _Main.main(:string[]):void not found in " + sourceFile);
+		throw new ReferenceError("entry point _Main.main(:string[]):void not found in " + sourceFile);
 	}
 	module._Main.main$AS(args);
 };

@@ -1,7 +1,7 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
+import "../../common/*.jsx";
+import "../../common/math/*.jsx";
+import "../../collision/*.jsx";
+import "../../collision/shapes/*.jsx";
 
 class b2MassData {
 	var mass: number;

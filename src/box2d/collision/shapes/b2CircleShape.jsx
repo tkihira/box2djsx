@@ -1,13 +1,13 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
+import "../../common/*.jsx";
+import "../../common/math/*.jsx";
+import "../../collision/*.jsx";
+import "../../collision/shapes/*.jsx";
+import "../../dynamics/*.jsx";
 
 class b2CircleShape extends b2Shape {
 	var m_localPosition: b2Vec2 = new b2Vec2();
 	var m_radius = 0;
-	
+
 	function TestPoint(p: b2Vec2): boolean{
 		//var d = b2Math.SubtractVV(p, this.m_position);
 		var d = new b2Vec2();
@@ -15,7 +15,7 @@ class b2CircleShape extends b2Shape {
 		d.Subtract(this.m_position);
 		return b2Math.b2Dot(d, d) <= this.m_radius * this.m_radius;
 	}
-	
+
 	function constructor(def: b2CircleDef, body: b2Body, localCenter: b2Vec2) {
 		// initialize instance variables for references
 		super(def, body);
@@ -84,7 +84,7 @@ class b2CircleShape extends b2Shape {
 			this.m_body.Freeze();
 		}
 	}
-	
+
 	override function Synchronize(position1: b2Vec2, R1: b2Mat22, position2: b2Vec2, R2: b2Mat22): void {
 		this.m_R.SetM(R2);
 		//this.m_position = position2 + b2Mul(R2, this.m_localPosition);
@@ -121,14 +121,14 @@ class b2CircleShape extends b2Shape {
 			this.m_body.Freeze();
 		}
 	}
-	
+
 	override function QuickSync(position: b2Vec2, R: b2Mat22): void {
 		this.m_R.SetM(R);
 		//this.m_position = position + b2Mul(R, this.m_localPosition);
 		this.m_position.x = (R.col1.x * this.m_localPosition.x + R.col2.x * this.m_localPosition.y) + position.x;
 		this.m_position.y = (R.col1.y * this.m_localPosition.x + R.col2.y * this.m_localPosition.y) + position.y;
 	}
-	
+
 	override function ResetProxy(broadPhase: b2BroadPhase): void {
 		if (this.m_proxyId == b2Pair.b2_nullProxy)
 		{
@@ -158,7 +158,7 @@ class b2CircleShape extends b2Shape {
 			this.m_body.Freeze();
 		}
 	}
-	
+
 	override function Support(dX: number, dY: number, out: b2Vec2): void {
 		//b2Vec2 u = d;
 		//u.Normalize();

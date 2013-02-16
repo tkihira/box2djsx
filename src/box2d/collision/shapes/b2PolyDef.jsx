@@ -1,8 +1,8 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
+import "../../common/*.jsx";
+import "../../common/math/*.jsx";
+import "../../collision/*.jsx";
+import "../../collision/shapes/*.jsx";
+import "../../dynamics/*.jsx";
 
 class b2PolyDef extends b2ShapeDef {
 	function constructor()
@@ -17,7 +17,7 @@ class b2PolyDef extends b2ShapeDef {
 		this.density = 0.0;
 		this.categoryBits = 0x0001;
 		this.maskBits = 0xFFFF;
-		this.groupIndex = 0;	
+		this.groupIndex = 0;
 		//
 
 		// initialize instance variables for references

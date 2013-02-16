@@ -1,9 +1,9 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
-import "dynamics/contacts/*.jsx";
+import "../../common/*.jsx";
+import "../../common/math/*.jsx";
+import "../../collision/*.jsx";
+import "../../collision/shapes/*.jsx";
+import "../../dynamics/*.jsx";
+import "../../dynamics/contacts/*.jsx";
 
 class b2ContactConstraint {
 	var points: b2ContactConstraintPoint[];
@@ -14,7 +14,7 @@ class b2ContactConstraint {
 	var friction: number = 0;
 	var restitution: number = 0;
 	var pointCount = 0;
-	
+
 	function constructor() {
 		// initialize instance variables for references
 		this.normal = new b2Vec2();

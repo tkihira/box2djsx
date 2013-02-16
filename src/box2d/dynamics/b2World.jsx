@@ -1,9 +1,9 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
-import "dynamics/contacts/*.jsx";
+import "../common/*.jsx";
+import "../common/math/*.jsx";
+import "../collision/*.jsx";
+import "../collision/shapes/*.jsx";
+import "../dynamics/*.jsx";
+import "../dynamics/contacts/*.jsx";
 
 class b2World {
 	var m_blockAllocator: variant = null;
@@ -32,7 +32,7 @@ class b2World {
 	var m_filter: b2CollisionFilter;
 
 	var m_positionIterationCount = 0;
-	
+
 	var step: b2TimeStep;
 
 	function constructor(worldAABB: b2AABB, gravity: b2Vec2, doSleep: boolean){
@@ -65,15 +65,15 @@ class b2World {
 		var bd = new b2BodyDef();
 		this.m_groundBody = this.CreateBody(bd);
 	}
-	
+
 	function SetListener(listener: variant): void {
 		this.m_listener = listener;
 	}
-	
+
 	function SetFilter(filter: b2CollisionFilter): void {
 		this.m_filter = filter;
 	}
-	
+
 	function CreateBody(def: b2BodyDef): b2Body {
 		//void* mem = this.m_blockAllocator.Allocate(sizeof(b2Body));
 		var b = new b2Body(def, this);
@@ -163,7 +163,7 @@ class b2World {
 
 		this.m_contactManager.m_destroyImmediate = false;
 	}
-	
+
 	/*CreateJoint: function(def){
 		var j = b2Joint.Create(def, this.m_blockAllocator);
 
@@ -205,7 +205,7 @@ class b2World {
 
 		return j;
 	}
-	
+
 	DestroyJoint: function(j)
 	{
 

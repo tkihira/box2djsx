@@ -1,4 +1,4 @@
-import "common/math/*.jsx";
+import "../../common/math/*.jsx";
 
 class b2Math {
 	static function b2IsValid(x: number): boolean {

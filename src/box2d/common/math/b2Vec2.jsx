@@ -1,4 +1,4 @@
-import "common/math/*.jsx";
+import "../../common/math/*.jsx";
 
 class b2Vec2 {
 	var x: number;
@@ -21,11 +21,11 @@ class b2Vec2 {
 		this.x = v.x;
 		this.y = v.y;
 	}
-	
+
 	function Negative(): b2Vec2 {
 		return new b2Vec2(-this.x, -this.y);
 	}
-	
+
 	function Copy(): b2Vec2{
 		return new b2Vec2(this.x, this.y);
 	}
@@ -100,7 +100,7 @@ class b2Vec2 {
 	function IsValid(): boolean {
 		return b2Math.b2IsValid(this.x) && b2Math.b2IsValid(this.y);
 	}
-	
+
 	static function Make(x: number, y: number): b2Vec2 {
 		return new b2Vec2(x, y);
 	}

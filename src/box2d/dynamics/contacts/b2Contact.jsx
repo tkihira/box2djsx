@@ -1,9 +1,9 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
-import "dynamics/contacts/*.jsx";
+import "../../common/*.jsx";
+import "../../common/math/*.jsx";
+import "../../collision/*.jsx";
+import "../../collision/shapes/*.jsx";
+import "../../dynamics/*.jsx";
+import "../../dynamics/contacts/*.jsx";
 
 class b2Contact {
 	var m_flags: number;
@@ -64,7 +64,7 @@ class b2Contact {
 	function constructor() {
 		this.initializer(null, null);
 	}
-	
+
 	function GetManifolds(): b2Manifold[] {return null;}
 	function GetManifoldCount(): number {
 		return this.m_manifoldCount;
@@ -81,13 +81,13 @@ class b2Contact {
 	function GetShape2(): b2Shape {
 		return this.m_shape2;
 	}
-	
+
 	function Evaluate(): void {}
 
 	static const e_islandFlag = 0x0001;
 	static const e_destroyFlag = 0x0002;
-	
-	
+
+
 	static function AddType(createFcn: function(:b2Shape, :b2Shape, :variant):b2Contact, destroyFcn: function(:b2Contact, :variant):void, type1: number, type2: number): void {
 		//b2Settings.b2Assert(b2Shape.e_unknownShape < type1 && type1 < b2Shape.e_shapeTypeCount);
 		//b2Settings.b2Assert(b2Shape.e_unknownShape < type2 && type2 < b2Shape.e_shapeTypeCount);
@@ -193,7 +193,7 @@ class b2Contact {
 		var destroyFcn = b2Contact.s_registers[type1][type2].destroyFcn;
 		destroyFcn(contact, allocator);
 	}
-	
+
 	static var s_registers: b2ContactRegister[][] = null;
 	static var s_initialized = false;
 }

@@ -1,6 +1,6 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
+import "../common/*.jsx";
+import "../common/math/*.jsx";
+import "../collision/*.jsx";
 
 class b2PairManager {
 	var m_broadPhase: b2BroadPhase;
@@ -13,7 +13,7 @@ class b2PairManager {
 	var m_pairBufferCount = 0;
 
 	var m_hashTable: number[];
-	
+
 	function constructor() {
 		var i = 0;
 		//b2Settings.b2Assert(b2Math.b2IsPowerOfTwo(b2Pair.b2_tableCapacity) == true);
@@ -45,12 +45,12 @@ class b2PairManager {
 		this.m_pairs[b2Settings.b2_maxPairs-1].next = b2Pair.b2_nullPair;
 		this.m_pairCount = 0;
 	}
-	
+
 	function Initialize(broadPhase: b2BroadPhase, callback: b2PairCallback): void {
 		this.m_broadPhase = broadPhase;
 		this.m_callback = callback;
 	}
-	
+
 	function AddBufferedPair(proxyId1: number, proxyId2: number): void {
 		//b2Settings.b2Assert(id1 != b2_nullProxy && id2 != b2_nullProxy);
 		//b2Settings.b2Assert(this.m_pairBufferCount < b2_maxPairs);
@@ -80,7 +80,7 @@ class b2PairManager {
 			this.ValidateBuffer();
 		}
 	}
-	
+
 	function RemoveBufferedPair(proxyId1: number, proxyId2: number): void {
 		//b2Settings.b2Assert(id1 != b2_nullProxy && id2 != b2_nullProxy);
 		//b2Settings.b2Assert(this.m_pairBufferCount < b2_maxPairs);
@@ -114,7 +114,7 @@ class b2PairManager {
 			this.ValidateBuffer();
 		}
 	}
-	
+
 	function Commit(): void {
 		var i = 0;
 
@@ -175,7 +175,7 @@ class b2PairManager {
 			this.ValidateTable();
 		}
 	}
-	
+
 	function AddPair(proxyId1: number, proxyId2: number): b2Pair {
 
 		if (proxyId1 > proxyId2){
@@ -213,7 +213,7 @@ class b2PairManager {
 
 		return pair;
 	}
-	
+
 	function RemovePair(proxyId1: number, proxyId2: number): variant{
 
 		//b2Settings.b2Assert(this.m_pairCount > 0);
@@ -269,7 +269,7 @@ class b2PairManager {
 		//b2Settings.b2Assert(false);
 		return null;
 	}
-	
+
 	function Find(proxyId1: number, proxyId2: number): b2Pair {
 
 		if (proxyId1 > proxyId2){
@@ -283,7 +283,7 @@ class b2PairManager {
 
 		return this.FindHash(proxyId1, proxyId2, hash);
 	}
-	
+
 	function FindHash(proxyId1: number, proxyId2: number, hash: number): b2Pair {
 		var index = this.m_hashTable[hash];
 
@@ -301,7 +301,7 @@ class b2PairManager {
 
 		return this.m_pairs[ index ];
 	}
-	
+
 	function ValidateBuffer(): void {
 		// DEBUG
 	}
@@ -309,7 +309,7 @@ class b2PairManager {
 	function ValidateTable(): void {
 		// DEBUG
 	}
-	
+
 	static function Hash(proxyId1: number, proxyId2: number): number
 	{
 		var key = ((proxyId2 << 16) & 0xffff0000) | proxyId1;

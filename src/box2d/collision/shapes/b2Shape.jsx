@@ -1,8 +1,8 @@
-import "common/*.jsx";
-import "common/math/*.jsx";
-import "collision/*.jsx";
-import "collision/shapes/*.jsx";
-import "dynamics/*.jsx";
+import "../../common/*.jsx";
+import "../../common/math/*.jsx";
+import "../../collision/*.jsx";
+import "../../collision/shapes/*.jsx";
+import "../../dynamics/*.jsx";
 
 class b2Shape {
 	var m_next: b2Shape = null;
@@ -25,7 +25,7 @@ class b2Shape {
 	var m_categoryBits: number;
 	var m_maskBits: number;
 	var m_groupIndex: number;
-	
+
 	function constructor(def: b2ShapeDef, body: b2Body){
 		// initialize instance variables for references
 		this.m_R = new b2Mat22();
@@ -75,7 +75,7 @@ class b2Shape {
 	function GetNext(): b2Shape {
 		return this.m_next;
 	}
-	
+
 	function DestroyProxy(): void
 	{
 		if (this.m_proxyId != b2Pair.b2_nullProxy)
@@ -92,7 +92,7 @@ class b2Shape {
 	function GetMaxRadius(): number{
 		return this.m_maxRadius;
 	}
-	
+
 	static function Create(def: b2ShapeDef, body: b2Body, center: b2Vec2): b2Shape {
 		switch (def.type)
 		{
