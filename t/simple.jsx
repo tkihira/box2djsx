@@ -1,11 +1,11 @@
 import "test-case.jsx";
 
-import "../src/box2d/common/*.jsx";
-import "../src/box2d/common/math/*.jsx";
-import "../src/box2d/collision/*.jsx";
-import "../src/box2d/collision/shapes/*.jsx";
-import "../src/box2d/dynamics/*.jsx";
-import "../src/box2d/dynamics/contacts/*.jsx";
+import "box2d.jsx/common/*.jsx";
+import "box2d.jsx/common/math/*.jsx";
+import "box2d.jsx/collision/*.jsx";
+import "box2d.jsx/collision/shapes/*.jsx";
+import "box2d.jsx/dynamics/*.jsx";
+import "box2d.jsx/dynamics/contacts/*.jsx";
 
 class _Test extends TestCase {
   function testHello() : void {
