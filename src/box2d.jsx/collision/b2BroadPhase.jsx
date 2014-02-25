@@ -635,11 +635,6 @@ class b2BroadPhase {
 	}
 
 	function Validate(): void {
-		var pair;
-		var proxy1;
-		var proxy2;
-		var overlap;
-
 		for (var axis = 0; axis < 2; ++axis)
 		{
 			var bounds = this.m_bounds[axis];
