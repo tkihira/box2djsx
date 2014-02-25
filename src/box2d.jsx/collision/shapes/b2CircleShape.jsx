@@ -135,10 +135,8 @@ class b2CircleShape extends b2Shape {
 			return;
 		}
 
-		var proxy = broadPhase.GetProxy(this.m_proxyId);
-
+		broadPhase.GetProxy(this.m_proxyId);
 		broadPhase.DestroyProxy(this.m_proxyId);
-		proxy = null;
 
 		var aabb = new b2AABB();
 		aabb.minVertex.Set(this.m_position.x - this.m_radius, this.m_position.y - this.m_radius);

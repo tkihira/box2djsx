@@ -361,8 +361,6 @@ class b2Collision {
 		var v12 = edge1 + 1 < count1 ? vert1s[edge1+1] : vert1s[0];
 
 		//var dv = b2Math.SubtractVV(v12, v11);
-		var dvX = v12.x - v11.x;
-		var dvY = v12.y - v11.y;
 
 		//var sideNormal = b2Math.b2MulMV(poly1.m_R, b2Math.SubtractVV(v12, v11));
 		var sideNormalX = v12.x - v11.x;

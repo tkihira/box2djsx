@@ -396,10 +396,8 @@ class b2PolyShape extends b2Shape {
 			return;
 		}
 
-		var proxy = broadPhase.GetProxy(this.m_proxyId);
-
+		broadPhase.GetProxy(this.m_proxyId);
 		broadPhase.DestroyProxy(this.m_proxyId);
-		proxy = null;
 
 		var R = b2Math.b2MulMM(this.m_R, this.m_localOBB.R);
 		var absR = b2Math.b2AbsM(R);

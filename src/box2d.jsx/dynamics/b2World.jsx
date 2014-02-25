@@ -343,7 +343,7 @@ class b2World {
 		*/
 
 		// Build and simulate all awake islands.
-		var stackSize = this.m_bodyCount;
+		// var stackSize = this.m_bodyCount;
 		//var stack = (b2Body**)this.m_stackAllocator.Allocate(stackSize * sizeof(b2Body*));
 		var stack = []: b2Body[]; stack.length = (this.m_bodyCount);
 		for (var k = 0; k < this.m_bodyCount; k++)

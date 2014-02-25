@@ -153,7 +153,6 @@ class b2ContactSolver {
 
 	function PreSolve(): void {
 		var tVec;
-		var tVec2;
 		var tMat;
 
 		// Warm start.
@@ -431,8 +430,6 @@ class b2ContactSolver {
 			var normalX = c.normal.x;
 			var normalY = c.normal.y;
 			//var tangent = b2Math.b2CrossVF(normal, 1.0);
-			var tangentX = normalY;
-			var tangentY = -normalX;
 
 			// Solver normal constraints
 			var tCount = c.pointCount;
